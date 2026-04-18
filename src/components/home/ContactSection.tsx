@@ -107,7 +107,7 @@ export default function ContactSection() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label>Reason for Contact</Label>
-                    <Select onValueChange={(v) => setValue('reason', v)} defaultValue="Product Enquiry">
+                    <Select onValueChange={(v:any) => setValue('reason', v)} defaultValue="Product Enquiry">
                       <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="Product Enquiry">Product Enquiry</SelectItem>
@@ -118,7 +118,7 @@ export default function ContactSection() {
                   </div>
                   <div>
                     <Label>Area of Interest</Label>
-                    <Select onValueChange={(v) => setValue('area_of_interest', v)} defaultValue="Chromatography Consumables">
+                    <Select onValueChange={(v:any) => setValue('area_of_interest', v)} defaultValue="Chromatography Consumables">
                       <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
                       <SelectContent>
                         {['Lab Supplies', 'Chromatography Consumables', 'Trainings', 'Service Contracts', 'Others'].map(v => (

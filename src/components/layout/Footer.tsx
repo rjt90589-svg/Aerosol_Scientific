@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { FlaskConical, Mail, Phone, MapPin, Linkedin, Twitter, Facebook } from 'lucide-react'
+import { FlaskConical, Mail, Phone, MapPin,} from 'lucide-react'
 import { SITE_ADDRESS_UAE, SITE_ADDRESS_INDIA, SITE_EMAIL_SALES, SITE_EMAIL_SUPPORT, SITE_PHONE_UAE, SITE_PHONE_INDIA } from '@/lib/constants'
 
 export default function Footer() {
@@ -22,13 +22,13 @@ export default function Footer() {
             <p className="text-gray-400 text-sm leading-relaxed mb-4">
               Delivering excellence in scientific instruments, consumables, and complete laboratory solutions across UAE and India.
             </p>
-            <div className="flex gap-3">
+            {/* <div className="flex gap-3">
               {[Linkedin, Twitter, Facebook].map((Icon, i) => (
                 <a key={i} href="#" className="w-8 h-8 rounded-lg bg-white/10 hover:bg-[#1565C0] flex items-center justify-center transition-colors">
                   <Icon size={14} />
                 </a>
               ))}
-            </div>
+            </div> */}
           </div>
 
           {/* Quick Links */}

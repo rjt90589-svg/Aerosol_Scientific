@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'aerosolscientific.com' },
     ],
+     domains: ["images.unsplash.com"],
   },
 }
 

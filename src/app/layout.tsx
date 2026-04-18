@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
 import { Inter, Geist } from 'next/font/google'
 import './globals.css'
-import { Toaster } from '@/components/ui/toaster'
+// import sonner from 'sonner'
+// import { Toaster } from '@/components/ui/toaster'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import TopBar from '@/components/layout/TopBar'
 import { cn } from "@/lib/utils";
+// import Chatbot from '@/components/chatbot'
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -31,7 +33,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Navbar />
         <main>{children}</main>
         <Footer />
-        <Toaster />
+        {/* <Toaster /> */}
+        {/* <sonner/> */}
+        {/* <Chatbot /> */}
       </body>
     </html>
   )
