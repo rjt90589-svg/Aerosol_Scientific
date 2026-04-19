@@ -1,41 +1,58 @@
 import type { Metadata } from 'next'
-import { Inter, Geist } from 'next/font/google'
+import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
-// import sonner from 'sonner'
-// import { Toaster } from '@/components/ui/toaster'
+import { Toaster } from 'sonner'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import TopBar from '@/components/layout/TopBar'
-import { cn } from "@/lib/utils";
-// import Chatbot from '@/components/chatbot'
+import WhatsAppButton from '@/components/layout/WhatsAppButton'
+import Chatbot from '@/components/chatbot'
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const geistSans = Geist({
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
+})
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
+const geistMono = Geist_Mono({
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
+})
 
 export const metadata: Metadata = {
-  title: 'Aerosol Scientific | Scientific Instruments & Lab Solutions',
-  description: 'Delivering Excellence in Scientific Instruments & Services. Chromatography, Lab Equipment, Turnkey Lab Projects, After-Sales Service across UAE & India.',
-  keywords: 'scientific instruments, HPLC, GC, chromatography, lab equipment, Dubai, India, laboratory solutions',
+  title: {
+    default: 'Aerosol Scientific | Scientific Instruments & Lab Solutions',
+    template: '%s | Aerosol Scientific',
+  },
+  description:
+    'Delivering Excellence in Scientific Instruments & Services. Chromatography consumables, Lab Equipment, Turnkey Lab Projects across UAE & India.',
+  keywords:
+    'scientific instruments, HPLC, GC, chromatography, lab equipment, Dubai, India, laboratory solutions, aerosol scientific',
   openGraph: {
     title: 'Aerosol Scientific',
     description: 'Delivering Excellence in Scientific Instruments & Services',
     url: 'https://aerosolscientific.com',
     siteName: 'Aerosol Scientific',
-  }
+    type: 'website',
+  },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={cn("font-sans", geist.variable)}>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="antialiased">
         <TopBar />
         <Navbar />
-        <main>{children}</main>
+        <main className="min-h-screen">{children}</main>
         <Footer />
-        {/* <Toaster /> */}
-        {/* <sonner/> */}
-        {/* <Chatbot /> */}
+        <WhatsAppButton />
+        <Chatbot/>
+        <Toaster
+          position="top-right"
+          richColors
+          toastOptions={{ style: { fontFamily: 'Satoshi, sans-serif' } }}
+        />
       </body>
     </html>
   )

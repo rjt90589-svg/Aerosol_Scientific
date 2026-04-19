@@ -6,7 +6,7 @@ export const SITE_PHONE_UAE = '+971-547598109'
 export const SITE_PHONE_INDIA = '+91 98919 38724'
 export const SITE_ADDRESS_UAE = '108-AL MAZROUA, AN-2, Dubai, UAE'
 export const SITE_ADDRESS_INDIA = 'F-4, 1st Floor, Karka Duma, New Delhi-110092'
-
+export const WHATSAPP_NUMBER = '+971547598109'
 export const NAV_LINKS = [
   { label: 'Home', href: '/' },
   { label: 'About Us', href: '/about', children: [
