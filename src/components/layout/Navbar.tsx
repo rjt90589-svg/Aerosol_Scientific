@@ -114,15 +114,16 @@ export default function Navbar() {
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 group shrink-0">
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#1251A3] to-[#0891B2] rounded-2xl blur-md opacity-40 group-hover:opacity-70 transition-opacity duration-300" />
-                <div className="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-[#1251A3] to-[#0891B2] flex items-center justify-center shadow-lg">
-                  <FlaskConical size={19} className="text-white" />
-                </div>
+                {/* <div className="absolute inset-0 bg-gradient-to-br from-[#1251A3] to-[#0891B2] rounded-2xl blur-md opacity-40 group-hover:opacity-70 transition-opacity duration-300" /> */}
+                {/* <div className="relative  rounded-2xl  flex items-center justify-center shadow-lg"> */}
+                  {/* <FlaskConical size={19} className="text-white" /> */}
+                <img src="/logo.png" alt="" className='w-16 relative h-16' />
+                {/* </div> */}
               </div>
-              <div className="leading-none">
+              {/* <div className="leading-none">
                 <span className="font-bold text-[18px] text-[#050E1D] tracking-tight block">Aerosol</span>
                 <span className="text-[9px] uppercase tracking-[0.28em] text-[#0891B2] font-semibold block">Scientific</span>
-              </div>
+              </div> */}
             </Link>
 
             {/* Desktop Nav */}
