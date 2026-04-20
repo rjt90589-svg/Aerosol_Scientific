@@ -23,6 +23,17 @@ export const PRODUCT_CATEGORIES = [
   'Vials',
   'Septa',
   'Manual Vial Crimpers & Decappers',
+  'Photometry',
+  'Titration',
+  'Thermal Analysis',
+  'Gas Handling',
+  'Lab Infrastructure',
+  'Gas Generators',
+  'Tablet Testing',
+  'Gas Safety',
+  'pH & Electrochemistry',
+  'Ultrasonic Equipment',
+  
 ]
 
 export const PARTNERS = [
@@ -37,3 +48,5 @@ export const PARTNERS = [
   { name: 'Silverson', logo: 'https://aerosolscientific.com/wp-content/uploads/2025/11/silverson-logo-150x150.jpg', href: '#' },
   { name: 'IKA', logo: 'https://aerosolscientific.com/wp-content/uploads/2025/11/ika-logo-150x150.jpg', href: '#' },
 ]
+
+export const SUPABASE_STORAGE_BUCKET = 'product-images'

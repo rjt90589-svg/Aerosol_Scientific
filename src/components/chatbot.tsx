@@ -18,58 +18,224 @@ const QUICK_REPLIES = [
   '🔬 What products do you offer?',
   '⚗️ HPLC vials availability',
   '🛠️ Service contracts info',
-  '📦 How to get a quote?',
+  '🤝 Who are your partners?',
 ]
 
+// ── Comprehensive system prompt with ALL products, services, categories ──
 const SYSTEM_PROMPT = `You are "Aero", a friendly and knowledgeable assistant for Aerosol Scientific — a scientific instruments and laboratory solutions company with offices in UAE (Dubai) and India (New Delhi).
 
 COMPANY OVERVIEW:
 - Name: Aerosol Scientific
-- Offices: UAE (108-AL MAZROUA, AN-2, Dubai) and India (F-4, 1st Floor, Karka Duma, New Delhi-110092)
+- Offices: UAE (108-AL MAZROUA, AN-2, Dubai) | India (F-4, 1st Floor, Karka Duma, New Delhi-110092)
 - Phone UAE: +971-547598109
-- Phone India: +91 98919 38724  
+- Phone India: +91 98919 38724
 - Email: sales@aerosolscientific.com | support@aerosolscientific.com
 - WhatsApp: +971547598109
 - Website: aerosolscientific.com
 
-WHAT WE DO:
-1. Chromatography Consumables — GC & HPLC vials (amber/clear, 1.5mL, 2mL, 4mL), septa (PTFE/Silicone), crimp caps, screw caps, manual crimpers & decappers in ND9, ND11, ND18, ND20 formats
-2. Analytical Instruments — HPLC, UHPLC, GC, GCMS, LCMS, ICPMS, Spectroscopy from Agilent, Waters, Shimadzu, Sciex and 15+ global OEM brands
-3. Laboratory Services:
-   - Turnkey Lab Projects (full setup: instruments + furniture + fume hoods + gas systems + SS furniture)
-   - After-Sales Service & Maintenance (24hr response, preventive maintenance, repairs)
-   - Multi-Vendor Support (Agilent, Sciex, Waters, Shimadzu — up to 40% cheaper than OEM)
-   - Service Contracts (Comprehensive / Labor / Trade plans)
-   - Training & Education (Chromatography basics, method development, troubleshooting workshops)
-4. Laboratory Furniture — SS furniture, fume hoods, chemical storage, anti-vibration tables
-5. Lab Supplies — Plasticware, glassware (Witeg Germany), general consumables
+═══════════════════════════════════════
+COMPLETE PRODUCT PORTFOLIO
+═══════════════════════════════════════
 
-CUSTOMERS SERVED:
-Pharmaceutical, Life Sciences, Food & Beverage testing, Environmental, Diagnostics, Forensic, Research institutions
+1. CHROMATOGRAPHY CONSUMABLES (Aerosol Scientific own products):
+   • Vials:
+     - 1.5mL Amber 9mm Screw Vial (ND9, borosilicate, 11.6×32mm)
+     - 1.5mL Clear 9mm Screw Vial (ND9, borosilicate, 11.6×32mm)
+     - Available formats: ND9 (9mm), ND11, ND18, ND20 thread sizes
+     - Amber and clear glass options for GC & HPLC
+     - Volumes: 1.5mL, 2mL, 4mL, 10mL, 20mL, 40mL
+     - With integrated Micro-Insert option available
+   • Septa:
+     - White PTFE/Red Silicone Septa (minimal bleed, excellent chemical resistance)
+     - PTFE/Silicone composite — for GC and HPLC
+   • Manual Vial Crimpers & Decappers:
+     - Manual Hand Crimper (20mm, stainless steel, ergonomic)
+   • Lab Supplies / GC & HPLC Consumables:
+     - GC Columns
+     - HPLC Columns
+     - PM Kits (preventive maintenance kits for instruments)
+     - Liner and Septa for GC
+     - Centrifuge tubes, PP vials, glass vials
+     - Pipette tips, sample prep accessories
+     - Aerosol consumables (30, 40 series)
 
-PRICING:
-- No fixed prices online — customers request quotes for their specific requirements
-- Competitive pricing, especially for multi-vendor service contracts
+2. WITEG GERMANY PRODUCTS (Lab Equipment & Glassware):
+   • Stirring & Mixing Equipment:
+     - Magnetic Stirrers (1200 RPM, 1500 RPM)
+     - Hotplate Stirrers
+     - Overhead Stirrers (digital set)
+     - Multi-position stirrers
+     - Vortex Mixers
+     - Thermal Shakers
+     - Shakers and rockers
+   • Heating Equipment:
+     - Heating mantles, Dry baths & block heaters
+     - Water baths (standard, circulating, shaking)
+     - Oil baths, Temperature controllers
+   • Centrifugation:
+     - Benchtop centrifuges, Mini centrifuges
+     - High-speed centrifuges
+   • Lab Glassware (30,000+ products, DIN/ISO/ASTM):
+     - Condensers, flasks, funnels, beakers
+     - Chromatography glassware
+     - Distillation & extraction glassware
+     - Filtration systems
+   • Liquid Handling:
+     - Pipettes (0.1µL to 50mL)
+     - Dispensers (0.25mL to 250mL)
+     - Digital Burette TITREX
+   • SMART-Lab Wi-Fi enabled devices (incubators, ovens, remote monitoring)
+   • Autoclave with Basket
 
-RESPONSE GUIDELINES:
-1. TONE: Friendly, professional, concise — like a knowledgeable colleague
-2. Keep responses short (2-4 sentences for simple queries, brief bullets for lists)
-3. Always direct to quote request for pricing/availability
-4. Mention UAE and India offices when location-relevant
-5. For product queries, describe what we have and direct to /products page
-6. For service queries, mention 24hr response and direct to /services page  
-7. Always end with a helpful next step or offer to connect with the team
-8. Do NOT make up specific prices, stock levels, or technical specs
-9. If asked something unrelated to lab/science, politely redirect
+3. FDGSI (France) GAS GENERATORS:
+   • Nitrogen Generators (CALYPSO, STREAM, MAESTRO series):
+     - PSA and Membrane technology
+     - Purity: 95% to 99.9995%
+     - Applications: LC-MS, GC-MS, sample evaporation
+   • Hydrogen Generators (COSMOS H2 series):
+     - PEM technology, purity up to 99.9999%
+     - Flow: 100–1500 cc/min
+     - Applications: GC carrier gas, FID, FPD, NPD, TCD
+   • Air Generators (PROSPERO, DEIMOS series):
+     - Zero Air, hydrocarbon < 0.1 ppm, flow up to 30 L/min
+   • Liquid Nitrogen Generators (CRYOGEN series):
+     - 10–80 liters/day, cryopreservation applications
 
-IMPORTANT: Be warm, genuine, and helpful. You represent a trusted scientific partner, not just a seller.`
+4. PCI ANALYTICS (India) PRODUCTS:
+   • Gas Generators:
+     - PreCiGen Nitrogen Generators (for GC)
+     - Hydrogen Gas Generators
+     - Zero Air Generators
+   • Analytical Instruments:
+     - HPLC Column Ovens
+     - Digital Gas Flow Meters
+     - Probe Sonicators
+     - Ultrasonic Bath Sonicators
+   • Gas Handling:
+     - Gas Purification Panels
+     - Automatic Gas Changeover Manifolds
+     - High-precision P-Lok Regulators
+   • Lab Equipment:
+     - Oil-free Diaphragm Vacuum Pumps
+     - Positive Pressure Processors for SPE
+     - Sample Evaporators, Vortex Mixers
+   • Consumables: GC/HPLC consumables, FTIR accessories, AAS accessories
+
+5. THERMOLAB SCIENTIFIC EQUIPMENTS (Stability & Environmental Chambers):
+   • Stability Chambers:
+     - Walk-In Stability Chambers (ICH compliant)
+     - Stability Chambers (21 CFR Part 11 / GAMP 5 compliance)
+   • Autoclaves & Sterilizers:
+     - Autoclave with Basket
+     - Horizontal Sterilizer — Double Door
+     - Vertical Series Sterilizers
+   • Environmental Chambers:
+     - Photostability Chambers
+     - Incubators & Environmental Chambers
+     - Ovens (standard and vacuum)
+   • Cold Chain:
+     - Pharma Cold Rooms
+   • Laminar Airflow Units
+   - Compliance: ICH, WHO, USFDA, GMP, 21 CFR Part 11
+
+6. GENERAL ANALYTICAL INSTRUMENTS (Via Partners):
+   • pH & Electrochemistry:
+     - pH/mV/°C/ORP Analyzers (benchtop and handheld)
+     - Conductivity/TDS/Resistivity Analyzers
+     - Multiparameter Analyzers
+   • Titration:
+     - Karl Fischer Titrators
+     - Auto Titrators (acid/base, redox, complexometric)
+   • Thermal Analysis:
+     - Automatic Melting/Boiling Point Apparatus
+   • Photometry:
+     - Flame Photometers
+     - UV/Vis Spectrophotometers
+   • Ultrasonic Equipment:
+     - Ultrasonic Bath with Heater / Chiller
+   • Tablet Testing:
+     - Friability Test Apparatus
+     - Tap Density Test Apparatus
+     - Tablet Hardness Tester
+     - Tablet Dissolution Test Apparatus
+     - Leak Test Apparatus
+     - Sieve Shakers
+   • Gas Safety:
+     - Gas Alarm Systems (up to 8 gas lines)
+     - Dew Point Apparatus
+   • Lab Infrastructure:
+     - Laboratory Furniture (benches, islands)
+     - Laboratory Fume Hoods
+     - Laboratory Stand-Alone units
+     - Laboratory Utilities
+
+═══════════════════════════════════════
+SERVICES
+═══════════════════════════════════════
+
+1. MULTI-VENDOR SUPPORT:
+   Brands: Agilent (LCMS/HPLC/GC/GCMS/ICPMS), Sciex (LCMS), Waters (HPLC/LCMS), Shimadzu (LCMS/HPLC/GC/GCMS)
+   Services: Installations, Repair/Service, Preventive Maintenance
+   Also covers: Gas Generators, Small equipment, Lab supplies
+   Benefit: Up to 40% cheaper than OEM contracts
+
+2. SERVICE CONTRACTS:
+   Types: Comprehensive (Parts+Labor), Labor Only, Trade Maintenance
+   Coverage: Scheduled PM visits, Emergency breakdown, Calibration, Compliance
+   Also: Lab & instrument relocation, Regulatory compliance documentation
+
+3. LAB SUPPLIES (consumable supply):
+   GC Columns, HPLC Columns, PM Kits, Liner/Septa for GC
+   Glass/PP vials and caps (30, 40 series), Centrifuge tubes
+   Pipette tips, sample prep, aerosol consumables
+
+4. TRAININGS & WORKSHOPS:
+   Topics: HPLC & GC basics, Method Development, Troubleshooting
+   Also: Basic Repair, Preventive Maintenance, Data Integrity (21 CFR Part 11)
+   Certificate on completion | Academic and corporate | Hands-on sessions
+
+5. TURNKEY LABORATORY PROJECTS:
+   Full setup: instruments + furniture + fume hoods + gas systems + SS furniture
+   Compliance: GLP/GMP, with full documentation
+
+═══════════════════════════════════════
+INDUSTRIES SERVED
+═══════════════════════════════════════
+Pharmaceutical, Life Sciences, Food & Beverage Testing, Environmental, Diagnostics, Forensic, Research institutions, Petrochemicals, Fine Chemicals, Atomic Energy, Government Labs
+
+═══════════════════════════════════════
+PARTNER BRANDS
+═══════════════════════════════════════
+Thermolab Scientific, Witeg Germany, FDGSi (France), PCi Analytics (India), Sartorius, Eppendorf, Torontech, Luminultra, Silverson, IKA
+
+═══════════════════════════════════════
+PRICING
+═══════════════════════════════════════
+No fixed prices online — all products and services require a quote request.
+Competitive pricing, especially for multi-vendor service contracts (40% savings vs OEM).
+
+═══════════════════════════════════════
+RESPONSE GUIDELINES
+═══════════════════════════════════════
+1. TONE: Friendly, professional, concise — like a knowledgeable lab colleague
+2. SHORT: 2-4 sentences for simple questions; brief bullets for lists
+3. QUOTES: Always direct to /contact or WhatsApp for pricing/availability
+4. LOCATION: Mention UAE/India offices when relevant to the question
+5. PRODUCTS: Name the specific product/category and direct to /products
+6. SERVICES: Mention 24hr response SLA and direct to /services
+7. NEXT STEP: Always end with a clear action (visit page, contact, WhatsApp)
+8. HONESTY: Never make up prices, stock levels, or specs not listed above
+9. REDIRECT: For completely off-topic questions, politely redirect to lab/science context
+10. PARTNER PRODUCTS: When asked about Witeg, FDGSi, PCi, or Thermolab products, explain we are authorized distributors and can help with quotes
+
+IMPORTANT: Be warm, genuine, and helpful. You represent a trusted scientific partner.`
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: "👋 Hi! I'm Aero, your Aerosol Scientific assistant.\n\nAsk me about our chromatography consumables, lab instruments, service contracts, or how to get a quote — I'm here to help!",
+      content: "👋 Hi! I'm Aero, your Aerosol Scientific assistant.\n\nAsk me about our chromatography consumables, gas generators, lab instruments, stability chambers, service contracts, or how to get a quote — I'm here to help!",
       timestamp: new Date(),
     }
   ])
@@ -86,21 +252,36 @@ export default function Chatbot() {
     if (isOpen) setTimeout(() => inputRef.current?.focus(), 300)
   }, [isOpen])
 
-  const extractLinks = (content: string) => {
-    const links: Message['links'] = []
+  const extractLinks = (content: string): Message['links'] => {
+    const links: { label: string; href: string; type: 'product' | 'service' }[] = []
     const lower = content.toLowerCase()
 
-    if (lower.includes('vial') || lower.includes('septa') || lower.includes('consumable') || lower.includes('product')) {
+    if (lower.includes('vial') || lower.includes('septa') || lower.includes('consumable') || lower.includes('crimp')) {
       links.push({ label: 'Browse Products', href: '/products', type: 'product' })
     }
-    if (lower.includes('hplc') || lower.includes('chromatography') || lower.includes('gc ')) {
-      links.push({ label: 'HPLC/GC Products', href: '/products?category=Vials', type: 'product' })
+    if (lower.includes('witeg') || lower.includes('stirrer') || lower.includes('glassware')) {
+      links.push({ label: 'Witeg Products', href: '/partners#witeg', type: 'product' })
     }
-    if (lower.includes('service') || lower.includes('maintenance') || lower.includes('contract')) {
+    if (lower.includes('fdgsi') || lower.includes('nitrogen generator') || lower.includes('hydrogen generator') || lower.includes('gas generator')) {
+      links.push({ label: 'FDGSi Gas Generators', href: '/partners#fdgsi', type: 'product' })
+    }
+    if (lower.includes('pci') || lower.includes('pcigen')) {
+      links.push({ label: 'PCi Analytics', href: '/partners#pci', type: 'product' })
+    }
+    if (lower.includes('thermolab') || lower.includes('stability chamber') || lower.includes('autoclave')) {
+      links.push({ label: 'Thermolab Products', href: '/partners#thermolab', type: 'product' })
+    }
+    if (lower.includes('service') || lower.includes('maintenance') || lower.includes('contract') || lower.includes('repair')) {
       links.push({ label: 'View Services', href: '/services', type: 'service' })
     }
-    if (lower.includes('quote') || lower.includes('price') || lower.includes('cost')) {
+    if (lower.includes('training') || lower.includes('workshop') || lower.includes('course')) {
+      links.push({ label: 'Trainings', href: '/services#training', type: 'service' })
+    }
+    if (lower.includes('quote') || lower.includes('price') || lower.includes('cost') || lower.includes('order')) {
       links.push({ label: 'Request a Quote', href: '/contact', type: 'service' })
+    }
+    if (lower.includes('partner') || lower.includes('brand')) {
+      links.push({ label: 'Our Partners', href: '/partners', type: 'product' })
     }
 
     return links.slice(0, 2)
@@ -108,11 +289,11 @@ export default function Chatbot() {
 
   const formatContent = (text: string) => {
     return text.split('\n').map((line, i) => {
-      if (line.startsWith('•') || line.startsWith('-')) {
+      if (line.startsWith('•') || line.startsWith('-') || line.startsWith('*')) {
         return (
           <div key={i} className="flex gap-2 text-sm leading-relaxed">
             <span className="text-[#0891B2] mt-0.5 shrink-0">•</span>
-            <span>{line.replace(/^[•\-]\s*/, '')}</span>
+            <span>{line.replace(/^[•\-\*]\s*/, '')}</span>
           </div>
         )
       }
@@ -173,6 +354,7 @@ export default function Chatbot() {
         whileTap={{ scale: 0.93 }}
         className="fixed bottom-24 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-[#1251A3] to-[#0891B2] text-white shadow-[0_8px_32px_rgba(18,81,163,0.45)] flex items-center justify-center"
         aria-label="Chat with Aero"
+        suppressHydrationWarning
       >
         <AnimatePresence mode="wait">
           {isOpen ? (
@@ -186,9 +368,11 @@ export default function Chatbot() {
           )}
         </AnimatePresence>
         {!isOpen && (
-          <motion.span className="absolute inset-0 rounded-full bg-gradient-to-br from-[#1251A3] to-[#0891B2]"
+          <motion.span
+            className="absolute inset-0 rounded-full bg-gradient-to-br from-[#1251A3] to-[#0891B2]"
             animate={{ scale: [1, 1.4, 1], opacity: [0.6, 0, 0.6] }}
-            transition={{ duration: 2.5, repeat: Infinity }} />
+            transition={{ duration: 2.5, repeat: Infinity }}
+          />
         )}
       </motion.button>
 
@@ -217,20 +401,23 @@ export default function Chatbot() {
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <h3 className="font-display font-bold text-white text-[15px]">Aero</h3>
+                      <h3 className="font-bold text-white text-[15px]">Aero</h3>
                       <Sparkles size={11} className="text-[#22D3EE]" />
                     </div>
                     <p className="text-[11px] text-white/50">Aerosol Scientific Assistant</p>
                     <div className="flex items-center gap-1.5 mt-0.5">
-                      <motion.span className="w-1.5 h-1.5 rounded-full bg-emerald-400"
-                        animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 2, repeat: Infinity }} />
-                      <span className="text-[10px] text-emerald-400 font-medium">Online</span>
+                      <motion.span
+                        className="w-1.5 h-1.5 rounded-full bg-emerald-400"
+                        animate={{ scale: [1, 1.3, 1] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      />
+                      <span className="text-[10px] text-emerald-400 font-medium">Online 24/7</span>
                     </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <a href="tel:+971547598109"
-                    className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors" title="Call">
+                    className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors" title="Call UAE">
                     <Phone size={13} className="text-white" />
                   </a>
                   <a href="mailto:sales@aerosolscientific.com"
@@ -246,9 +433,10 @@ export default function Chatbot() {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 chat-messages"
-              style={{ background: 'linear-gradient(180deg, #F8FAFF 0%, #FFFFFF 100%)' }}>
-
+            <div
+              className="flex-1 overflow-y-auto p-4 space-y-4 chat-messages"
+              style={{ background: 'linear-gradient(180deg, #F8FAFF 0%, #FFFFFF 100%)' }}
+            >
               {messages.map((msg, idx) => (
                 <motion.div
                   key={idx}
@@ -256,7 +444,6 @@ export default function Chatbot() {
                   animate={{ opacity: 1, y: 0 }}
                   className={`flex gap-2.5 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}
                 >
-                  {/* Avatar */}
                   <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-white shrink-0 ${
                     msg.role === 'user'
                       ? 'bg-gradient-to-br from-[#3D5276] to-[#0A1628]'
@@ -276,7 +463,6 @@ export default function Chatbot() {
                       </div>
                     </div>
 
-                    {/* Quick links */}
                     {msg.links && msg.links.length > 0 && (
                       <div className="mt-2 flex flex-wrap gap-1.5">
                         {msg.links.map((link, li) => (
@@ -300,7 +486,7 @@ export default function Chatbot() {
                 </motion.div>
               ))}
 
-              {/* Quick replies (first message only) */}
+              {/* Quick replies on first load */}
               {messages.length === 1 && (
                 <div className="flex flex-wrap gap-2">
                   {QUICK_REPLIES.map(q => (
@@ -312,7 +498,7 @@ export default function Chatbot() {
                 </div>
               )}
 
-              {/* Loading */}
+              {/* Typing indicator */}
               {loading && (
                 <div className="flex gap-2.5">
                   <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#1251A3] to-[#0891B2] flex items-center justify-center shrink-0">
@@ -341,14 +527,16 @@ export default function Chatbot() {
                   value={input}
                   onChange={e => setInput(e.target.value)}
                   onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
-                  placeholder="Ask about products, services…"
+                  placeholder="Ask about products, services, partners…"
                   disabled={loading}
                   className="flex-1 px-4 py-2.5 rounded-xl bg-[rgba(18,81,163,0.04)] border border-[rgba(18,81,163,0.1)] text-sm text-[#0A1628] placeholder-[#7B90B2] outline-none focus:border-[#1251A3] focus:ring-2 focus:ring-[rgba(18,81,163,0.08)] transition-all disabled:opacity-50 font-medium"
+                  suppressHydrationWarning
                 />
                 <button
                   onClick={() => send()}
                   disabled={!input.trim() || loading}
                   className="w-11 h-11 rounded-xl bg-gradient-to-r from-[#1251A3] to-[#0891B2] text-white flex items-center justify-center shadow-md hover:shadow-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:-translate-y-0.5"
+                  suppressHydrationWarning
                 >
                   <Send size={15} />
                 </button>

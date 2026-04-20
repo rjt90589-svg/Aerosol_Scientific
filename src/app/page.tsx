@@ -8,6 +8,9 @@ import { createClient } from '@/lib/supabase/server'
 import ProductCard from '@/components/products/ProductCard'
 import SectionHeading from '@/components/ui/SectionHeading'
 import Link from 'next/link'
+import NewHeroSlider from '@/components/home/NewHeroSlider'
+import WhatWeProvide from '@/components/home/WhatWeProvide'
+import AnalabHeroSlider from '@/components/home/Analabheroslider'
 
 export default async function HomePage() {
   const supabase = await createClient()
@@ -19,9 +22,11 @@ export default async function HomePage() {
 
   return (
     <>
-      <HeroSlider />
+      {/* <HeroSlider /> */}
+      {/* <NewHeroSlider/> */}
+      <AnalabHeroSlider />
       <WhyUs />
-
+<WhatWeProvide />
       {/* Featured Products */}
       {products && products.length > 0 && (
         <section className="py-20 bg-white">

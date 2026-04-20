@@ -6,8 +6,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import {
-  MapPin, Phone, Mail, Send, CheckCircle, MessageSquare,
-  ArrowRight, Sparkles, Clock, Globe
+  MapPin, Phone, Mail, Send, CheckCircle,
+  ArrowRight, Sparkles, Clock,
 } from 'lucide-react'
 import SectionHeading from '@/components/ui/SectionHeading'
 import { toast } from 'sonner'
@@ -24,7 +24,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>
 
 const REASONS = ['Product Enquiry', 'Service Request', 'General Query', 'Training', 'Partnership']
-const AREAS = ['Chromatography Consumables', 'Lab Instruments', 'Turnkey Lab Setup', 'Service Contracts', 'Multi-Vendor Support', 'Training', 'Others']
+const AREAS   = ['Chromatography Consumables', 'Lab Instruments', 'Turnkey Lab Setup', 'Service Contracts', 'Multi-Vendor Support', 'Training', 'Others']
 
 const OFFICES = [
   {
@@ -49,7 +49,7 @@ const OFFICES = [
 
 export default function ContactSection() {
   const [submitted, setSubmitted] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading]     = useState(false)
 
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -57,7 +57,7 @@ export default function ContactSection() {
   })
 
   const selectedReason = watch('reason')
-  const selectedArea = watch('area_of_interest')
+  const selectedArea   = watch('area_of_interest')
 
   const onSubmit = async (data: FormData) => {
     setLoading(true)
@@ -88,7 +88,6 @@ export default function ContactSection() {
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#0891B2] rounded-full blur-[150px] opacity-[0.04]" />
 
       <div className="relative max-w-7xl mx-auto px-4">
-        {/* Heading */}
         <div className="flex flex-col items-center mb-16">
           <SectionHeading
             eyebrow="Get In Touch"
@@ -100,10 +99,8 @@ export default function ContactSection() {
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
 
-          {/* Left panel — offices + quick contact */}
+          {/* ── Left panel — offices + WhatsApp ── */}
           <div className="lg:col-span-2 space-y-5">
-
-            {/* Office cards */}
             {OFFICES.map((office, i) => (
               <motion.div
                 key={office.title}
@@ -113,7 +110,6 @@ export default function ContactSection() {
                 transition={{ delay: i * 0.1 }}
                 className="group relative bg-white rounded-2xl overflow-hidden border border-[rgba(18,81,163,0.08)] shadow-sm hover:shadow-xl hover:shadow-[rgba(18,81,163,0.08)] transition-all duration-350"
               >
-                {/* Top gradient accent */}
                 <div className={`h-1 w-full bg-gradient-to-r ${office.gradient}`} />
                 <div className="p-5">
                   <div className="flex items-center gap-2.5 mb-3">
@@ -146,7 +142,6 @@ export default function ContactSection() {
               </motion.div>
             ))}
 
-            {/* WhatsApp */}
             <motion.a
               href="https://wa.me/971547598109"
               target="_blank"
@@ -165,13 +160,13 @@ export default function ContactSection() {
               </div>
               <div className="flex-1">
                 <div className="font-bold text-sm">Chat on WhatsApp</div>
-                <div className="text-green-200 text-xs">Instant response · UAE & India</div>
+                <div className="text-green-200 text-xs">Instant response · UAE &amp; India</div>
               </div>
               <ArrowRight size={16} className="text-green-300 group-hover:translate-x-1 transition-transform" />
             </motion.a>
           </div>
 
-          {/* Right panel — form */}
+          {/* ── Right panel — form ── */}
           <motion.div
             initial={{ opacity: 0, x: 25 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -190,7 +185,7 @@ export default function ContactSection() {
                     <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#22D3EE]">Send Us a Message</span>
                   </div>
                   <h3 className="font-display font-bold text-white text-xl">We respond within 24 hours</h3>
-                  <p className="text-white/40 text-sm mt-0.5">Your trusted laboratory partner — UAE & India</p>
+                  <p className="text-white/40 text-sm mt-0.5">Your trusted laboratory partner — UAE &amp; India</p>
                 </div>
               </div>
 
@@ -208,22 +203,31 @@ export default function ContactSection() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit(onSubmit)} className="p-7 space-y-5">
+
                   {/* Name + Email */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {[
-                      { name: 'full_name', label: 'Full Name', placeholder: 'Dr. Raj Kumar', type: 'text' },
-                      { name: 'email', label: 'Email Address', placeholder: 'raj@lab.com', type: 'email' },
-                    ].map(({ name, label, placeholder, type }) => (
+                    {([
+                      { name: 'full_name', label: 'Full Name',      placeholder: 'Dr. Raj Kumar', type: 'text'  },
+                      { name: 'email',     label: 'Email Address',   placeholder: 'raj@lab.com',   type: 'email' },
+                    ] as const).map(({ name, label, placeholder, type }) => (
                       <div key={name}>
-                        <label className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#7B90B2] mb-2 block">{label} *</label>
+                        <label className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#7B90B2] mb-2 block">
+                          {label} *
+                        </label>
+                        {/*
+                          suppressHydrationWarning prevents React from throwing a hydration
+                          error when browser extensions (e.g. LastPass, Bitwarden) inject
+                          fdprocessedid or similar attributes into form inputs at runtime.
+                        */}
                         <input
-                          {...register(name as keyof FormData)}
+                          {...register(name)}
                           type={type}
                           placeholder={placeholder}
                           className="input-sci"
+                          suppressHydrationWarning
                         />
-                        {errors[name as keyof FormData] && (
-                          <p className="text-red-500 text-[11px] mt-1">{errors[name as keyof FormData]?.message}</p>
+                        {errors[name] && (
+                          <p className="text-red-500 text-[11px] mt-1">{errors[name]?.message}</p>
                         )}
                       </div>
                     ))}
@@ -231,22 +235,36 @@ export default function ContactSection() {
 
                   {/* Phone */}
                   <div>
-                    <label className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#7B90B2] mb-2 block">Phone Number *</label>
-                    <input {...register('phone')} placeholder="+971 54 xxx xxxx or +91 98xxx xxxxx" className="input-sci" />
+                    <label className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#7B90B2] mb-2 block">
+                      Phone Number *
+                    </label>
+                    <input
+                      {...register('phone')}
+                      placeholder="+971 54 xxx xxxx or +91 98xxx xxxxx"
+                      className="input-sci"
+                      suppressHydrationWarning
+                    />
                     {errors.phone && <p className="text-red-500 text-[11px] mt-1">{errors.phone.message}</p>}
                   </div>
 
                   {/* Reason pills */}
                   <div>
-                    <label className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#7B90B2] mb-2.5 block">Reason for Contact</label>
+                    <label className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#7B90B2] mb-2.5 block">
+                      Reason for Contact
+                    </label>
                     <div className="flex flex-wrap gap-2">
                       {REASONS.map(r => (
-                        <button key={r} type="button" onClick={() => setValue('reason', r)}
+                        <button
+                          key={r}
+                          type="button"
+                          onClick={() => setValue('reason', r)}
+                          suppressHydrationWarning
                           className={`px-3.5 py-2 rounded-full text-[12px] font-semibold border transition-all duration-200 ${
                             selectedReason === r
                               ? 'bg-[#1251A3] text-white border-[#1251A3] shadow-md shadow-blue-500/20'
                               : 'bg-white text-[#3D5276] border-[rgba(18,81,163,0.15)] hover:border-[#1251A3] hover:text-[#1251A3]'
-                          }`}>
+                          }`}
+                        >
                           {r}
                         </button>
                       ))}
@@ -255,15 +273,22 @@ export default function ContactSection() {
 
                   {/* Area pills */}
                   <div>
-                    <label className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#7B90B2] mb-2.5 block">Area of Interest</label>
+                    <label className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#7B90B2] mb-2.5 block">
+                      Area of Interest
+                    </label>
                     <div className="flex flex-wrap gap-2">
                       {AREAS.map(a => (
-                        <button key={a} type="button" onClick={() => setValue('area_of_interest', a)}
+                        <button
+                          key={a}
+                          type="button"
+                          onClick={() => setValue('area_of_interest', a)}
+                          suppressHydrationWarning
                           className={`px-3 py-1.5 rounded-full text-[11px] font-semibold border transition-all duration-200 ${
                             selectedArea === a
                               ? 'bg-[#0891B2] text-white border-[#0891B2] shadow-md shadow-teal-500/20'
                               : 'bg-white text-[#3D5276] border-[rgba(8,145,178,0.2)] hover:border-[#0891B2] hover:text-[#0891B2]'
-                          }`}>
+                          }`}
+                        >
                           {a}
                         </button>
                       ))}
@@ -272,12 +297,15 @@ export default function ContactSection() {
 
                   {/* Message */}
                   <div>
-                    <label className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#7B90B2] mb-2 block">Message *</label>
+                    <label className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#7B90B2] mb-2 block">
+                      Message *
+                    </label>
                     <textarea
                       {...register('message')}
                       rows={4}
                       placeholder="Tell us about your lab requirement — product quantity, instrument type, service needed, or project scope…"
                       className="input-sci resize-none"
+                      suppressHydrationWarning
                     />
                     {errors.message && <p className="text-red-500 text-[11px] mt-1">{errors.message.message}</p>}
                   </div>
@@ -286,14 +314,23 @@ export default function ContactSection() {
                   <button
                     type="submit"
                     disabled={loading}
+                    suppressHydrationWarning
                     className="w-full flex items-center justify-center gap-2.5 bg-gradient-to-r from-[#1251A3] to-[#0891B2] text-white font-bold py-4 rounded-2xl hover:shadow-xl hover:shadow-blue-500/25 transition-all duration-300 hover:-translate-y-0.5 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 text-[14px]"
                   >
                     {loading ? (
-                      <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />Sending…</>
+                      <>
+                        <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        Sending…
+                      </>
                     ) : (
-                      <><Send size={16} />Send Message<span className="text-white/60 font-normal text-[12px] ml-1">· We reply in 24hrs</span></>
+                      <>
+                        <Send size={16} />
+                        Send Message
+                        <span className="text-white/60 font-normal text-[12px] ml-1">· We reply in 24hrs</span>
+                      </>
                     )}
                   </button>
+
                 </form>
               )}
             </div>
