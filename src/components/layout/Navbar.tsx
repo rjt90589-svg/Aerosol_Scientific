@@ -73,12 +73,12 @@ function ProductsMegaMenu({ products, onClose }: MegaMenuProps) {
     >
       <div className="bg-white rounded-2xl shadow-[0_24px_70px_rgba(18,81,163,0.18)] border border-[rgba(18,81,163,0.09)] overflow-hidden flex flex-col">
         {/* accent bar */}
-        <div className="h-0.5 w-full bg-gradient-to-r from-[#1251A3] via-[#0891B2] to-[#22D3EE] shrink-0" />
+        <div className="h-0.5 w-full bg-linear-gradient-to-r from-[#1251A3] via-[#0891B2] to-[#22D3EE] shrink-0" />
 
         <div className="flex" style={{ minHeight: 340 }}>
 
           {/* ── Left: category list ───────────────────────────────── */}
-          <div className="w-[220px] shrink-0 border-r border-[rgba(18,81,163,0.07)] bg-[rgba(18,81,163,0.02)] py-3 flex flex-col">
+          <div className="w-55 shrink-0 border-r border-[rgba(18,81,163,0.07)] bg-[rgba(18,81,163,0.02)] py-3 flex flex-col">
             <div className="px-4 pb-2">
               <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#7B90B2]">Categories</span>
             </div>
@@ -304,7 +304,7 @@ export default function Navbar() {
 
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 group shrink-0">
-              <img src="/logo.png" alt="Aerosol Scientific" className="w-16 h-16 relative" />
+              <img src="/logo.png" alt="Aerosol Scientific" className="w-20 h-20 relative" />
             </Link>
 
             {/* Desktop Nav */}
