@@ -1,27 +1,32 @@
+
 export interface Product {
   id: string
   name: string
   slug: string
-  description: string
-  short_description: string
+  description: string | null
+  short_description: string | null
   category: string
   brand: string
-  image_url: string
+  image_url: string | null
   images: string[]
-  specifications: Record<string, string>
+  specifications: Record<string, string | number | boolean>
   tags: string[]
   featured: boolean
   created_at: string
   updated_at: string
+  // Joined from reviews table (approved only)
+  reviews: Review[]
+  // Computed from reviews
+  average_rating: number | null
+  review_count: number
 }
-
 export interface Review {
   id: string
   product_id: string
   reviewer_name: string
   reviewer_email: string
-  rating: number
-  comment: string
+  rating: number // 1–5
+  comment: string | null
   approved: boolean
   created_at: string
 }

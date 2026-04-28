@@ -474,20 +474,45 @@ export default function AnalabHeroSlider() {
                 />
 
                 {/* Product image */}
-                <AnimatePresence mode="wait">
-                  <motion.img
-                    key={`img-${epoch}`}
-                    src={s.image}
-                    alt={s.title}
-                    className="relative z-10 w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                    style={{ maxHeight: 430, filter: 'drop-shadow(0 12px 40px rgba(0,0,0,0.55))' }}
-                    draggable={false}
-                    initial={{ opacity: 0, scale: 0.80 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 1.08, transition: { duration: 0.28 } }}
-                    transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-                  />
-                </AnimatePresence>
+               <AnimatePresence mode="wait">
+  <motion.img
+    key={`img-${epoch}`}
+    src={s.image}
+    alt={s.title}
+    draggable={false}
+    className="relative z-10 w-full h-full object-contain will-change-transform"
+    style={{
+      maxHeight: 430,
+      filter: 'drop-shadow(0 12px 40px rgba(0,0,0,0.45))',
+    }}
+
+    initial={{
+      opacity: 0,
+      scale: 0.94,
+      y: 12,
+      filter: "blur(6px)"
+    }}
+
+    animate={{
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      filter: "blur(0px)"
+    }}
+
+    exit={{
+      opacity: 0,
+      scale: 1.04,
+      y: -10,
+      filter: "blur(4px)"
+    }}
+
+    transition={{
+      duration: 0.55,
+      ease: [0.22, 1, 0.36, 1],
+    }}
+  />
+</AnimatePresence>
 
                 {/* "View Details" pill that appears on hover */}
                 <div

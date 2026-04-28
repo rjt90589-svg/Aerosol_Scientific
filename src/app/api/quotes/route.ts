@@ -1,50 +1,64 @@
-import { NextResponse } from 'next/server'
-import { createAdminClient } from '@/lib/supabase/admin'
-import { resend, ADMIN_EMAIL } from '@/lib/resend'
+import { createClient } from '@/lib/supabase/server'
+import { NextRequest, NextResponse } from 'next/server'
 
-export async function POST(req: Request) {
-  try {
-    const body = await req.json()
-    const supabase = createAdminClient()
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url)
+  const status = searchParams.get('status')
 
-    const { error } = await supabase.from('quote_requests').insert([body])
-    if (error) throw error
+  const supabase = await createClient()
+  let query = supabase
+    .from('quote_requests')
+    .select('*')
+    .order('created_at', { ascending: false })
 
-    await resend.emails.send({
-      from: 'Aerosol Scientific <noreply@aerosolscientific.com>',
-      to: [ADMIN_EMAIL],
-      subject: `New Quote Request: ${body.product_name || 'General'}`,
-      html: `
-        <h2>New Quote Request</h2>
-        <p><strong>Product:</strong> ${body.product_name || 'N/A'}</p>
-        <p><strong>Name:</strong> ${body.full_name}</p>
-        <p><strong>Email:</strong> ${body.email}</p>
-        <p><strong>Phone:</strong> ${body.phone}</p>
-        <p><strong>Company:</strong> ${body.company || 'N/A'}</p>
-        <p><strong>Quantity:</strong> ${body.quantity || 'N/A'}</p>
-        <p><strong>Message:</strong> ${body.message || 'N/A'}</p>
-        <hr/>
-        <p><a href="${process.env.NEXT_PUBLIC_SITE_URL}/admin/quotes">View in Admin Panel</a></p>
-      `,
-    })
+  if (status) query = query.eq('status', status)
 
-    // Confirmation email to customer
-    await resend.emails.send({
-      from: 'Aerosol Scientific <noreply@aerosolscientific.com>',
-      to: [body.email],
-      subject: 'Quote Request Received — Aerosol Scientific',
-      html: `
-        <h2>Thank you, ${body.full_name}!</h2>
-        <p>We've received your quote request for <strong>${body.product_name || 'our products'}</strong>.</p>
-        <p>Our team will get back to you within <strong>24 hours</strong>.</p>
-        <br/>
-        <p>Best regards,<br/>Aerosol Scientific Team<br/>sales@aerosolscientific.com</p>
-      `,
-    })
+  const { data, error } = await query
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  return NextResponse.json(data ?? [])
+}
 
-    return NextResponse.json({ success: true })
-  } catch (err) {
-    console.error(err)
-    return NextResponse.json({ error: 'Failed' }, { status: 500 })
+export async function POST(req: NextRequest) {
+  const body = await req.json()
+  const { full_name, email, phone, company, product_id, product_name, quantity, message } = body
+
+  if (!full_name || !email || !phone) {
+    return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
   }
+
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('quote_requests')
+    .insert([{
+      full_name,
+      email,
+      phone,
+      company: company || null,
+      product_id: product_id || null,
+      product_name: product_name || null,
+      quantity: quantity || null,
+      message: message || null,
+      status: 'new',
+    }])
+    .select()
+    .single()
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  return NextResponse.json({ success: true, quote: data }, { status: 201 })
+}
+
+export async function PATCH(req: NextRequest) {
+  const body = await req.json()
+  const { id, status } = body
+
+  if (!id || !status) return NextResponse.json({ error: 'Missing id or status' }, { status: 400 })
+
+  const supabase = await createClient()
+  const { error } = await supabase
+    .from('quote_requests')
+    .update({ status })
+    .eq('id', id)
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  return NextResponse.json({ success: true })
 }

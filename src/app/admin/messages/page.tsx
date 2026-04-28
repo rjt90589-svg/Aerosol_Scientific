@@ -7,13 +7,25 @@ import type { ContactMessage } from '@/types'
 export default function AdminMessages() {
   const [messages, setMessages] = useState<ContactMessage[]>([])
   const [selected, setSelected] = useState<ContactMessage | null>(null)
+  const [loading, setLoading] = useState(true)
+   const fetchMessages = async () => {
+    setLoading(true)
+    try {
+      const res = await fetch('/api/contact')
+      const data = await res.json()
+      setMessages(data)
+    } finally {
+      setLoading(false)
+    }
+  }
 
-  useEffect(() => {
-    const supabase = createClient()
-    supabase.from('contact_messages').select('*').order('created_at', { ascending: false }).then(({ data }) => {
-      setMessages(data || [])
-    })
-  }, [])
+  useEffect(() => { fetchMessages() }, [])
+  // useEffect(() => {
+  //   const supabase = createClient()
+  //   supabase.from('contact_messages').select('*').order('created_at', { ascending: false }).then(({ data }) => {
+  //     setMessages(data || [])
+  //   })
+  // }, [])
 
   return (
     <div>

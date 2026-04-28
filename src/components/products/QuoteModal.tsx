@@ -1,26 +1,12 @@
 'use client'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { X, Send, CheckCircle } from 'lucide-react'
+import { X, Quote, CheckCircle2, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import type { Product } from '@/types'
-
-const schema = z.object({
-  full_name: z.string().min(2),
-  email: z.string().email(),
-  phone: z.string().min(7),
-  company: z.string().optional(),
-  quantity: z.string().optional(),
-  message: z.string().optional(),
-})
-
-type FormData = z.infer<typeof schema>
 
 interface Props {
   product: Product
@@ -29,25 +15,42 @@ interface Props {
 }
 
 export default function QuoteModal({ product, isOpen, onClose }: Props) {
-  const [submitted, setSubmitted] = useState(false)
-  const [loading, setLoading] = useState(false)
-
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
-    resolver: zodResolver(schema)
+  const [form, setForm] = useState({
+    full_name: '', email: '', phone: '', company: '', quantity: '', message: '',
   })
+  const [loading, setLoading] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  const onSubmit = async (data: FormData) => {
+  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setForm(f => ({ ...f, [k]: e.target.value }))
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault()
     setLoading(true)
+    setError(null)
     try {
       const res = await fetch('/api/quotes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...data, product_id: product.id, product_name: product.name }),
+        body: JSON.stringify({
+          ...form,
+          product_id: product.id,
+          product_name: product.name,
+        }),
       })
-      if (res.ok) setSubmitted(true)
+      if (!res.ok) throw new Error('Failed to submit quote request')
+      setSubmitted(true)
+    } catch (err) {
+      setError((err as Error).message)
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleClose = () => {
+    onClose()
+    setTimeout(() => { setSubmitted(false); setError(null); setForm({ full_name: '', email: '', phone: '', company: '', quantity: '', message: '' }) }, 300)
   }
 
   return (
@@ -59,72 +62,75 @@ export default function QuoteModal({ product, isOpen, onClose }: Props) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={onClose}
+            onClick={handleClose}
           />
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden z-10"
+            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden"
           >
             {/* Header */}
             <div className="bg-gradient-to-r from-[#1565C0] to-[#00838F] p-5 text-white">
-              <button onClick={onClose} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center">
-                <X size={16} />
-              </button>
-              <div className="text-xs font-bold uppercase tracking-wider opacity-80 mb-1">Request a Quote</div>
-              <h2 className="font-bold text-lg leading-tight">{product.name}</h2>
+              <div className="flex items-start justify-between">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Quote size={18} />
+                    <h2 className="text-lg font-bold">Request a Quote</h2>
+                  </div>
+                  <p className="text-white/80 text-sm">{product.name}</p>
+                </div>
+                <button onClick={handleClose} className="w-8 h-8 rounded-lg bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors">
+                  <X size={16} />
+                </button>
+              </div>
             </div>
 
-            {/* Body */}
-            <div className="p-6">
-              {submitted ? (
-                <div className="flex flex-col items-center py-8 text-center">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                    <CheckCircle size={32} className="text-green-500" />
-                  </div>
-                  <h3 className="font-bold text-xl text-gray-900 mb-2">Quote Requested!</h3>
-                  <p className="text-gray-500 text-sm">We'll send you a detailed quote within 24 hours.</p>
-                  <Button onClick={onClose} className="mt-6">Close</Button>
+            {submitted ? (
+              <div className="p-10 flex flex-col items-center text-center gap-3">
+                <div className="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center">
+                  <CheckCircle2 size={32} className="text-green-500" />
                 </div>
-              ) : (
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <Label>Full Name *</Label>
-                      <Input {...register('full_name')} placeholder="Your name" className="mt-1" />
-                      {errors.full_name && <p className="text-red-500 text-xs mt-1">Required</p>}
-                    </div>
-                    <div>
-                      <Label>Email *</Label>
-                      <Input {...register('email')} type="email" placeholder="email@domain.com" className="mt-1" />
-                      {errors.email && <p className="text-red-500 text-xs mt-1">Valid email required</p>}
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <Label>Phone *</Label>
-                      <Input {...register('phone')} placeholder="+91..." className="mt-1" />
-                    </div>
-                    <div>
-                      <Label>Company</Label>
-                      <Input {...register('company')} placeholder="Optional" className="mt-1" />
-                    </div>
+                <h3 className="text-xl font-bold text-gray-900">Quote Requested!</h3>
+                <p className="text-gray-500 text-sm">We'll get back to you within 24 hours at <strong>{form.email}</strong>.</p>
+                <Button onClick={handleClose} className="mt-2 bg-gradient-to-r from-[#1565C0] to-[#00838F]">Close</Button>
+              </div>
+            ) : (
+              <form onSubmit={submit} className="p-5 space-y-3 max-h-[70vh] overflow-y-auto">
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <Label>Full Name <span className="text-red-500">*</span></Label>
+                    <Input value={form.full_name} onChange={set('full_name')} placeholder="John Smith" className="mt-1" required />
                   </div>
                   <div>
-                    <Label>Quantity / Requirement</Label>
-                    <Input {...register('quantity')} placeholder="e.g. 1000 vials, bulk order..." className="mt-1" />
+                    <Label>Email <span className="text-red-500">*</span></Label>
+                    <Input type="email" value={form.email} onChange={set('email')} placeholder="john@company.com" className="mt-1" required />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <Label>Phone <span className="text-red-500">*</span></Label>
+                    <Input value={form.phone} onChange={set('phone')} placeholder="+971 5X XXX XXXX" className="mt-1" required />
                   </div>
                   <div>
-                    <Label>Additional Notes</Label>
-                    <Textarea {...register('message')} rows={3} placeholder="Any specific requirements..." className="mt-1 resize-none" />
+                    <Label>Company</Label>
+                    <Input value={form.company} onChange={set('company')} placeholder="Company name" className="mt-1" />
                   </div>
-                  <Button type="submit" disabled={loading} className="w-full bg-gradient-to-r from-[#1565C0] to-[#00838F]">
-                    {loading ? 'Sending...' : <span className="flex items-center gap-2"><Send size={14} />Send Quote Request</span>}
-                  </Button>
-                </form>
-              )}
-            </div>
+                </div>
+                <div>
+                  <Label>Quantity / Volume</Label>
+                  <Input value={form.quantity} onChange={set('quantity')} placeholder="e.g. 100 units, bulk order..." className="mt-1" />
+                </div>
+                <div>
+                  <Label>Additional Message</Label>
+                  <Textarea value={form.message} onChange={set('message')} rows={3} className="mt-1 resize-none" placeholder="Specifications, delivery requirements, etc." />
+                </div>
+                {error && <p className="text-red-500 text-sm">{error}</p>}
+                <Button type="submit" disabled={loading} className="w-full bg-gradient-to-r from-[#1565C0] to-[#00838F] py-5">
+                  {loading ? <span className="flex items-center gap-2"><Loader2 size={16} className="animate-spin" /> Submitting...</span> : 'Submit Quote Request'}
+                </Button>
+              </form>
+            )}
           </motion.div>
         </div>
       )}

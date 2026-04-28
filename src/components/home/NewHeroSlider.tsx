@@ -123,7 +123,7 @@ function ProgressBar({ duration, active, accent }: { duration: number; active: b
   )
 }
 
-const DURATION = 5500
+const DURATION = 1500
 
 export default function NewHeroSlider() {
   const [current, setCurrent] = useState(0)
@@ -273,7 +273,7 @@ export default function NewHeroSlider() {
                 animate="center"
                 exit="exit"
                 transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                className="relative w-full max-w-[520px]"
+                className="relative w-full max-w-130"
               >
                 {/* Card frame */}
                 <div className={`relative rounded-3xl overflow-hidden bg-gradient-to-br ${s.rightBg} aspect-[4/3] shadow-2xl`}

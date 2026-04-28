@@ -12,7 +12,7 @@ export default function TopBar() {
   }
 
   return (
-    <div className="bg-gradient-to-r from-[#0D47A1] to-[#00838F] text-white text-xs">
+    <div className="bg-[#0586D3] from-[#0D47A1]  text-white text-xs">
       <div className="max-w-7xl mx-auto px-4 py-2 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1.5">

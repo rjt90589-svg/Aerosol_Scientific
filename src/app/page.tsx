@@ -8,7 +8,7 @@ import { createClient } from '@/lib/supabase/server'
 import ProductCard from '@/components/products/ProductCard'
 import SectionHeading from '@/components/ui/SectionHeading'
 import Link from 'next/link'
-import NewHeroSlider from '@/components/home/NewHeroSlider'
+// import NewHeroSlider from '@/components/home/NewHeroSlider'
 import WhatWeProvide from '@/components/home/WhatWeProvide'
 import AnalabHeroSlider from '@/components/home/Analabheroslider'
 
@@ -18,7 +18,7 @@ export default async function HomePage() {
     .from('products')
     .select('*')
     .eq('featured', true)
-    .limit(4)
+    .limit(8)
 
   return (
     <>

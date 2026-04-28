@@ -1,7 +1,8 @@
+// src/lib/supabase/storage.ts
 import { createClient } from './client'
 import { SUPABASE_STORAGE_BUCKET } from '../constants'
 
-export async function uploadProductImage(file: File, productSlug: string): Promise<string | null> {
+export async function uploadProductImage(file: File, productSlug: string): Promise<string> {
   const supabase = createClient()
   const ext = file.name.split('.').pop()
   const fileName = `${productSlug}-${Date.now()}.${ext}`
@@ -9,14 +10,11 @@ export async function uploadProductImage(file: File, productSlug: string): Promi
 
   const { error } = await supabase.storage
     .from(SUPABASE_STORAGE_BUCKET)
-    .upload(filePath, file, {
-      cacheControl: '3600',
-      upsert: false,
-    })
+    .upload(filePath, file, { cacheControl: '3600', upsert: false })
 
   if (error) {
-    console.error('Upload error:', error)
-    return null
+    console.error('[storage] Upload error:', error)
+    throw new Error(`Image upload failed: ${error.message}`)
   }
 
   const { data } = supabase.storage.from(SUPABASE_STORAGE_BUCKET).getPublicUrl(filePath)
@@ -25,11 +23,11 @@ export async function uploadProductImage(file: File, productSlug: string): Promi
 
 export async function deleteProductImage(url: string): Promise<void> {
   const supabase = createClient()
-  // Extract path from public URL
   const urlParts = url.split(`/${SUPABASE_STORAGE_BUCKET}/`)
   if (urlParts.length < 2) return
   const filePath = urlParts[1]
-  await supabase.storage.from(SUPABASE_STORAGE_BUCKET).remove([filePath])
+  const { error } = await supabase.storage.from(SUPABASE_STORAGE_BUCKET).remove([filePath])
+  if (error) console.error('[storage] Delete error:', error)
 }
 
 export function getStorageUrl(path: string): string {

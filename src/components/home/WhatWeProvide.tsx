@@ -52,7 +52,7 @@ export default function WhatWeProvide() {
           <SectionHeading
             eyebrow="Product Range"
             title="What We |Provide"
-            subtitle="From consumables to complete instruments — your one-stop laboratory partner."
+            subtitle="Entire Laboratory setup (Design/civil/furniture/Govt approvals), Laboratory equipment’s from worldwide manufacturers/OEMs, Consumables, training, service support, AMC contract, Multivendor support— Your one-stop laboratory partner."
           />
           <Link
             href="/products"
@@ -80,11 +80,23 @@ export default function WhatWeProvide() {
 
                 <div className="p-7">
                   <div className="flex items-start gap-5 mb-5">
-                    <div
-                      className={`w-12 h-12 rounded-xl bg-gradient-to-br ${cat.gradient} flex items-center justify-center shadow-md shrink-0 group-hover:scale-110 transition-transform duration-300`}
-                    >
-                      <Icon size={22} className="text-white" />
-                    </div>
+                   <div className="relative shrink-0">
+  {/* 🔥 Glow background */}
+  <div
+    className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${cat.gradient} blur-xl opacity-40 group-hover:opacity-70 transition duration-300`}
+  />
+
+  {/* 🔥 Main icon box */}
+  <div
+    className={`relative w-14 h-14 rounded-2xl bg-gradient-to-br ${cat.gradient} flex items-center justify-center shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:-translate-y-0.5`}
+  >
+    {/* 🔥 Inner shine */}
+    <div className="absolute inset-0 rounded-2xl bg-white/10" />
+
+    {/* 🔥 Icon */}
+    <Icon size={26} className="relative text-white drop-shadow-lg" />
+  </div>
+</div>
                     <div>
                       <h3 className="font-bold text-gray-900 text-lg leading-tight mb-1.5 group-hover:text-[#1565C0] transition-colors">
                         {cat.title}

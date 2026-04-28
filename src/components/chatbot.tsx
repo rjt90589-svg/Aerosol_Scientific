@@ -6,6 +6,8 @@ import {
   MessageCircle, X, Send, User, Loader2,
   Phone, Mail, FlaskConical, ArrowRight, Sparkles
 } from 'lucide-react'
+import { useProductStore } from '@/lib/store/productStore'
+import type { Product } from '@/types'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -21,241 +23,90 @@ const QUICK_REPLIES = [
   '🤝 Who are your partners?',
 ]
 
-// ── Comprehensive system prompt with ALL products, services, categories ──
-const SYSTEM_PROMPT = `You are "Aero", a friendly and knowledgeable assistant for Aerosol Scientific — a scientific instruments and laboratory solutions company with offices in UAE (Dubai) and India (New Delhi).
+const STATIC_SYSTEM_PROMPT = `You are "Aero", a friendly and knowledgeable assistant for Aerosol Scientific — a scientific instruments and laboratory solutions company with offices in UAE (Dubai) and India (New Delhi).
 
 COMPANY OVERVIEW:
 - Name: Aerosol Scientific
 - Offices: UAE (108-AL MAZROUA, AN-2, Dubai) | India (F-4, 1st Floor, Karka Duma, New Delhi-110092)
-- Phone UAE: +971-547598109
-- Phone India: +91 98919 38724
+- Phone UAE: +971-547598109 | Phone India: +91 98919 38724
 - Email: sales@aerosolscientific.com | support@aerosolscientific.com
 - WhatsApp: +971547598109
-- Website: aerosolscientific.com
 
-═══════════════════════════════════════
-COMPLETE PRODUCT PORTFOLIO
-═══════════════════════════════════════
+SERVICES:
+1. Multi-vendor support (Agilent, Sciex, Waters, Shimadzu) — up to 40% cheaper than OEM
+2. Service contracts: Comprehensive, Labor Only, Trade Maintenance
+3. Lab supplies & consumables (GC/HPLC columns, PM kits, vials)
+4. Trainings & workshops (HPLC, GC, Method Development, 21 CFR Part 11)
+5. Turnkey laboratory projects (GLP/GMP compliant)
 
-1. CHROMATOGRAPHY CONSUMABLES (Aerosol Scientific own products):
-   • Vials:
-     - 1.5mL Amber 9mm Screw Vial (ND9, borosilicate, 11.6×32mm)
-     - 1.5mL Clear 9mm Screw Vial (ND9, borosilicate, 11.6×32mm)
-     - Available formats: ND9 (9mm), ND11, ND18, ND20 thread sizes
-     - Amber and clear glass options for GC & HPLC
-     - Volumes: 1.5mL, 2mL, 4mL, 10mL, 20mL, 40mL
-     - With integrated Micro-Insert option available
-   • Septa:
-     - White PTFE/Red Silicone Septa (minimal bleed, excellent chemical resistance)
-     - PTFE/Silicone composite — for GC and HPLC
-   • Manual Vial Crimpers & Decappers:
-     - Manual Hand Crimper (20mm, stainless steel, ergonomic)
-   • Lab Supplies / GC & HPLC Consumables:
-     - GC Columns
-     - HPLC Columns
-     - PM Kits (preventive maintenance kits for instruments)
-     - Liner and Septa for GC
-     - Centrifuge tubes, PP vials, glass vials
-     - Pipette tips, sample prep accessories
-     - Aerosol consumables (30, 40 series)
+PARTNER BRANDS: Thermolab Scientific, Witeg Germany, FDGSi France, PCi Analytics India, Sartorius, Eppendorf
 
-2. WITEG GERMANY PRODUCTS (Lab Equipment & Glassware):
-   • Stirring & Mixing Equipment:
-     - Magnetic Stirrers (1200 RPM, 1500 RPM)
-     - Hotplate Stirrers
-     - Overhead Stirrers (digital set)
-     - Multi-position stirrers
-     - Vortex Mixers
-     - Thermal Shakers
-     - Shakers and rockers
-   • Heating Equipment:
-     - Heating mantles, Dry baths & block heaters
-     - Water baths (standard, circulating, shaking)
-     - Oil baths, Temperature controllers
-   • Centrifugation:
-     - Benchtop centrifuges, Mini centrifuges
-     - High-speed centrifuges
-   • Lab Glassware (30,000+ products, DIN/ISO/ASTM):
-     - Condensers, flasks, funnels, beakers
-     - Chromatography glassware
-     - Distillation & extraction glassware
-     - Filtration systems
-   • Liquid Handling:
-     - Pipettes (0.1µL to 50mL)
-     - Dispensers (0.25mL to 250mL)
-     - Digital Burette TITREX
-   • SMART-Lab Wi-Fi enabled devices (incubators, ovens, remote monitoring)
-   • Autoclave with Basket
+RESPONSE GUIDELINES:
+1. Friendly, professional, concise — 2-4 sentences for simple questions
+2. For pricing, always direct to /contact or WhatsApp
+3. When a user asks about a specific product, reference it by name and provide its detail page link
+4. For service inquiries mention 24hr response SLA and direct to /services
+5. Always end with a clear action (visit page, contact, WhatsApp)
+6. Never make up prices, stock levels, or specs not listed
+7. Be warm, genuine, and helpful`
 
-3. FDGSI (France) GAS GENERATORS:
-   • Nitrogen Generators (CALYPSO, STREAM, MAESTRO series):
-     - PSA and Membrane technology
-     - Purity: 95% to 99.9995%
-     - Applications: LC-MS, GC-MS, sample evaporation
-   • Hydrogen Generators (COSMOS H2 series):
-     - PEM technology, purity up to 99.9999%
-     - Flow: 100–1500 cc/min
-     - Applications: GC carrier gas, FID, FPD, NPD, TCD
-   • Air Generators (PROSPERO, DEIMOS series):
-     - Zero Air, hydrocarbon < 0.1 ppm, flow up to 30 L/min
-   • Liquid Nitrogen Generators (CRYOGEN series):
-     - 10–80 liters/day, cryopreservation applications
+// Build dynamic system prompt suffix from live product catalog
+function buildProductCatalogPrompt(products: Product[]): string {
+  if (!products.length) return ''
 
-4. PCI ANALYTICS (India) PRODUCTS:
-   • Gas Generators:
-     - PreCiGen Nitrogen Generators (for GC)
-     - Hydrogen Gas Generators
-     - Zero Air Generators
-   • Analytical Instruments:
-     - HPLC Column Ovens
-     - Digital Gas Flow Meters
-     - Probe Sonicators
-     - Ultrasonic Bath Sonicators
-   • Gas Handling:
-     - Gas Purification Panels
-     - Automatic Gas Changeover Manifolds
-     - High-precision P-Lok Regulators
-   • Lab Equipment:
-     - Oil-free Diaphragm Vacuum Pumps
-     - Positive Pressure Processors for SPE
-     - Sample Evaporators, Vortex Mixers
-   • Consumables: GC/HPLC consumables, FTIR accessories, AAS accessories
+  const byCategory = products.reduce<Record<string, Product[]>>((acc, p) => {
+    ;(acc[p.category] = acc[p.category] || []).push(p)
+    return acc
+  }, {})
 
-5. THERMOLAB SCIENTIFIC EQUIPMENTS (Stability & Environmental Chambers):
-   • Stability Chambers:
-     - Walk-In Stability Chambers (ICH compliant)
-     - Stability Chambers (21 CFR Part 11 / GAMP 5 compliance)
-   • Autoclaves & Sterilizers:
-     - Autoclave with Basket
-     - Horizontal Sterilizer — Double Door
-     - Vertical Series Sterilizers
-   • Environmental Chambers:
-     - Photostability Chambers
-     - Incubators & Environmental Chambers
-     - Ovens (standard and vacuum)
-   • Cold Chain:
-     - Pharma Cold Rooms
-   • Laminar Airflow Units
-   - Compliance: ICH, WHO, USFDA, GMP, 21 CFR Part 11
+  const lines: string[] = [
+    '',
+    '═══════════════════════════════════════',
+    'LIVE PRODUCT CATALOG (from database)',
+    '═══════════════════════════════════════',
+  ]
 
-6. GENERAL ANALYTICAL INSTRUMENTS (Via Partners):
-   • pH & Electrochemistry:
-     - pH/mV/°C/ORP Analyzers (benchtop and handheld)
-     - Conductivity/TDS/Resistivity Analyzers
-     - Multiparameter Analyzers
-   • Titration:
-     - Karl Fischer Titrators
-     - Auto Titrators (acid/base, redox, complexometric)
-   • Thermal Analysis:
-     - Automatic Melting/Boiling Point Apparatus
-   • Photometry:
-     - Flame Photometers
-     - UV/Vis Spectrophotometers
-   • Ultrasonic Equipment:
-     - Ultrasonic Bath with Heater / Chiller
-   • Tablet Testing:
-     - Friability Test Apparatus
-     - Tap Density Test Apparatus
-     - Tablet Hardness Tester
-     - Tablet Dissolution Test Apparatus
-     - Leak Test Apparatus
-     - Sieve Shakers
-   • Gas Safety:
-     - Gas Alarm Systems (up to 8 gas lines)
-     - Dew Point Apparatus
-   • Lab Infrastructure:
-     - Laboratory Furniture (benches, islands)
-     - Laboratory Fume Hoods
-     - Laboratory Stand-Alone units
-     - Laboratory Utilities
-
-═══════════════════════════════════════
-SERVICES
-═══════════════════════════════════════
-
-1. MULTI-VENDOR SUPPORT:
-   Brands: Agilent (LCMS/HPLC/GC/GCMS/ICPMS), Sciex (LCMS), Waters (HPLC/LCMS), Shimadzu (LCMS/HPLC/GC/GCMS)
-   Services: Installations, Repair/Service, Preventive Maintenance
-   Also covers: Gas Generators, Small equipment, Lab supplies
-   Benefit: Up to 40% cheaper than OEM contracts
-
-2. SERVICE CONTRACTS:
-   Types: Comprehensive (Parts+Labor), Labor Only, Trade Maintenance
-   Coverage: Scheduled PM visits, Emergency breakdown, Calibration, Compliance
-   Also: Lab & instrument relocation, Regulatory compliance documentation
-
-3. LAB SUPPLIES (consumable supply):
-   GC Columns, HPLC Columns, PM Kits, Liner/Septa for GC
-   Glass/PP vials and caps (30, 40 series), Centrifuge tubes
-   Pipette tips, sample prep, aerosol consumables
-
-4. TRAININGS & WORKSHOPS:
-   Topics: HPLC & GC basics, Method Development, Troubleshooting
-   Also: Basic Repair, Preventive Maintenance, Data Integrity (21 CFR Part 11)
-   Certificate on completion | Academic and corporate | Hands-on sessions
-
-5. TURNKEY LABORATORY PROJECTS:
-   Full setup: instruments + furniture + fume hoods + gas systems + SS furniture
-   Compliance: GLP/GMP, with full documentation
-
-═══════════════════════════════════════
-INDUSTRIES SERVED
-═══════════════════════════════════════
-Pharmaceutical, Life Sciences, Food & Beverage Testing, Environmental, Diagnostics, Forensic, Research institutions, Petrochemicals, Fine Chemicals, Atomic Energy, Government Labs
-
-═══════════════════════════════════════
-PARTNER BRANDS
-═══════════════════════════════════════
-Thermolab Scientific, Witeg Germany, FDGSi (France), PCi Analytics (India), Sartorius, Eppendorf, Torontech, Luminultra, Silverson, IKA
-
-═══════════════════════════════════════
-PRICING
-═══════════════════════════════════════
-No fixed prices online — all products and services require a quote request.
-Competitive pricing, especially for multi-vendor service contracts (40% savings vs OEM).
-
-═══════════════════════════════════════
-RESPONSE GUIDELINES
-═══════════════════════════════════════
-1. TONE: Friendly, professional, concise — like a knowledgeable lab colleague
-2. SHORT: 2-4 sentences for simple questions; brief bullets for lists
-3. QUOTES: Always direct to /contact or WhatsApp for pricing/availability
-4. LOCATION: Mention UAE/India offices when relevant to the question
-5. PRODUCTS: Name the specific product/category and direct to /products
-6. SERVICES: Mention 24hr response SLA and direct to /services
-7. NEXT STEP: Always end with a clear action (visit page, contact, WhatsApp)
-8. HONESTY: Never make up prices, stock levels, or specs not listed above
-9. REDIRECT: For completely off-topic questions, politely redirect to lab/science context
-10. PARTNER PRODUCTS: When asked about Witeg, FDGSi, PCi, or Thermolab products, explain we are authorized distributors and can help with quotes
-
-IMPORTANT: Be warm, genuine, and helpful. You represent a trusted scientific partner.`
-
-export default function Chatbot() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      role: 'assistant',
-      content: "👋 Hi! I'm Aero, your Aerosol Scientific assistant.\n\nAsk me about our chromatography consumables, gas generators, lab instruments, stability chambers, service contracts, or how to get a quote — I'm here to help!",
-      timestamp: new Date(),
+  for (const [category, items] of Object.entries(byCategory)) {
+    lines.push(`\n${category.toUpperCase()}:`)
+    for (const p of items) {
+      const desc = p.short_description || p.description || ''
+      lines.push(`  • ${p.name}${desc ? ` — ${desc.slice(0, 120)}` : ''} [slug: ${p.slug}]`)
     }
-  ])
-  const [input, setInput] = useState('')
-  const [loading, setLoading] = useState(false)
-  const endRef = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
+  }
 
-  useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+  lines.push(
+    '',
+    'IMPORTANT: When any product is mentioned, tell the user they can view it at /products/{slug} and request a quote there.',
+    'Always use the exact slug from the catalog above to build product URLs.',
+  )
 
-  useEffect(() => {
-    if (isOpen) setTimeout(() => inputRef.current?.focus(), 300)
-  }, [isOpen])
+  return lines.join('\n')
+}
 
-  const extractLinks = (content: string): Message['links'] => {
-    const links: { label: string; href: string; type: 'product' | 'service' }[] = []
-    const lower = content.toLowerCase()
+// Extract smart links — both static service links and dynamic product page links
+function extractLinks(
+  content: string,
+  products: Product[],
+): Message['links'] {
+  const links: { label: string; href: string; type: 'product' | 'service' }[] = []
+  const lower = content.toLowerCase()
 
+  // Match live products by name or slug mentioned in the response
+  for (const p of products) {
+    const nameMatch = lower.includes(p.name.toLowerCase())
+    const slugMatch = lower.includes(p.slug.toLowerCase())
+    if (nameMatch || slugMatch) {
+      links.push({
+        label: p.name.length > 28 ? p.name.slice(0, 26) + '…' : p.name,
+        href: `/products/${p.slug}`,
+        type: 'product',
+      })
+      if (links.filter(l => l.type === 'product').length >= 2) break
+    }
+  }
+
+  // Static service/category links
+  if (!links.length) {
     if (lower.includes('vial') || lower.includes('septa') || lower.includes('consumable') || lower.includes('crimp')) {
       links.push({ label: 'Browse Products', href: '/products', type: 'product' })
     }
@@ -274,7 +125,7 @@ export default function Chatbot() {
     if (lower.includes('service') || lower.includes('maintenance') || lower.includes('contract') || lower.includes('repair')) {
       links.push({ label: 'View Services', href: '/services', type: 'service' })
     }
-    if (lower.includes('training') || lower.includes('workshop') || lower.includes('course')) {
+    if (lower.includes('training') || lower.includes('workshop')) {
       links.push({ label: 'Trainings', href: '/services#training', type: 'service' })
     }
     if (lower.includes('quote') || lower.includes('price') || lower.includes('cost') || lower.includes('order')) {
@@ -283,12 +134,45 @@ export default function Chatbot() {
     if (lower.includes('partner') || lower.includes('brand')) {
       links.push({ label: 'Our Partners', href: '/partners', type: 'product' })
     }
-
-    return links.slice(0, 2)
   }
 
-  const formatContent = (text: string) => {
-    return text.split('\n').map((line, i) => {
+  return links.slice(0, 2)
+}
+
+export default function Chatbot() {
+  const [isOpen, setIsOpen] = useState(false)
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      role: 'assistant',
+      content: "👋 Hi! I'm Aero, your Aerosol Scientific assistant.\n\nAsk me about our chromatography consumables, gas generators, lab instruments, stability chambers, service contracts, or how to get a quote — I'm here to help!",
+      timestamp: new Date(),
+    },
+  ])
+  const [input, setInput] = useState('')
+  const [loading, setLoading] = useState(false)
+  const endRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  // Pull live product catalog from the shared Zustand store
+  const { products, fetchProducts } = useProductStore()
+
+  // Warm the product cache as soon as the chatbot mounts
+  useEffect(() => {
+    fetchProducts();
+    
+    
+  }, [fetchProducts])
+
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
+
+  useEffect(() => {
+    if (isOpen) setTimeout(() => inputRef.current?.focus(), 300)
+  }, [isOpen])
+
+  const formatContent = (text: string) =>
+    text.split('\n').map((line, i) => {
       if (line.startsWith('•') || line.startsWith('-') || line.startsWith('*')) {
         return (
           <div key={i} className="flex gap-2 text-sm leading-relaxed">
@@ -300,47 +184,59 @@ export default function Chatbot() {
       if (line.trim() === '') return <div key={i} className="h-1.5" />
       return <p key={i} className="text-sm leading-relaxed">{line}</p>
     })
-  }
 
-  const send = useCallback(async (text?: string) => {
-    const msg = (text || input).trim()
-    if (!msg || loading) return
+  const send = useCallback(
+    async (text?: string) => {
+      const msg = (text || input).trim()
+      if (!msg || loading) return
 
-    const userMsg: Message = { role: 'user', content: msg, timestamp: new Date() }
-    const history = [...messages, userMsg]
-    setMessages(history)
-    setInput('')
-    setLoading(true)
+      const userMsg: Message = { role: 'user', content: msg, timestamp: new Date() }
+      const history = [...messages, userMsg]
+      setMessages(history)
+      setInput('')
+      setLoading(true)
 
-    try {
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          systemPrompt: SYSTEM_PROMPT,
-          messages: history.map(m => ({ role: m.role, content: m.content }))
+      // Compose system prompt: static base + live product catalog
+      const systemPrompt = STATIC_SYSTEM_PROMPT + buildProductCatalogPrompt(products)
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            systemPrompt,
+            messages: history.map(m => ({ role: m.role, content: m.content })),
+          }),
         })
-      })
-      const data = await res.json()
-      const reply = data.reply || "I'm sorry, I couldn't process that. Please try again or contact us directly."
-      const links = extractLinks(reply)
+        const data = await res.json()
+        const reply =
+          data.reply || "I'm sorry, I couldn't process that. Please try again or contact us directly."
 
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: reply,
-        timestamp: new Date(),
-        links,
-      }])
-    } catch {
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: "I'm having connectivity issues. Please reach us directly:\n📧 sales@aerosolscientific.com\n📞 +971-547598109",
-        timestamp: new Date(),
-      }])
-    } finally {
-      setLoading(false)
-    }
-  }, [input, messages, loading])
+        setMessages(prev => [
+          ...prev,
+          {
+            role: 'assistant',
+            content: reply,
+            timestamp: new Date(),
+            links: extractLinks(reply, products),
+          },
+        ])
+      } catch {
+        setMessages(prev => [
+          ...prev,
+          {
+            role: 'assistant',
+            content:
+              "I'm having connectivity issues. Please reach us directly:\n📧 sales@aerosolscientific.com\n📞 +971-547598109",
+            timestamp: new Date(),
+          },
+        ])
+      } finally {
+        setLoading(false)
+      }
+    },
+    [input, messages, loading, products],
+  )
 
   return (
     <>
@@ -411,21 +307,20 @@ export default function Chatbot() {
                         animate={{ scale: [1, 1.3, 1] }}
                         transition={{ duration: 2, repeat: Infinity }}
                       />
-                      <span className="text-[10px] text-emerald-400 font-medium">Online 24/7</span>
+                      <span className="text-[10px] text-emerald-400 font-medium">
+                        Online · {products.length > 0 ? `${products.length} products` : 'Loading catalog…'}
+                      </span>
                     </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <a href="tel:+971547598109"
-                    className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors" title="Call UAE">
+                  <a href="tel:+971547598109" className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors" title="Call UAE">
                     <Phone size={13} className="text-white" />
                   </a>
-                  <a href="mailto:sales@aerosolscientific.com"
-                    className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors" title="Email">
+                  <a href="mailto:sales@aerosolscientific.com" className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors" title="Email">
                     <Mail size={13} className="text-white" />
                   </a>
-                  <button onClick={() => setIsOpen(false)}
-                    className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors">
+                  <button onClick={() => setIsOpen(false)} className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors">
                     <X size={13} className="text-white" />
                   </button>
                 </div>
@@ -463,15 +358,19 @@ export default function Chatbot() {
                       </div>
                     </div>
 
+                    {/* Dynamic product / service links */}
                     {msg.links && msg.links.length > 0 && (
                       <div className="mt-2 flex flex-wrap gap-1.5">
                         {msg.links.map((link, li) => (
-                          <a key={li} href={link.href}
+                          <a
+                            key={li}
+                            href={link.href}
                             className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold transition-all hover:-translate-y-0.5 ${
                               link.type === 'product'
                                 ? 'bg-blue-50 text-[#1251A3] border border-blue-100 hover:bg-blue-100'
                                 : 'bg-teal-50 text-[#0891B2] border border-teal-100 hover:bg-teal-100'
-                            }`}>
+                            }`}
+                          >
                             <ArrowRight size={10} />
                             {link.label}
                           </a>
@@ -486,12 +385,15 @@ export default function Chatbot() {
                 </motion.div>
               ))}
 
-              {/* Quick replies on first load */}
+              {/* Quick replies */}
               {messages.length === 1 && (
                 <div className="flex flex-wrap gap-2">
                   {QUICK_REPLIES.map(q => (
-                    <button key={q} onClick={() => send(q)}
-                      className="px-3 py-1.5 rounded-full text-[12px] bg-white border border-[rgba(18,81,163,0.12)] text-[#3D5276] hover:border-[#1251A3] hover:text-[#1251A3] transition-all font-medium shadow-sm hover:shadow-md">
+                    <button
+                      key={q}
+                      onClick={() => send(q)}
+                      className="px-3 py-1.5 rounded-full text-[12px] bg-white border border-[rgba(18,81,163,0.12)] text-[#3D5276] hover:border-[#1251A3] hover:text-[#1251A3] transition-all font-medium shadow-sm hover:shadow-md"
+                    >
                       {q}
                     </button>
                   ))}
@@ -507,9 +409,12 @@ export default function Chatbot() {
                   <div className="bg-white border border-[rgba(18,81,163,0.07)] rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
                     <div className="flex gap-1.5 items-center">
                       {[0, 1, 2].map(i => (
-                        <motion.span key={i} className="w-2 h-2 rounded-full bg-[#1251A3] opacity-60"
+                        <motion.span
+                          key={i}
+                          className="w-2 h-2 rounded-full bg-[#1251A3] opacity-60"
                           animate={{ scale: [1, 1.5, 1], opacity: [0.4, 1, 0.4] }}
-                          transition={{ duration: 1, repeat: Infinity, delay: i * 0.25 }} />
+                          transition={{ duration: 1, repeat: Infinity, delay: i * 0.25 }}
+                        />
                       ))}
                     </div>
                   </div>
@@ -526,7 +431,12 @@ export default function Chatbot() {
                   type="text"
                   value={input}
                   onChange={e => setInput(e.target.value)}
-                  onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault()
+                      send()
+                    }
+                  }}
                   placeholder="Ask about products, services, partners…"
                   disabled={loading}
                   className="flex-1 px-4 py-2.5 rounded-xl bg-[rgba(18,81,163,0.04)] border border-[rgba(18,81,163,0.1)] text-sm text-[#0A1628] placeholder-[#7B90B2] outline-none focus:border-[#1251A3] focus:ring-2 focus:ring-[rgba(18,81,163,0.08)] transition-all disabled:opacity-50 font-medium"

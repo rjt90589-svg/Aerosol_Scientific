@@ -50,33 +50,50 @@ export default function WhyUs() {
           <SectionHeading
             eyebrow="Why Choose Us"
             title="Why |Aerosol Scientific?"
-            subtitle="Our experienced team understands the industry and its challenges. We ensure quick, reliable, and cost-effective services."
+            subtitle="Our experienced team understands the industry and its challenges. We ensure quick, reliable, and cost-effective solutions and services to your lab."
             centered
           />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature, i) => {
-            const Icon = feature.icon
-            return (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
-                whileHover={{ y: -4 }}
-                className="group relative bg-white rounded-2xl p-6 border border-gray-100 hover:border-blue-200 shadow-sm hover:shadow-xl transition-all duration-300"
-              >
-                {/* Gradient corner */}
-                <div className={`absolute top-0 right-0 w-20 h-20 bg-gradient-to-br ${feature.color} opacity-5 rounded-2xl`} />
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 shadow-md group-hover:scale-110 transition-transform`}>
-                  <Icon size={22} className="text-white" />
-                </div>
-                <h3 className="font-bold text-gray-900 text-lg mb-2">{feature.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{feature.description}</p>
-              </motion.div>
-            )
-          })}
+         {features.map((feature, i) => {
+  const Icon = feature.icon
+
+  return (
+    <motion.div
+      key={feature.title}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4, delay: i * 0.08 }}
+      whileHover={{ y: -6 }}
+      className="group relative bg-white rounded-2xl p-6 border border-gray-100 hover:border-transparent shadow-sm hover:shadow-2xl transition-all duration-300 overflow-hidden"
+    >
+      {/* 🔥 Strong gradient glow background */}
+      <div className={`absolute -top-10 -right-10 w-40 h-40 bg-gradient-to-br ${feature.color} opacity-20 blur-3xl group-hover:opacity-40 transition`} />
+
+      {/* 🔥 Icon container */}
+      <div className="relative mb-5">
+        <div
+          className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center shadow-lg transition-all duration-300 group-hover:scale-110`}
+        >
+          {/* glow ring */}
+          {/* <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${feature.color} blur-xl opacity-40 group-hover:opacity-70 transition`} /> */}
+
+          <Icon size={26} className="relative text-white drop-shadow-md" />
+        </div>
+      </div>
+
+      {/* 🔥 Content */}
+      <h3 className="font-bold text-gray-900 text-lg mb-2 tracking-tight">
+        {feature.title}
+      </h3>
+
+      <p className="text-gray-500 text-sm leading-relaxed">
+        {feature.description}
+      </p>
+    </motion.div>
+  )
+})}
         </div>
       </div>
     </section>

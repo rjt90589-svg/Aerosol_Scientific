@@ -1,14 +1,15 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { Star, Quote, ChevronRight, Package, Check } from 'lucide-react'
+import { Star, Quote, ChevronRight, Check, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import QuoteModal from '@/components/products/QuoteModal'
 import ProductCard from '@/components/products/ProductCard'
+import { useProductStore } from '@/lib/store/productStore'
 import type { Product, Review } from '@/types'
 
 interface Props {
@@ -17,22 +18,45 @@ interface Props {
   related: Product[]
 }
 
-export default function ProductDetailClient({ product, reviews, related }: Props) {
+export default function ProductDetailClient({ product, reviews: initialReviews, related }: Props) {
+  const { fetchProducts } = useProductStore()
   const [quoteOpen, setQuoteOpen] = useState(false)
   const [selectedImage, setSelectedImage] = useState(product.image_url)
   const [reviewForm, setReviewForm] = useState({ name: '', email: '', rating: 5, comment: '' })
   const [reviewSubmitted, setReviewSubmitted] = useState(false)
+  const [reviewLoading, setReviewLoading] = useState(false)
+  const [reviewError, setReviewError] = useState<string | null>(null)
 
-  const avgRating = reviews.length ? reviews.reduce((a, r) => a + r.rating, 0) / reviews.length : 0
+  // Warm the store in background so navigation to /products is instant
+  useEffect(() => { fetchProducts() }, [fetchProducts])
+
+  const avgRating = initialReviews.length
+    ? initialReviews.reduce((a, r) => a + r.rating, 0) / initialReviews.length
+    : 0
 
   const submitReview = async (e: React.FormEvent) => {
     e.preventDefault()
-    await fetch('/api/reviews', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...reviewForm, product_id: product.id }),
-    })
-    setReviewSubmitted(true)
+    setReviewLoading(true)
+    setReviewError(null)
+    try {
+      const res = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          product_id: product.id,
+          name: reviewForm.name,
+          email: reviewForm.email,
+          rating: reviewForm.rating,
+          comment: reviewForm.comment,
+        }),
+      })
+      if (!res.ok) throw new Error('Failed to submit review')
+      setReviewSubmitted(true)
+    } catch (err) {
+      setReviewError((err as Error).message)
+    } finally {
+      setReviewLoading(false)
+    }
   }
 
   return (
@@ -57,9 +81,12 @@ export default function ProductDetailClient({ product, reviews, related }: Props
               animate={{ opacity: 1 }}
               className="aspect-square bg-gray-50 rounded-2xl overflow-hidden border border-gray-100 mb-3"
             >
-              <img src={selectedImage} alt={product.name} className="w-full h-full object-contain p-6" />
+              {selectedImage
+                ? <img src={selectedImage} alt={product.name} className="w-full h-full object-contain p-6" />
+                : <div className="w-full h-full flex items-center justify-center text-gray-300 text-sm">No image</div>
+              }
             </motion.div>
-            {product.images.length > 1 && (
+            {product.images && product.images.length > 1 && (
               <div className="flex gap-2">
                 {product.images.map((img, i) => (
                   <button
@@ -78,7 +105,7 @@ export default function ProductDetailClient({ product, reviews, related }: Props
           <div>
             <div className="flex items-center gap-2 mb-3">
               <span className="text-xs font-bold bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full">{product.category}</span>
-              <span className="text-xs text-gray-400">by {product.brand}</span>
+              {product.brand && <span className="text-xs text-gray-400">by {product.brand}</span>}
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-3">{product.name}</h1>
 
@@ -89,13 +116,13 @@ export default function ProductDetailClient({ product, reviews, related }: Props
                   <Star key={i} size={14} className={i <= Math.round(avgRating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-200 fill-gray-200'} />
                 ))}
               </div>
-              <span className="text-sm text-gray-500">({reviews.length} reviews)</span>
+              <span className="text-sm text-gray-500">({initialReviews.length} reviews)</span>
             </div>
 
             <p className="text-gray-600 leading-relaxed mb-6">{product.description}</p>
 
             {/* Specs */}
-            {Object.keys(product.specifications).length > 0 && (
+            {product.specifications && Object.keys(product.specifications).length > 0 && (
               <div className="bg-gray-50 rounded-xl p-4 mb-6">
                 <h3 className="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wide">Specifications</h3>
                 <div className="grid grid-cols-2 gap-2">
@@ -109,26 +136,24 @@ export default function ProductDetailClient({ product, reviews, related }: Props
               </div>
             )}
 
-            <div id="quote">
-              <Button
-                onClick={() => setQuoteOpen(true)}
-                className="w-full bg-gradient-to-r from-[#1565C0] to-[#00838F] hover:shadow-lg hover:shadow-blue-500/25 py-6 text-base font-semibold"
-              >
-                <Quote className="mr-2" size={18} />
-                Request a Quote
-              </Button>
-            </div>
+            <Button
+              onClick={() => setQuoteOpen(true)}
+              className="w-full bg-gradient-to-r from-[#1565C0] to-[#00838F] hover:shadow-lg hover:shadow-blue-500/25 py-6 text-base font-semibold"
+            >
+              <Quote className="mr-2" size={18} />
+              Request a Quote
+            </Button>
           </div>
         </div>
 
         {/* Reviews */}
         <div className="mb-16">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Customer Reviews</h2>
-          {reviews.length === 0 ? (
-            <p className="text-gray-400 text-sm">No reviews yet. Be the first!</p>
+          {initialReviews.length === 0 ? (
+            <p className="text-gray-400 text-sm mb-8">No reviews yet. Be the first!</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-              {reviews.map((review) => (
+              {initialReviews.map((review) => (
                 <div key={review.id} className="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-teal-500 flex items-center justify-center text-white text-xs font-bold">
@@ -147,7 +172,7 @@ export default function ProductDetailClient({ product, reviews, related }: Props
             </div>
           )}
 
-          {/* Add Review Form */}
+          {/* Review Form */}
           {!reviewSubmitted ? (
             <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm max-w-xl">
               <h3 className="font-bold text-lg mb-4">Write a Review</h3>
@@ -155,11 +180,24 @@ export default function ProductDetailClient({ product, reviews, related }: Props
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <Label>Your Name</Label>
-                    <Input value={reviewForm.name} onChange={e => setReviewForm(f => ({...f, name: e.target.value}))} placeholder="Name" className="mt-1" required />
+                    <Input
+                      value={reviewForm.name}
+                      onChange={e => setReviewForm(f => ({...f, name: e.target.value}))}
+                      placeholder="Name"
+                      className="mt-1"
+                      required
+                    />
                   </div>
                   <div>
                     <Label>Email</Label>
-                    <Input type="email" value={reviewForm.email} onChange={e => setReviewForm(f => ({...f, email: e.target.value}))} placeholder="email@..." className="mt-1" required />
+                    <Input
+                      type="email"
+                      value={reviewForm.email}
+                      onChange={e => setReviewForm(f => ({...f, email: e.target.value}))}
+                      placeholder="email@..."
+                      className="mt-1"
+                      required
+                    />
                   </div>
                 </div>
                 <div>
@@ -174,9 +212,23 @@ export default function ProductDetailClient({ product, reviews, related }: Props
                 </div>
                 <div>
                   <Label>Comment</Label>
-                  <Textarea value={reviewForm.comment} onChange={e => setReviewForm(f => ({...f, comment: e.target.value}))} rows={3} className="mt-1 resize-none" placeholder="Share your experience..." required />
+                  <Textarea
+                    value={reviewForm.comment}
+                    onChange={e => setReviewForm(f => ({...f, comment: e.target.value}))}
+                    rows={3}
+                    className="mt-1 resize-none"
+                    placeholder="Share your experience..."
+                    required
+                  />
                 </div>
-                <Button type="submit" className="bg-gradient-to-r from-[#1565C0] to-[#00838F]">Submit Review</Button>
+                {reviewError && <p className="text-red-500 text-sm">{reviewError}</p>}
+                <Button
+                  type="submit"
+                  disabled={reviewLoading}
+                  className="bg-gradient-to-r from-[#1565C0] to-[#00838F]"
+                >
+                  {reviewLoading ? <span className="flex items-center gap-2"><Loader2 size={14} className="animate-spin" /> Submitting...</span> : 'Submit Review'}
+                </Button>
               </form>
             </div>
           ) : (
