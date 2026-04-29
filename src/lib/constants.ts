@@ -37,16 +37,16 @@ export const PRODUCT_CATEGORIES = [
 ]
 
 export const PARTNERS = [
-  { name: 'Thermolab Scientific', logo: 'https://aerosolscientific.com/wp-content/uploads/2025/11/Thermolab-512x512-bg-150x150.jpg', href: '/partners#thermolab' },
-  { name: 'Witeg Germany', logo: 'https://aerosolscientific.com/wp-content/uploads/2025/10/Witeg-Germany-logo-150x150.jpg', href: '/partners#witeg' },
-  { name: 'PCi Analytics', logo: 'https://aerosolscientific.com/wp-content/uploads/2025/10/Pci-Analytics-logo-150x150.jpg', href: '/partners#pci' },
-  { name: 'FDGSi', logo: 'https://aerosolscientific.com/wp-content/uploads/2025/10/FDGS-logo-150x150.jpg', href: '/partners#fdgsi' },
-  { name: 'Sartorius', logo: 'https://aerosolscientific.com/wp-content/uploads/2025/11/sartorius-logo-150x150.jpg', href: '#' },
-  { name: 'Eppendorf', logo: 'https://aerosolscientific.com/wp-content/uploads/2025/11/eppendorf-logo-150x150.jpg', href: '#' },
-  { name: 'Torontech', logo: 'https://aerosolscientific.com/wp-content/uploads/2025/11/torontech-logo-150x150.jpg', href: '#' },
-  { name: 'Luminultra', logo: 'https://aerosolscientific.com/wp-content/uploads/2025/11/luminultra-logo-150x150.jpg', href: '#' },
-  { name: 'Silverson', logo: 'https://aerosolscientific.com/wp-content/uploads/2025/11/silverson-logo-150x150.jpg', href: '#' },
-  { name: 'IKA', logo: 'https://aerosolscientific.com/wp-content/uploads/2025/11/ika-logo-150x150.jpg', href: '#' },
+  { name: 'Thermolab Scientific', logo: '/partners/Thermolab-scientific.jpg', href: '/partners#thermolab' },
+  { name: 'Witeg Germany', logo: '/partners/Witeg-Germany-logo.jpg', href: '/partners#witeg' },
+  { name: 'PCi Analytics', logo: '/partners/Pci-Analytics-logo.jpg', href: '/partners#pci' },
+  { name: 'FDGSi', logo: '/partners/FDGS-logo.jpg', href: '/partners#fdgsi' },
+  { name: 'Sartorius', logo: '/partners/sartorius-logo.jpg', href: '#' },
+  { name: 'Eppendorf', logo: '/partners/eppendorf-logo.jpg', href: '#' },
+  { name: 'Torontech', logo: '/partners/torontech-logo.jpg', href: '#' },
+  { name: 'Luminultra', logo: '/partners/luminultra-logo.jpg', href: '#' },
+  { name: 'Silverson', logo: '/partners/silverson-logo.jpg', href: '#' },
+  { name: 'IKA', logo: '/partners/ika-logo.jpg', href: '#' },
 ]
 
 export const SUPABASE_STORAGE_BUCKET = 'product-images'

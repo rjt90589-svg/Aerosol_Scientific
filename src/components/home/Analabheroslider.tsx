@@ -9,7 +9,7 @@ import { useProductStore } from '@/lib/store/productStore'
 import type { Product } from '@/types'
 
 
-const DURATION = 3000
+const DURATION = 4000
 
 
 // ─── Static bg images served from /public/bg-img/ ────────────────────────────
