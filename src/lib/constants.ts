@@ -24,40 +24,113 @@ export const NAV_LINKS = [
 
 export const PRODUCT_CATEGORIES = [
   {
-    name: "Thermolab Chambers",
+    name: "Core Laboratory Equipment (Thermolab Scientific)",
     subcategories: [
-      "Stability chambers",
-      "Clean room",
-      "Freezers",
-      "Sterilizers",
+      "Stability / Photostability chambers",
+      "Biological/BOD Incubators",
+      "Oven/Vacuum Ovens",
+      "Dual Chambers",
+      "Walk-in Chambers",
+      "Clean Room",
+      "Cold Chain (Freezers)",
+      "Sterilizers (Vertical/Horizontal)",
     ],
   },
   {
-    name: "Laboratory Equipment",
-    subcategories: [],
-  },
-  {
-    name: "Consumables",
+    name: "General Laboratory Equipment",
     subcategories: [
-      "Liquid handling (Purifiers/Pipettes/Tips)",
-      "Glassware and plasticwares",
-      "Chromatography consumables (Vials Septa)",
-      "HPLC columns",
+      "Water Bath",
+      "Shaking Water Bath",
+      "Hot Plate",
+      "Magnetic Stirrer",
+      "Overhead Stirrers",
+      "Shakers and Mixers",
+      "Heating Mantle",
+      "Incubators",
+      "CO2/Shaking Incubators",
+      "Furnaces/Ovens",
+      "Distillation",
+      "Rotary Evaporator",
+      "Centrifuge Tubes",
+      "Benchtop/Mini Centrifuges",
+      "Filtration",
+      "Microscopes",
+      "Refractometers",
+      "Spectrophotometers",
+      "Microplate Reader",
+      "Ultrasonic Cleaner",
     ],
   },
   {
-    name: "Laboratory Balances",
+    name: "Chromatography Consumables",
     subcategories: [
-      "SARTORUIS",
-      "KERN",
-      "WITEG",
+      "Vials, Caps and Septa",
+      "HPLC Columns",
     ],
   },
   {
-    name: "Pharma consumables (Gloves/cap/covers/Lab coat)",
-    subcategories: [],
+    name: "Liquid Handling (Purifiers/Pipettes/Tips)",
+    subcategories: [
+      "Purification Systems",
+      "Pipettes and Tips",
+      "Dispensing",
+      "Titration",
+      "Pumps",
+    ],
   },
-] as const
+  {
+    name: "General Laboratory Consumables",
+    subcategories: [
+      "Glassware",
+      "Plasticware",
+      "Occupational Safety Protection",
+    ],
+  },
+  {
+    name: "Analytical Instruments",
+    subcategories: [
+      "Liquid Chromatography (HPLC/LCMS)",
+      "Gas Chromatography (GC/GCMS)",
+    ],
+  },
+  {
+    name: "Gas and Vacuum Technology",
+    subcategories: [
+      "N2 Generators",
+      "H2 Generators",
+      "Vacuum Pumps",
+    ],
+  },
+  {
+    name: "Measurement and Testing Equipment",
+    subcategories: [
+      "Balances",
+      "pH / Conductivity / Oxygen / Multiparameter Meters",
+      "Data Loggers (Temp/Humidity)",
+      "Laboratory Thermometers",
+      "Density Meters",
+      "Viscometers",
+      "Material Testing",
+    ],
+  },
+  {
+    name: "Medical and Pharma Consumables",
+    subcategories: [
+      "Surgical Masks",
+      "Gloves/Covers",
+      "Gowns",
+      "Biology Models",
+      "Medical Kits",
+    ],
+  },
+  {
+    name: "Refurbished Analytical Instruments",
+    subcategories: [
+      "HPLC/LCMS",
+      "GC/GCMS",
+    ],
+  },
+] as const;
 
 // Derived flat list of all category names — useful for validation / select inputs
 export const CATEGORY_NAMES = PRODUCT_CATEGORIES.map(c => c.name)
