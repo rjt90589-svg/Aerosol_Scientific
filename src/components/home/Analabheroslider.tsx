@@ -1,251 +1,55 @@
 'use client'
 
+
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react'
+import { useProductStore } from '@/lib/store/productStore'
+import type { Product } from '@/types'
 
-// ─── Slide data — each slide links to its Supabase-backed product detail page ──
-const slides = [
-  {
-    id: 1,
-    tag: 'pH / mV / ORP / °C',
-    title: 'pH/mV/ORP/°C Analyzer',
-    model: 'µpHCal100',
-    slug: 'ph-mv-orp-temperature-analyzer-uphcal100',
-    specs: [
-      'pH Range : -2.000 to 20.000 pH',
-      'Resolution : 0.1 / 0.01 / 0.001 pH',
-      'ORP - mV / RmV : ± 2000.0',
-      'Temperature Range : -5.0 to 130.0°C',
-      'Multipoint Calibration',
-      'Auto Buffer Recognition',
-    ],
-    image: 'https://www.analab.co.in/files/catalog/slider/1._pH-mV-ºC-ORP_Analyzer_-_µpHCal100_(1).png',
-    bgImage: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=1920&q=85',
-  },
-  {
-    id: 2,
-    tag: 'Portable Analyzer',
-    title: 'Handheld pH/mV/°C Analyzer',
-    model: 'µpHCal Handheld',
-    slug: 'handheld-ph-mv-temperature-analyzer-uphcal',
-    specs: [
-      'pH Range: -1.000 to 15.00 pH',
-      'Resolution: 0.01 pH',
-      'Temperature Range: 0 to 130.0°C',
-      'Onsite temperature calibration',
-      'Slope: 80 – 120%',
-      'Auto Buffer Recognition',
-    ],
-    image: 'https://www.analab.co.in/files/catalog/slider/slider_product/pHCalHandheld_New_1200x480px.png',
-    bgImage: 'https://images.unsplash.com/photo-1576086213369-97a306d36557?w=1920&q=85',
-  },
-  {
-    id: 3,
-    tag: 'Karl Fischer',
-    title: 'Karl Fischer Titrator',
-    model: 'µAquaCal100',
-    slug: 'karl-fischer-titrator-uaquacal100',
-    specs: [
-      'Moisture Estimation by Volumetric Method',
-      'Better than 50 ppm to 100%',
-      'Auto Flushing & Auto Drain',
-      'Onsite Volume Calibration / Validation',
-      'Weight Entry - 0.1 / 0.01 mg & transfer of weight',
-    ],
-    image: 'https://www.analab.co.in/files/catalog/slider/slider_product/6.-Karl-Fischer-Titrator---µAquaCal100.png',
-    bgImage: 'https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?w=1920&q=85',
-  },
-  {
-    id: 4,
-    tag: 'Titration',
-    title: 'Auto Titrator',
-    model: 'µTitraCal50',
-    slug: 'auto-titrator-utitracal50',
-    specs: [
-      'Acid / Base Titration',
-      'Aqueous / Non-Aqueous Titration',
-      'Amperometric, Redox & Chelatemetric Titration',
-      'Argentometric for Cl, Br, I and Cyanide',
-      'Lubricant Oil Analysis – TAN and TBN',
-      'Silver assay for hallmarking',
-    ],
-    image: 'https://www.analab.co.in/files/catalog/slider/slider_product/7.-Auto-Titrator---µTitraCal50.png',
-    bgImage: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1920&q=85',
-  },
-  {
-    id: 5,
-    tag: 'Thermal Analysis',
-    title: 'Automatic Melting Point Apparatus',
-    model: 'µThermoCal50 (Block Type)',
-    slug: 'automatic-melting-point-apparatus-uthermocal50',
-    specs: [
-      'Temperature Range : +5°C above ambient to 400°C',
-      'Heating Rates : 0.1 to 20.0°C/min',
-      'Three different sample analysis in single run',
-      'Recording of melting pattern via CapillaryVIEW',
-    ],
-    image: 'https://www.analab.co.in/files/catalog/slider/slider_product/9.-Automatic-Melting-Point-Apparatus---Block-Type---µThermoCal50.png',
-    bgImage: 'https://images.unsplash.com/photo-1518152006812-edab29b069ac?w=1920&q=85',
-  },
-  {
-    id: 6,
-    tag: 'Thermal Analysis',
-    title: 'Melting / Boiling Point Apparatus',
-    model: 'µThermoCal25 (Silicon Oil)',
-    slug: 'melting-boiling-point-apparatus-uthermocal25',
-    specs: [
-      'Temperature Range: +5°C above ambient to 300°C',
-      'Readability: 1.0 OR 0.1°C',
-      'Onsite calibration with calibrated thermometer',
-      'Heating Rate After Set Point: ~1.0°C/min',
-    ],
-    image: 'https://www.analab.co.in/files/catalog/slider/slider_product/8B.-Melting---Boiling-Point-Apparatus---Silicon-Oil-Type---µThermoCal25.png',
-    bgImage: 'https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=1920&q=85',
-  },
-  {
-    id: 7,
-    tag: 'Flame Photometry',
-    title: 'Flame Photometer',
-    model: 'µFlameCal50',
-    slug: 'flame-photometer-uflamecal50',
-    specs: [
-      'Element Range: Na, K, Li : 1–200 ppm',
-      'Ca : 15–300 ppm, Ba : 50–3000 ppm',
-      'Sensitivity: Na / K / Li 0.5 ppm',
-      'Units: ppm, mg/L, meq/L and mmol/L',
-      'Calibration: Up to 5 standards per element',
-    ],
-    image: 'https://www.analab.co.in/files/catalog/slider/slider_product/10.-Flame-Photometer---µFlameCal50.png',
-    bgImage: 'https://images.unsplash.com/photo-1564325724739-bae0bd08762c?w=1920&q=85',
-  },
-  {
-    id: 8,
-    tag: 'Ultrasonic Bath',
-    title: 'Ultrasonic Bath with Heater',
-    model: 'IGBT Based',
-    slug: 'ultrasonic-bath-with-heater-igbt',
-    specs: [
-      'Technology : Latest IGBT Based',
-      'Temperature Range : 5°C above ambient to 80°C',
-      'Transducer Frequency : 33 ±3 KHz',
-      'Auto Degassing : Yes, user adjustable time',
-      'Display Frequency : Yes',
-    ],
-    image: 'https://www.analab.co.in/files/catalog/slider/slider_product/11.-Ultrasonic-Bath-with-Heater.png',
-    bgImage: 'https://images.unsplash.com/photo-1614308460141-d1b7c7b9fb4b?w=1920&q=85',
-  },
-  {
-    id: 9,
-    tag: 'Ultrasonic Bath',
-    title: 'Ultrasonic Bath with Chiller',
-    model: 'IGBT Based + Compressor',
-    slug: 'ultrasonic-bath-with-chiller-igbt',
-    specs: [
-      'Technology : Latest IGBT Based',
-      'Temperature Display: 5°C to Room Temperature',
-      'Compressor: In-built with system',
-      'Transducer Frequency : 33 ±3 KHz',
-      'Auto Degassing : Yes, user adjustable time',
-    ],
-    image: 'https://www.analab.co.in/files/catalog/slider/slider_product/12.-Ultrasonic-Bath-with-Chiller.png',
-    bgImage: 'https://images.unsplash.com/photo-1606206873764-fd2b8a23a9e3?w=1920&q=85',
-  },
-  {
-    id: 10,
-    tag: 'Tablet Testing',
-    title: 'Friability Test Apparatus',
-    model: 'µFTCal50',
-    slug: 'friability-test-apparatus-uftcal50',
-    specs: [
-      'Speed : Variable from 20 to 70 RPM',
-      'Timer : Variable up to 9 hrs 59 min 59 sec',
-      'Counter : 1 to 9999 revolutions',
-      '10° Tilt : With Audio Visual Alert',
-      'Power Failure Detection — auto resume',
-    ],
-    image: 'https://www.analab.co.in/files/catalog/slider/slider_product/FTcal-50-slider-600x600.png',
-    bgImage: 'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=1920&q=85',
-  },
-  {
-    id: 11,
-    tag: 'Tablet Testing',
-    title: 'Tap Density Test Apparatus',
-    model: 'µTDCal50',
-    slug: 'tap-density-test-apparatus-utdcal50',
-    specs: [
-      'No. of Station : USP1 (300 taps per min.)',
-      'Stroke Height : 14 mm ± 2mm / 3mm ± 0.2 mm',
-      'Stroke / Minute : 300 ± 15, 250 ± 15',
-    ],
-    image: 'https://www.analab.co.in/files/catalog/slider/slider_product/15.-Tap-Density-Test-Apparatus---µTDCal50---LOW-RESOLUTION.png',
-    bgImage: 'https://images.unsplash.com/photo-1583912086096-8c60d75a53f9?w=1920&q=85',
-  },
-  {
-    id: 12,
-    tag: 'Gas Generator',
-    title: 'Nitrogen / Zero Air Combination Gas Generator',
-    model: 'NZA-2300 / NZA-4800',
-    slug: 'nitrogen-zero-air-gas-generator-nza',
-    specs: [
-      'N₂: 300 ml/min, Zero Air: 2000 ml/min @ 6 Kg/cm² (NZA-2300)',
-      'N₂: 800 ml/min, Zero Air: 4000 ml/min @ 6 Kg/cm² (NZA-4800)',
-      'Suitable for two/three or five/six GC instruments',
-    ],
-    image: 'https://www.analab.co.in/files/catalog/slider/slider_product/17.-Nitrogen-Gas-Generator-for-GC.png',
-    bgImage: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1920&q=85',
-  },
-  {
-    id: 13,
-    tag: 'Gas Handling',
-    title: 'Gas Handling and Purification System',
-    model: 'GHS-Plus-01 to 04',
-    slug: 'gas-handling-purification-system-ghs-plus',
-    specs: [
-      'For Hydrogen, Nitrogen, Zero Air & Helium Gas Line',
-      'GHS-Plus-01 : For Any One Gas',
-      'GHS-Plus-02 : For Any Two Gases',
-      'GHS-Plus-03 : For Any Three Gases',
-      'GHS-Plus-04 : For Any Four Gases',
-    ],
-    image: 'https://www.analab.co.in/files/catalog/slider/slider_product/GHS-Plus-04_Slider-600x600px.png',
-    bgImage: 'https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?w=1920&q=85',
-  },
-  {
-    id: 14,
-    tag: 'Gas Alarm',
-    title: 'Gas Alarm System',
-    model: 'GAS-8',
-    slug: 'gas-alarm-system-gas8',
-    specs: [
-      'Pressure Range : ≤200 kg/cm²',
-      'Resolution : 0.5 kg/cm²',
-      'Number of Gas : Maximum Eight Gas Lines',
-      'Connector : Water proof Male & Female',
-      'Visual Alarm : Red and Green LED Light',
-    ],
-    image: 'https://www.analab.co.in/files/catalog/slider/slider_product/24.-Gas-Alarm-System.png',
-    bgImage: 'https://images.unsplash.com/photo-1548407260-da850faa41e3?w=1920&q=85',
-  },
-  {
-    id: 15,
-    tag: 'Lab Infrastructure',
-    title: 'Laboratory Furniture & Fume Hood',
-    model: 'Custom Built',
-    slug: 'laboratory-furniture-fume-hood',
-    specs: [
-      'Laboratory Furniture',
-      'Laboratory Fume Hood',
-      'Laboratory Stand Alone',
-      'Laboratory Utilities',
-    ],
-    image: 'https://www.analab.co.in/files/catalog/slider/slider_product/Laboratory-Furniture-Homepage.jpg',
-    bgImage: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1920&q=85',
-  },
-]
 
 const DURATION = 3000
+
+
+// ─── Static bg images served from /public/bg-img/ ────────────────────────────
+// Indexed by slug — add an entry whenever you mark a new product as featured.
+const BG_POOL = [
+  '/bg-img/1.jpg',
+  '/bg-img/2.jpg',
+  '/bg-img/3.jpg',
+  '/bg-img/4.jpg',
+  '/bg-img/5.jpg',
+  '/bg-img/6.jpg',
+  '/bg-img/7.jpg',
+  '/bg-img/8.jpg',
+'/bg-img/1.jpg',
+  '/bg-img/2.jpg',
+  '/bg-img/3.jpg',
+  '/bg-img/4.jpg',
+  '/bg-img/5.jpg',
+  '/bg-img/6.jpg',
+  '/bg-img/7.jpg',
+]
+
+
+const FALLBACK_BG = '/bg-img/1.jpg'
+
+
+// ─── Map Supabase Product → slide shape ───────────────────────────────────────
+function productToSlide(p: Product, index: number) {
+  return {
+    id:      p.id,
+    tag:     p.category,
+    title:   p.name,
+    model:   p.brand ?? '',
+    slug:    p.slug,
+    specs:   (p.tags ?? []).slice(0, 6),
+    image:   p.image_url ?? '',
+   bgImage: BG_POOL[index % BG_POOL.length],
+  }
+}
+
 
 // ─── Per-element staggered slide-up wrapper ───────────────────────────────────
 function SlideUp({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
@@ -261,8 +65,9 @@ function SlideUp({ children, delay = 0 }: { children: React.ReactNode; delay?: n
   )
 }
 
-// ─── Full-screen Ken Burns background — pans right → left per slide ───────────
-function SlideBackground({ slide, epoch }: { slide: typeof slides[0]; epoch: number }) {
+
+// ─── Full-screen Ken Burns background ────────────────────────────────────────
+function SlideBackground({ bgImage, epoch }: { bgImage: string; epoch: number }) {
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -274,7 +79,7 @@ function SlideBackground({ slide, epoch }: { slide: typeof slides[0]; epoch: num
         transition={{ duration: 0.9, ease: 'easeInOut' }}
       >
         <motion.img
-          src={slide.bgImage}
+          src={bgImage}
           alt=""
           aria-hidden
           className="absolute w-full h-full object-cover"
@@ -283,7 +88,7 @@ function SlideBackground({ slide, epoch }: { slide: typeof slides[0]; epoch: num
           animate={{ x: '-6%' }}
           transition={{ duration: (DURATION + 900) / 1000, ease: 'linear' }}
         />
-        {/* Heavy left overlay for text legibility, transparent on right */}
+        {/* Heavy left overlay for text legibility */}
         <div
           className="absolute inset-0"
           style={{
@@ -311,28 +116,95 @@ function SlideBackground({ slide, epoch }: { slide: typeof slides[0]; epoch: num
   )
 }
 
+
+// ─── Skeleton shown on first load ────────────────────────────────────────────
+function SliderSkeleton() {
+  return (
+    <section
+      className="relative w-full overflow-hidden"
+      style={{ minHeight: 'min(90vh, 660px)', background: 'rgba(5,12,32,0.95)' }}
+    >
+      <div
+        className="absolute inset-0 animate-pulse"
+        style={{ background: 'linear-gradient(105deg, rgba(18,81,163,0.15) 0%, transparent 60%)' }}
+      />
+      <div className="relative z-10 flex items-center w-full" style={{ minHeight: 'min(90vh, 660px)' }}>
+        <div className="max-w-7xl mx-auto w-full px-6 sm:px-10 lg:px-14 grid grid-cols-1 lg:grid-cols-2 items-center gap-6 py-12 pb-28">
+          <div className="flex flex-col gap-4 lg:pr-10">
+            <div className="h-6 w-32 rounded-full animate-pulse" style={{ background: 'rgba(56,189,248,0.15)' }} />
+            <div className="h-10 w-3/4 rounded-lg animate-pulse" style={{ background: 'rgba(255,255,255,0.08)' }} />
+            <div className="h-4 w-1/3 rounded animate-pulse" style={{ background: 'rgba(56,189,248,0.12)' }} />
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="h-3 rounded animate-pulse" style={{ background: 'rgba(255,255,255,0.06)', width: `${70 + i * 4}%` }} />
+            ))}
+          </div>
+          <div className="flex items-center justify-center">
+            <div
+              className="rounded-full animate-pulse"
+              style={{ width: 380, height: 380, background: 'rgba(56,189,248,0.06)', border: '1.5px dashed rgba(56,189,248,0.15)' }}
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+
 // ─── Main slider ──────────────────────────────────────────────────────────────
 export default function AnalabHeroSlider() {
+  const { getFeatured, fetchProducts, loading } = useProductStore()
+
+
   const [current, setCurrent] = useState(0)
   const [paused, setPaused]   = useState(false)
   const [epoch, setEpoch]     = useState(0)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
+
+  // Kick off fetch once on mount — no-op if Zustand cache is still fresh
+  useEffect(() => { fetchProducts() }, [fetchProducts])
+
+
+ 
+const slides = getFeatured().map((p, i) => productToSlide(p, i))
   const goTo = useCallback((idx: number) => {
     setCurrent(idx)
     setEpoch(e => e + 1)
   }, [])
 
-  const prev = useCallback(() => goTo((current - 1 + slides.length) % slides.length), [current, goTo])
-  const next = useCallback(() => goTo((current + 1) % slides.length),                 [current, goTo])
 
+  const prev = useCallback(
+    () => goTo((current - 1 + slides.length) % slides.length),
+    [current, goTo, slides.length],
+  )
+  const next = useCallback(
+    () => goTo((current + 1) % slides.length),
+    [current, goTo, slides.length],
+  )
+
+
+  // Auto-advance
   useEffect(() => {
-    if (paused) return
+    if (paused || slides.length === 0) return
     timerRef.current = setTimeout(next, DURATION)
     return () => { if (timerRef.current) clearTimeout(timerRef.current) }
-  }, [next, paused, current])
+  }, [next, paused, current, slides.length])
+
+
+  // Reset to slide 0 if the featured set changes after a cache refresh
+  useEffect(() => {
+    setCurrent(0)
+    setEpoch(e => e + 1)
+  }, [slides.length])
+
+
+  if (loading && slides.length === 0) return <SliderSkeleton />
+  if (!loading && slides.length === 0) return null
+
 
   const s = slides[current]
+
 
   return (
     <section
@@ -342,7 +214,8 @@ export default function AnalabHeroSlider() {
       onMouseLeave={() => setPaused(false)}
     >
       {/* ── Full-screen panning background ── */}
-      <SlideBackground slide={s} epoch={epoch} />
+      <SlideBackground bgImage={s.bgImage} epoch={epoch} />
+
 
       {/* ── Main content grid ── */}
       <div
@@ -351,11 +224,13 @@ export default function AnalabHeroSlider() {
       >
         <div className="max-w-7xl mx-auto w-full px-6 sm:px-10 lg:px-14 grid grid-cols-1 lg:grid-cols-2 items-center gap-6 py-12 pb-28">
 
+
           {/* ──────── LEFT TEXT ──────── */}
           <div className="flex flex-col justify-center order-2 lg:order-1 lg:pr-10">
             <div key={epoch} className="flex flex-col">
 
-              {/* Tag badge */}
+
+              {/* Category badge */}
               <SlideUp delay={0}>
                 <div className="mb-4">
                   <span
@@ -373,7 +248,8 @@ export default function AnalabHeroSlider() {
                 </div>
               </SlideUp>
 
-              {/* Product title — clicking goes to detail page */}
+
+              {/* Product title */}
               <SlideUp delay={0.08}>
                 <Link href={`/products/${s.slug}`}>
                   <h1
@@ -385,18 +261,20 @@ export default function AnalabHeroSlider() {
                 </Link>
               </SlideUp>
 
-              {/* Model number */}
+
+              {/* Model / brand */}
               <SlideUp delay={0.15}>
                 <p className="font-semibold mb-5 tracking-wide" style={{ color: '#38bdf8', fontSize: '0.83rem' }}>
                   {s.model}
                 </p>
               </SlideUp>
 
-              {/* Specs */}
+
+              {/* Specs (tags) */}
               {s.specs.map((spec, i) => (
                 <SlideUp key={`${epoch}-spec-${i}`} delay={0.2 + i * 0.07}>
                   <div className="flex items-start gap-2.5 text-sm mb-1.5" style={{ color: 'rgba(226,232,240,0.90)' }}>
-                    <svg className="mt-[5px] shrink-0" width="13" height="13" viewBox="0 0 13 13" fill="none">
+                    <svg className="mt-1.25 shrink-0" width="13" height="13" viewBox="0 0 13 13" fill="none">
                       <circle cx="6.5" cy="6.5" r="6" stroke="#38bdf8" strokeOpacity="0.35" />
                       <circle cx="6.5" cy="6.5" r="2.8" fill="#38bdf8" />
                     </svg>
@@ -405,11 +283,10 @@ export default function AnalabHeroSlider() {
                 </SlideUp>
               ))}
 
+
               {/* CTA buttons */}
               <SlideUp delay={0.2 + s.specs.length * 0.07 + 0.07}>
                 <div className="mt-7 flex items-center gap-3 flex-wrap">
-
-                  {/* Primary: Know More → product detail page */}
                   <Link
                     href={`/products/${s.slug}`}
                     className="inline-flex items-center gap-2 px-7 py-3 rounded-md text-sm font-bold text-white transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5 active:translate-y-0"
@@ -421,8 +298,6 @@ export default function AnalabHeroSlider() {
                     Know More
                     <ArrowRight size={14} />
                   </Link>
-
-                  {/* Secondary: Enquire (pre-fills product name in contact form) */}
                   <Link
                     href={`/contact?product=${encodeURIComponent(s.title)}`}
                     className="inline-flex items-center gap-2 px-5 py-3 rounded-md text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5"
@@ -438,10 +313,12 @@ export default function AnalabHeroSlider() {
                 </div>
               </SlideUp>
 
+
             </div>
           </div>
 
-          {/* ──────── RIGHT IMAGE — clickable to detail page ──────── */}
+
+          {/* ──────── RIGHT IMAGE ──────── */}
           <div className="flex items-center justify-center order-1 lg:order-2">
             <Link href={`/products/${s.slug}`} className="block w-full">
               <div
@@ -452,18 +329,19 @@ export default function AnalabHeroSlider() {
                 <div
                   className="absolute inset-0"
                   style={{
-                    background:
-                      'radial-gradient(ellipse 72% 62% at 50% 54%, rgba(56,189,248,0.18) 0%, transparent 68%)',
+                    background: 'radial-gradient(ellipse 72% 62% at 50% 54%, rgba(56,189,248,0.18) 0%, transparent 68%)',
                   }}
                 />
 
-                {/* Slow-spinning dashed ring */}
+
+                {/* Slow-spinning outer ring */}
                 <motion.div
                   className="absolute rounded-full pointer-events-none"
                   style={{ inset: '6%', border: '1.5px dashed rgba(56,189,248,0.22)' }}
                   animate={{ rotate: 360 }}
                   transition={{ duration: 70, repeat: Infinity, ease: 'linear' }}
                 />
+
 
                 {/* Counter-spinning inner ring */}
                 <motion.div
@@ -473,48 +351,25 @@ export default function AnalabHeroSlider() {
                   transition={{ duration: 50, repeat: Infinity, ease: 'linear' }}
                 />
 
+
                 {/* Product image */}
-               <AnimatePresence mode="wait">
-  <motion.img
-    key={`img-${epoch}`}
-    src={s.image}
-    alt={s.title}
-    draggable={false}
-    className="relative z-10 w-full h-full object-contain will-change-transform"
-    style={{
-      maxHeight: 430,
-      filter: 'drop-shadow(0 12px 40px rgba(0,0,0,0.45))',
-    }}
+                <AnimatePresence mode="wait">
+                  <motion.img
+                    key={`img-${epoch}`}
+                    src={s.image}
+                    alt={s.title}
+                    draggable={false}
+                    className="relative z-10 w-full h-full object-contain will-change-transform"
+                    style={{ maxHeight: 430, filter: 'drop-shadow(0 12px 40px rgba(0,0,0,0.45))' }}
+                    initial={{ opacity: 0, scale: 0.94, y: 12,  filter: 'blur(6px)' }}
+                    animate={{ opacity: 1, scale: 1,    y: 0,   filter: 'blur(0px)' }}
+                    exit={{    opacity: 0, scale: 1.04,  y: -10, filter: 'blur(4px)' }}
+                    transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                  />
+                </AnimatePresence>
 
-    initial={{
-      opacity: 0,
-      scale: 0.94,
-      y: 12,
-      filter: "blur(6px)"
-    }}
 
-    animate={{
-      opacity: 1,
-      scale: 1,
-      y: 0,
-      filter: "blur(0px)"
-    }}
-
-    exit={{
-      opacity: 0,
-      scale: 1.04,
-      y: -10,
-      filter: "blur(4px)"
-    }}
-
-    transition={{
-      duration: 0.55,
-      ease: [0.22, 1, 0.36, 1],
-    }}
-  />
-</AnimatePresence>
-
-                {/* "View Details" pill that appears on hover */}
+                {/* Hover pill */}
                 <div
                   className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20
                              px-4 py-1.5 rounded-full text-xs font-semibold text-white pointer-events-none
@@ -528,14 +383,17 @@ export default function AnalabHeroSlider() {
             </Link>
           </div>
 
+
         </div>
       </div>
+
 
       {/* ── Left accent bar ── */}
       <div
         className="absolute left-0 top-[10%] bottom-[10%] w-[3px] rounded-r-full pointer-events-none"
         style={{ background: 'linear-gradient(180deg, transparent, #38bdf8 22%, #38bdf8 78%, transparent)' }}
       />
+
 
       {/* ── Slide counter ── */}
       <div
@@ -544,6 +402,7 @@ export default function AnalabHeroSlider() {
       >
         {String(current + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
       </div>
+
 
       {/* ── Bottom nav bar ── */}
       <div
@@ -555,6 +414,7 @@ export default function AnalabHeroSlider() {
         }}
       >
         <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-14 py-3 flex items-center justify-between gap-4">
+
 
           {/* Dots */}
           <div className="flex items-center gap-2 flex-wrap">
@@ -577,6 +437,7 @@ export default function AnalabHeroSlider() {
             ))}
           </div>
 
+
           {/* Auto-play progress bar */}
           <div
             className="flex-1 hidden sm:block max-w-[180px] rounded-full overflow-hidden"
@@ -592,6 +453,7 @@ export default function AnalabHeroSlider() {
               />
             )}
           </div>
+
 
           {/* Prev / Next */}
           <div className="flex items-center gap-2">
@@ -620,6 +482,7 @@ export default function AnalabHeroSlider() {
           </div>
         </div>
       </div>
+
 
       {/* ── Large side arrow buttons ── */}
       {[
@@ -654,3 +517,6 @@ export default function AnalabHeroSlider() {
     </section>
   )
 }
+
+
+
