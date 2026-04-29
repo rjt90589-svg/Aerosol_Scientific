@@ -57,9 +57,9 @@ export default function AdminDashboard() {
       <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
         <h2 className="font-bold text-gray-900 mb-2">Quick Actions</h2>
         <div className="flex flex-wrap gap-3">
-          <Link href="/admin/products/new" className="bg-gradient-to-r from-[#1565C0] to-[#00838F] text-white text-sm font-semibold px-4 py-2 rounded-xl hover:shadow-md transition-all">
+          {/* <Link href="/admin/products/new" className="bg-gradient-to-r from-[#1565C0] to-[#00838F] text-white text-sm font-semibold px-4 py-2 rounded-xl hover:shadow-md transition-all">
             + Add New Product
-          </Link>
+          </Link> */}
           <Link href="/admin/quotes" className="bg-gray-100 text-gray-700 text-sm font-semibold px-4 py-2 rounded-xl hover:bg-gray-200 transition-all">
             View Quote Requests
           </Link>

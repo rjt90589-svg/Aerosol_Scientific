@@ -15,7 +15,7 @@ interface Props {
 
 export default function PageHero({ eyebrow, title, subtitle, breadcrumbs }: Props) {
   return (
-    <section className="relative overflow-hidden bg-[#0586D3] py-16 md:py-16">
+    <section className="relative overflow-hidden bg-[#0586D3] py-16 md:py-8">
       {/* Grid overlay */}
       <div className="absolute inset-0 sci-grid-bg opacity-30" />
       {/* Glow */}
