@@ -27,7 +27,7 @@ export default function ProductCard({ product, index = 0 }: Props) {
         viewport={{ once: true }}
         transition={{ delay: index * 0.07 }}
         whileHover={{ y: -4 }}
-        className="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-2xl hover:border-blue-200 transition-all duration-300"
+        className="group bg-white rounded-2xl border border-gray-200 hover:scale-3d overflow-hidden hover:shadow-2xl hover:border-blue-200 transition-all duration-300"
       >
         {/* Image */}
         <Link href={`/products/${product.slug}`} className="block aspect-square overflow-hidden bg-gray-50 relative">
