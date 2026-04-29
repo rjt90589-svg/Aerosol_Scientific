@@ -32,22 +32,23 @@ const SERVICE_QUICK = [
 ]
 
 const CATEGORY_ICONS: Record<string, string> = {
-  'Vials': '🧪',
+  'Laboratory Equipment': '🧪',
   'Septa': '⭕',
   'Manual Vial Crimpers & Decappers': '🔧',
   'Photometry': '💡',
-  'Titration': '💧',
-  'Thermal Analysis': '🌡️',
+  'Pharma consumables (Gloves/cap/covers/Lab coat)': '💧',
+  'Thermolab Chambers': '🌡️',
   'Gas Handling': '💨',
-  'Lab Infrastructure': '🏗️',
+  'Laboratory Balances': '🏗️',
   'Gas Generators': '⚡',
-  'Tablet Testing': '💊',
+  'Consumables': '💊',
   'Gas Safety': '🛡️',
   'pH & Electrochemistry': '⚗️',
   'Ultrasonic Equipment': '📡',
 }
 
-const MENU_CATEGORIES = PRODUCT_CATEGORIES.filter(c => c !== 'All')
+import { CATEGORY_NAMES } from '@/lib/constants'
+const MENU_CATEGORIES = CATEGORY_NAMES
 
 // ── ProductsMegaMenu ──────────────────────────────────────────────────────────
 interface MegaMenuProps {
@@ -56,157 +57,164 @@ interface MegaMenuProps {
 }
 
 function ProductsMegaMenu({ products, onClose }: MegaMenuProps) {
-  const [activeCategory, setActiveCategory] = useState<string>(MENU_CATEGORIES[0])
+  const [activeCategory, setActiveCategory] = useState(MENU_CATEGORIES[0])
+  const [activeSubcategory, setActiveSubcategory] = useState<string | null>(null)
 
-  const categoryProducts = products
-    .filter(p => p.category === activeCategory)
-    .slice(0, 8)
+  const closeTimeout = useRef<NodeJS.Timeout | null>(null)
+
+  const handleEnter = () => {
+    if (closeTimeout.current) clearTimeout(closeTimeout.current)
+  }
+
+  const handleLeave = () => {
+    closeTimeout.current = setTimeout(() => {
+      onClose()
+    }, 120)
+  }
+
+  // ── Derived data ─────────────────────────
+  const categoryProducts = products.filter(p => p.category === activeCategory)
+
+  const grouped = categoryProducts.reduce((acc, product) => {
+    const key = product.subcategory || 'Other'
+    if (!acc[key]) acc[key] = []
+    acc[key].push(product)
+    return acc
+  }, {} as Record<string, Product[]>)
+
+  // auto select first subcategory
+  useEffect(() => {
+    const first = Object.keys(grouped)[0] || null
+    setActiveSubcategory(first)
+  }, [activeCategory])
 
   return (
     <motion.div
+      onMouseEnter={handleEnter}
+      onMouseLeave={handleLeave}
       initial={{ opacity: 0, y: 10, scale: 0.97 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 10, scale: 0.97 }}
       transition={{ duration: 0.15 }}
       className="absolute top-full pt-3 z-50"
-      style={{ left: '50%', transform: 'translateX(-50%)', width: 680 }}
+      style={{ left: '50%', transform: 'translateX(-50%)', width: 850 } }
     >
-      <div className="bg-white rounded-2xl shadow-[0_24px_70px_rgba(18,81,163,0.18)] border border-[rgba(18,81,163,0.09)] overflow-hidden flex flex-col">
-        {/* accent bar */}
-        <div className="h-0.5 w-full bg-linear-gradient-to-r from-[#1251A3] via-[#0891B2] to-[#22D3EE] shrink-0" />
+      <div className="bg-white rounded-2xl shadow-[0_30px_80px_rgba(18,81,163,0.18)] border border-[rgba(18,81,163,0.08)] overflow-hidden">
 
-        <div className="flex" style={{ minHeight: 340 }}>
+        {/* Top Accent */}
+        <div className="h-0.5 bg-gradient-to-r from-[#1251A3] via-[#0891B2] to-[#22D3EE]" />
 
-          {/* ── Left: category list ───────────────────────────────── */}
-          <div className="w-55 shrink-0 border-r border-[rgba(18,81,163,0.07)] bg-[rgba(18,81,163,0.02)] py-3 flex flex-col">
-            <div className="px-4 pb-2">
-              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#7B90B2]">Categories</span>
+        <div className="flex min-h-80 ">
+
+          {/* ───────── LEFT: Categories ───────── */}
+          <div className="w-54 bg-[rgba(18,81,163,0.02)] border-r py-3">
+            <div className="px-4 pb-2 text-[10px] font-bold uppercase text-[#7B90B2] tracking-wider">
+              Categories
             </div>
-            <div className="flex-1 overflow-y-auto space-y-0.5 px-2">
-              {MENU_CATEGORIES.map(cat => {
-                const count = products.filter(p => p.category === cat).length
-                const isActive = cat === activeCategory
-                return (
-                  <button
-                    key={cat}
-                    onMouseEnter={() => setActiveCategory(cat)}
-                    onClick={onClose}
-                    className={cn(
-                      'w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left transition-all duration-150 group/cat',
-                      isActive
-                        ? 'bg-[rgba(18,81,163,0.08)] text-[#1251A3]'
-                        : 'text-[#3D5276] hover:bg-[rgba(18,81,163,0.05)] hover:text-[#1251A3]'
-                    )}
-                  >
-                    <span className="text-sm shrink-0">{CATEGORY_ICONS[cat] ?? '🔬'}</span>
-                    <span className="flex-1 text-[12px] font-semibold leading-tight truncate">{cat}</span>
-                    {count > 0 && (
-                      <span className={cn(
-                        'text-[10px] font-bold tabular-nums shrink-0 transition-colors',
-                        isActive ? 'text-[#1251A3]' : 'text-[#C8D4E3] group-hover/cat:text-[#7B90B2]'
-                      )}>{count}</span>
-                    )}
-                    <ChevronRight size={11} className={cn(
-                      'shrink-0 transition-opacity',
-                      isActive ? 'opacity-50' : 'opacity-0 group-hover/cat:opacity-25'
-                    )} />
-                  </button>
-                )
-              })}
-            </div>
-            {/* All Products */}
-            <div className="px-3 pt-2 mt-1 border-t border-[rgba(18,81,163,0.07)]">
+
+            {MENU_CATEGORIES.map(cat => {
+              const isActive = cat === activeCategory
+
+              return (
+                <button
+                  key={cat}
+                  onMouseEnter={() => setActiveCategory(cat)}
+                  className={cn(
+                    'w-full flex items-center gap-2 px-4 py-2 text-left text-[12.5px] font-semibold transition',
+                    isActive
+                      ? 'bg-white text-[#1251A3]'
+                      : 'text-[#3D5276] hover:bg-white'
+                  )}
+                >
+                  <span>{CATEGORY_ICONS[cat] ?? '🔬'}</span>
+                  {cat}
+                </button>
+              )
+            })}
+
+            <div className="px-4 pt-3 mt-2 border-t">
               <Link
                 href="/products"
                 onClick={onClose}
-                className="flex items-center gap-2 px-3 py-2 rounded-xl text-[12px] font-bold text-[#1251A3] hover:bg-[rgba(18,81,163,0.06)] transition-colors"
+                className="flex items-center gap-2 text-[12px] font-bold text-[#1251A3]"
               >
                 <Grid3x3 size={13} /> All Products
-                <ArrowRight size={11} className="ml-auto" />
               </Link>
             </div>
           </div>
 
-          {/* ── Right: products panel ─────────────────────────────── */}
-          <div className="flex-1 min-w-0 py-3 flex flex-col">
-            {/* Category header */}
-            <div className="px-4 pb-2 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="text-base">{CATEGORY_ICONS[activeCategory] ?? '🔬'}</span>
-                <span className="text-[13px] font-bold text-[#0A1628]">{activeCategory}</span>
-              </div>
-              <Link
-                href={`/products?category=${encodeURIComponent(activeCategory)}`}
-                onClick={onClose}
-                className="flex items-center gap-1 text-[11px] font-semibold text-[#1251A3] hover:underline"
-              >
-                View all <ArrowRight size={10} />
-              </Link>
+          {/* ───────── MIDDLE: Subcategories ───────── */}
+          <div className="w-44 border-r py-3 bg-white">
+            <div className="px-4 pb-2 text-[10px] font-bold uppercase text-[#7B90B2] tracking-wider">
+              Subcategories
             </div>
 
-            {/* Product grid */}
-            <div className="flex-1 overflow-y-auto px-3">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeCategory}
-                  initial={{ opacity: 0, x: 8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -8 }}
-                  transition={{ duration: 0.12 }}
-                  className="grid grid-cols-2 gap-1"
-                >
-                  {categoryProducts.length > 0 ? (
-                    categoryProducts.map(product => (
-                      <Link
-                        key={product.id}
-                        href={`/products/${product.slug}`}
-                        onClick={onClose}
-                        className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-[rgba(18,81,163,0.05)] transition-colors group/prod"
-                      >
-                        <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-50 to-teal-50 flex items-center justify-center overflow-hidden shrink-0 border border-[rgba(18,81,163,0.06)]">
-                          {product.image_url
-                            ? <img src={product.image_url} alt="" className="w-full h-full object-contain p-1" />
-                            : <Package size={14} className="text-[#1251A3] opacity-60" />
-                          }
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-[12px] font-semibold text-[#0A1628] group-hover/prod:text-[#1251A3] transition-colors leading-tight truncate">
-                            {product.name}
-                          </p>
-                          {product.short_description && (
-                            <p className="text-[10.5px] text-[#7B90B2] leading-tight truncate mt-0.5">
-                              {product.short_description}
-                            </p>
-                          )}
-                        </div>
-                      </Link>
-                    ))
-                  ) : (
-                    <div className="col-span-2 flex flex-col items-center justify-center py-10 text-center">
-                      <span className="text-3xl mb-2">{CATEGORY_ICONS[activeCategory] ?? '🔬'}</span>
-                      <p className="text-[12px] text-[#7B90B2]">No products yet in this category</p>
-                      <Link href="/contact" onClick={onClose}
-                        className="mt-3 text-[11px] font-semibold text-[#1251A3] hover:underline">
-                        Enquire about availability →
-                      </Link>
-                    </div>
+            {Object.keys(grouped).map(sub => {
+              const isActive = sub === activeSubcategory
+
+              return (
+                <button
+                  key={sub}
+                  onMouseEnter={() => setActiveSubcategory(sub)}
+                  className={cn(
+                    'w-full flex items-center justify-between px-4 py-2 text-[12px] transition',
+                    isActive
+                      ? 'text-[#1251A3] bg-[rgba(18,81,163,0.05)]'
+                      : 'text-[#3D5276] hover:bg-[rgba(18,81,163,0.04)]'
                   )}
-                </motion.div>
-              </AnimatePresence>
-            </div>
-
-            {/* Footer CTA */}
-            <div className="px-4 pt-2 mt-1 border-t border-[rgba(18,81,163,0.06)] flex items-center justify-between">
-              <p className="text-[11px] text-[#7B90B2]">Can't find what you need?</p>
-              <Link
-                href="/contact"
-                onClick={onClose}
-                className="flex items-center gap-1.5 bg-gradient-to-r from-[#1251A3] to-[#0891B2] text-white px-3.5 py-1.5 rounded-lg text-[11px] font-bold hover:shadow-md transition-shadow"
-              >
-                <Phone size={11} /> Request a Quote
-              </Link>
-            </div>
+                >
+                  {sub}
+                  <ChevronRight size={12} className="opacity-40" />
+                </button>
+              )
+            })}
           </div>
+
+          {/* ───────── RIGHT: Products ───────── */}
+          <div className=" flex-1 p-4 bg-white">
+            {activeSubcategory && grouped[activeSubcategory]?.length > 0 ? (
+              <>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-sm font-bold text-[#0A1628]">
+                    {activeSubcategory}
+                  </h3>
+
+                  <Link
+                    href={`/products?category=${activeCategory}&subcategory=${activeSubcategory}`}
+                    onClick={onClose}
+                    className="text-xs text-[#1251A3] font-semibold hover:underline"
+                  >
+                    View all →
+                  </Link>
+                </div>
+
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 min-w-auto ">
+                  {grouped[activeSubcategory].slice(0, 6).map(product => (
+                    <Link
+                      key={product.id}
+                      href={`/products/${product.slug}`}
+                      onClick={onClose}
+                      className="flex items-center gap-2 p-2 rounded-lg hover:bg-[rgba(18,81,163,0.05)] transition"
+                    >
+                      <div className="w-10 h-10 rounded bg-blue-50 flex items-center justify-center">
+                        {product.image_url
+                          ? <img src={product.image_url} className="w-full h-full object-contain p-1" />
+                          : <Package size={14} />
+                        }
+                      </div>
+
+                      <span className="text-[12px] font-medium truncate">
+                        {product.name}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="text-sm text-[#7B90B2]">No products</div>
+            )}
+          </div>
+
         </div>
       </div>
     </motion.div>

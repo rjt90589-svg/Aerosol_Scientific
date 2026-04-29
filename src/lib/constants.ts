@@ -18,23 +18,57 @@ export const NAV_LINKS = [
   { label: 'Contact Us', href: '/contact' },
 ]
 
+// ── Product Categories ────────────────────────────────────────────────────────
+// Each entry has a top-level `name` and an optional list of `subcategories`.
+// Used for filter UI in /products and for admin product forms.
+
 export const PRODUCT_CATEGORIES = [
-  'All',
-  'Vials',
-  'Septa',
-  'Manual Vial Crimpers & Decappers',
-  'Photometry',
-  'Titration',
-  'Thermal Analysis',
-  'Gas Handling',
-  'Lab Infrastructure',
-  'Gas Generators',
-  'Tablet Testing',
-  'Gas Safety',
-  'pH & Electrochemistry',
-  'Ultrasonic Equipment',
-  
-]
+  {
+    name: "Thermolab Chambers",
+    subcategories: [
+      "Stability chambers",
+      "Clean room",
+      "Freezers",
+      "Sterilizers",
+    ],
+  },
+  {
+    name: "Laboratory Equipment",
+    subcategories: [],
+  },
+  {
+    name: "Consumables",
+    subcategories: [
+      "Liquid handling (Purifiers/Pipettes/Tips)",
+      "Glassware and plasticwares",
+      "Chromatography consumables (Vials Septa)",
+      "HPLC columns",
+    ],
+  },
+  {
+    name: "Laboratory Balances",
+    subcategories: [
+      "SARTORUIS",
+      "KERN",
+      "WITEG",
+    ],
+  },
+  {
+    name: "Pharma consumables (Gloves/cap/covers/Lab coat)",
+    subcategories: [],
+  },
+] as const
+
+// Derived flat list of all category names — useful for validation / select inputs
+export const CATEGORY_NAMES = PRODUCT_CATEGORIES.map(c => c.name)
+
+// Derived flat list of all subcategory names — useful for validation
+export const ALL_SUBCATEGORY_NAMES = PRODUCT_CATEGORIES.flatMap(c => c.subcategories)
+
+// Helper: get subcategories for a given category name
+export function getSubcategories(categoryName: string): readonly string[] {
+  return PRODUCT_CATEGORIES.find(c => c.name === categoryName)?.subcategories ?? []
+}
 
 export const PARTNERS = [
   { name: 'Thermolab Scientific', logo: '/partners/Thermolab-scientific.jpg', href: '/partners#thermolab' },

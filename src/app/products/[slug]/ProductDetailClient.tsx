@@ -59,14 +59,34 @@ export default function ProductDetailClient({ product, reviews: initialReviews, 
     }
   }
 
+  // Build category URL with optional subcategory pre-filtered
+  const categoryUrl = product.subcategory
+    ? `/products?category=${encodeURIComponent(product.category)}&subcategory=${encodeURIComponent(product.subcategory)}`
+    : `/products?category=${encodeURIComponent(product.category)}`
+
   return (
     <>
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-sm text-gray-400 mb-6">
+        <div className="flex items-center gap-2 text-sm text-gray-400 mb-6 flex-wrap">
           <Link href="/" className="hover:text-[#1565C0]">Home</Link>
           <ChevronRight size={14} />
           <Link href="/products" className="hover:text-[#1565C0]">Products</Link>
+          <ChevronRight size={14} />
+          <Link
+            href={`/products?category=${encodeURIComponent(product.category)}`}
+            className="hover:text-[#1565C0]"
+          >
+            {product.category}
+          </Link>
+          {product.subcategory && (
+            <>
+              <ChevronRight size={14} />
+              <Link href={categoryUrl} className="hover:text-[#1565C0]">
+                {product.subcategory}
+              </Link>
+            </>
+          )}
           <ChevronRight size={14} />
           <span className="text-gray-700 font-medium">{product.name}</span>
         </div>
@@ -103,10 +123,27 @@ export default function ProductDetailClient({ product, reviews: initialReviews, 
 
           {/* Info */}
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-xs font-bold bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full">{product.category}</span>
-              {product.brand && <span className="text-xs text-gray-400">by {product.brand}</span>}
+            {/* Category + subcategory badges */}
+            <div className="flex items-center gap-2 mb-3 flex-wrap">
+              <Link
+                href={`/products?category=${encodeURIComponent(product.category)}`}
+                className="text-xs font-bold bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full hover:bg-blue-100 transition-colors"
+              >
+                {product.category}
+              </Link>
+              {product.subcategory && (
+                <Link
+                  href={categoryUrl}
+                  className="text-xs font-medium bg-teal-50 text-teal-700 px-2.5 py-1 rounded-full hover:bg-teal-100 transition-colors"
+                >
+                  {product.subcategory}
+                </Link>
+              )}
+              {product.brand && (
+                <span className="text-xs text-gray-400">by {product.brand}</span>
+              )}
             </div>
+
             <h1 className="text-3xl font-bold text-gray-900 mb-3">{product.name}</h1>
 
             {/* Rating */}
@@ -122,26 +159,25 @@ export default function ProductDetailClient({ product, reviews: initialReviews, 
             <p className="text-gray-600 leading-relaxed mb-6">{product.description}</p>
 
             {/* Specs */}
-{/* Specs */}
-{product.specifications && Object.keys(product.specifications).length > 0 && (
-  <div className="bg-gray-50 rounded-xl p-4 mb-6">
-    <h3 className="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wide">Specifications</h3>
-    <div className="grid grid-cols-2 gap-2">
-      {Object.entries(product.specifications).map(([key, value]) => (
-        <div key={key} className="flex gap-2 text-sm">
-          <span className="text-gray-400 capitalize">{key.replace(/_/g, ' ')}:</span>
-          <span className="font-medium text-gray-700">
-            {typeof value === 'object' && value !== null
-              ? Object.entries(value as Record<string, string>)
-                  .map(([k, v]) => `${k.replace(/_/g, ' ')}: ${v}`)
-                  .join(' · ')
-              : String(value ?? '')}
-          </span>
-        </div>
-      ))}
-    </div>
-  </div>
-)}
+            {product.specifications && Object.keys(product.specifications).length > 0 && (
+              <div className="bg-gray-50 rounded-xl p-4 mb-6">
+                <h3 className="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wide">Specifications</h3>
+                <div className="grid grid-cols-2 gap-2">
+                  {Object.entries(product.specifications).map(([key, value]) => (
+                    <div key={key} className="flex gap-2 text-sm">
+                      <span className="text-gray-400 capitalize">{key.replace(/_/g, ' ')}:</span>
+                      <span className="font-medium text-gray-700">
+                        {typeof value === 'object' && value !== null
+                          ? Object.entries(value as Record<string, string>)
+                              .map(([k, v]) => `${k.replace(/_/g, ' ')}: ${v}`)
+                              .join(' · ')
+                          : String(value ?? '')}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <Button
               onClick={() => setQuoteOpen(true)}
@@ -234,7 +270,9 @@ export default function ProductDetailClient({ product, reviews: initialReviews, 
                   disabled={reviewLoading}
                   className="bg-gradient-to-r from-[#1565C0] to-[#00838F]"
                 >
-                  {reviewLoading ? <span className="flex items-center gap-2"><Loader2 size={14} className="animate-spin" /> Submitting...</span> : 'Submit Review'}
+                  {reviewLoading
+                    ? <span className="flex items-center gap-2"><Loader2 size={14} className="animate-spin" /> Submitting...</span>
+                    : 'Submit Review'}
                 </Button>
               </form>
             </div>

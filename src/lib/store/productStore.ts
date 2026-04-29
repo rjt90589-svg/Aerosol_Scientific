@@ -11,10 +11,10 @@ interface ProductState {
   fetchProducts: (force?: boolean) => Promise<void>
   invalidateCache: () => void
   getBySlug: (slug: string) => Product | undefined
-  getByCategory: (category: string) => Product[]
+  getByCategory: (category: string, subcategory?: string) => Product[]
   getFeatured: () => Product[]
   search: (query: string) => Product[]
-  filterAndSearch: (category: string, query: string) => Product[]
+  filterAndSearch: (category: string, subcategory: string, query: string) => Product[]
 }
 
 export const useProductStore = create<ProductState>((set, get) => ({
@@ -37,8 +37,6 @@ export const useProductStore = create<ProductState>((set, get) => ({
     try {
       const res = await fetch('/api/products', {
         // Bypass CDN/Next.js data cache — Zustand TTL is our cache layer.
-        // Without this, s-maxage on the route means refetches still get
-        // the old response even after the client TTL expires.
         cache: 'no-store',
       })
       if (!res.ok) throw new Error('Failed to fetch products')
@@ -51,9 +49,14 @@ export const useProductStore = create<ProductState>((set, get) => ({
 
   getBySlug: (slug) => get().products.find(p => p.slug === slug),
 
-  getByCategory: (category) => {
-    if (!category || category === 'All') return get().products
-    return get().products.filter(p => p.category === category)
+  getByCategory: (category, subcategory) => {
+    let results = get().products
+    if (!category || category === 'All') return results
+    results = results.filter(p => p.category === category)
+    if (subcategory) {
+      results = results.filter(p => p.subcategory === subcategory)
+    }
+    return results
   },
 
   getFeatured: () => get().products.filter(p => p.featured),
@@ -66,16 +69,23 @@ export const useProductStore = create<ProductState>((set, get) => ({
       p.description?.toLowerCase().includes(q) ||
       p.short_description?.toLowerCase().includes(q) ||
       p.category.toLowerCase().includes(q) ||
+      p.subcategory?.toLowerCase().includes(q) ||
       p.brand?.toLowerCase().includes(q) ||
       p.tags?.some(t => t.toLowerCase().includes(q))
     )
   },
 
-  filterAndSearch: (category, query) => {
+  filterAndSearch: (category, subcategory, query) => {
     let results = get().products
+
     if (category && category !== 'All') {
       results = results.filter(p => p.category === category)
     }
+
+    if (subcategory) {
+      results = results.filter(p => p.subcategory === subcategory)
+    }
+
     if (query.trim()) {
       const q = query.toLowerCase()
       results = results.filter(p =>
@@ -83,10 +93,12 @@ export const useProductStore = create<ProductState>((set, get) => ({
         p.description?.toLowerCase().includes(q) ||
         p.short_description?.toLowerCase().includes(q) ||
         p.category.toLowerCase().includes(q) ||
+        p.subcategory?.toLowerCase().includes(q) ||
         p.brand?.toLowerCase().includes(q) ||
         p.tags?.some(t => t.toLowerCase().includes(q))
       )
     }
+
     return results
   },
 }))

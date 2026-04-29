@@ -11,7 +11,7 @@ export async function PUT(req: NextRequest, { params }: RouteContext) {
 
   const body = await req.json()
   const {
-    name, description, short_description, category,
+    name, description, short_description, category, subcategory,
     brand, image_url, images, specifications, tags, featured,
   } = body
 
@@ -29,6 +29,7 @@ export async function PUT(req: NextRequest, { params }: RouteContext) {
       description: description || null,
       short_description: short_description || null,
       category,
+      subcategory: subcategory || null,
       brand: brand || 'Aerosol Scientific',
       image_url: image_url || null,
       images: images || [],

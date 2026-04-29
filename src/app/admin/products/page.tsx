@@ -7,10 +7,11 @@ import {
   Plus, Edit, Trash2, Search, X, Loader2,
   AlertTriangle, CheckCircle2, Package, Upload, ImageIcon,
 } from 'lucide-react'
-import { PRODUCT_CATEGORIES } from '@/lib/constants'
+import { CATEGORY_NAMES } from '@/lib/constants'
 import { uploadProductImage, deleteProductImage } from '@/lib/supabase/storage'
 import type { Product } from '@/types'
 import { useProductStore } from '@/lib/store/productStore'
+import CategorySubcategorySelect from '@/components/CategorySubcategorySelect'
 
 // ─── Shared primitives ────────────────────────────────────────────────────────
 function Overlay({ onClick }: { onClick: () => void }) {
@@ -88,20 +89,21 @@ function DeleteDialog({
   )
 }
 
-// ─── Zod schema (shared for add & edit) ───────────────────────────────────────
+// ─── Zod schema ───────────────────────────────────────────────────────────────
+// CHANGED: added `subcategory` field
 const productSchema = z.object({
   name:              z.string().min(1, 'Product name is required'),
   slug:              z.string().min(1, 'Slug is required').regex(/^[a-z0-9-]+$/, 'Lowercase, numbers and hyphens only'),
   category:          z.string().min(1, 'Category is required'),
+  subcategory:       z.string().optional(),   // NEW
   brand:             z.string().optional(),
   short_description: z.string().optional(),
   description:       z.string().min(1, 'Description is required'),
-  tags:              z.string().optional(),   // comma-sep, parsed on submit
+  tags:              z.string().optional(),
   featured:          z.boolean().optional(),
 })
 type ProductFormData = z.infer<typeof productSchema>
 
-// Spec rows managed outside RHF (dynamic key-value pairs)
 type SpecRow = { key: string; value: string }
 
 function defaultSpecRows(product?: Product): SpecRow[] {
@@ -110,7 +112,7 @@ function defaultSpecRows(product?: Product): SpecRow[] {
   return entries.length ? entries.map(([k, v]) => ({ key: k, value: String(v) })) : [{ key: '', value: '' }]
 }
 
-// ─── Image uploader (mini, reused in both dialogs) ────────────────────────────
+// ─── Image uploader ────────────────────────────────────────────────────────────
 const ACCEPTED = ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif']
 const MAX_MB   = 5
 
@@ -177,12 +179,11 @@ function ImagePicker({
   )
 }
 
-// ─── Shared form body (used in both Add & Edit dialogs) ───────────────────────
+// ─── Shared form body ─────────────────────────────────────────────────────────
 interface ProductFormBodyProps {
   form: ReturnType<typeof useForm<ProductFormData>>
   specRows: SpecRow[]
   setSpecRows: React.Dispatch<React.SetStateAction<SpecRow[]>>
-  // image props
   imagePreview: string | null
   isDragging: boolean
   uploadStatus: 'idle' | 'uploading' | 'done' | 'error'
@@ -208,6 +209,9 @@ function ProductFormBody({
     name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
 
   const featured = watch('featured')
+  // CHANGED: watch both category and subcategory for CategorySubcategorySelect
+  const category = watch('category') ?? ''
+  const subcategory = watch('subcategory') ?? ''
 
   return (
     <div className="space-y-4">
@@ -215,7 +219,7 @@ function ProductFormBody({
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label className={labelCls}>Name <span className="text-red-500">*</span></label>
-          <input {...register('name')} className={inputCls} placeholder="e.g. 1.5mL Amber Vial"
+          <input {...register('name')} className={inputCls} placeholder="e.g. Stability Chamber 100L"
             onChange={e => {
               register('name').onChange(e)
               if (!isEdit) setValue('slug', generateSlug(e.target.value))
@@ -224,32 +228,25 @@ function ProductFormBody({
         </div>
         <div>
           <label className={labelCls}>Slug <span className="text-red-500">*</span></label>
-          <input {...register('slug')} className={inputCls} placeholder="1-5ml-amber-vial" />
+          <input {...register('slug')} className={inputCls} placeholder="stability-chamber-100l" />
           {errors.slug && <p className={errCls}>{errors.slug.message}</p>}
         </div>
       </div>
 
-      {/* Category & Brand */}
+      {/* CHANGED: Category + Subcategory via shared component, + Brand alongside */}
       <div className="grid grid-cols-2 gap-3">
-        <div>
-          <label className={labelCls}>Category <span className="text-red-500">*</span></label>
-          {/* 
-            FIX: Use native select and call setValue('category', ...) so RHF validation
-            sees the value — this was the root cause of the silent add failure.
-          */}
-          <select
-            className={inputCls}
-            defaultValue={watch('category') || ''}
-            onChange={e => setValue('category', e.target.value, { shouldValidate: true })}
-          >
-            <option value="" disabled>Select category…</option>
-            {PRODUCT_CATEGORIES.filter(c => c !== 'All').map(c => (
-              <option key={c} value={c}>{c}</option>
-            ))}
-          </select>
+        {/* CategorySubcategorySelect spans both columns on its own row */}
+        <div className="col-span-2">
+          <CategorySubcategorySelect
+            category={category}
+            subcategory={subcategory}
+            onCategoryChange={val => setValue('category', val, { shouldValidate: true })}
+            onSubcategoryChange={val => setValue('subcategory', val, { shouldValidate: false })}
+            required
+          />
           {errors.category && <p className={errCls}>{errors.category.message}</p>}
         </div>
-        <div>
+        <div className="col-span-2">
           <label className={labelCls}>Brand</label>
           <input {...register('brand')} className={inputCls} placeholder="Aerosol Scientific" />
         </div>
@@ -274,7 +271,7 @@ function ProductFormBody({
       <div>
         <label className={labelCls}>Tags <span className="text-gray-300 font-normal normal-case tracking-normal">comma-separated</span></label>
         <input {...register('tags')} className={inputCls}
-          placeholder="hplc, vials, chromatography" />
+          placeholder="stability, chamber, thermolab" />
       </div>
 
       {/* Specifications */}
@@ -283,10 +280,10 @@ function ProductFormBody({
         <div className="space-y-2">
           {specRows.map((row, i) => (
             <div key={i} className="flex gap-2 items-center">
-              <input value={row.key} placeholder="Key (e.g. Material)"
+              <input value={row.key} placeholder="Key (e.g. Capacity)"
                 onChange={e => setSpecRows(r => r.map((x, j) => j === i ? { ...x, key: e.target.value } : x))}
                 className={`${inputCls} flex-1`} />
-              <input value={row.value} placeholder="Value (e.g. Borosilicate Glass)"
+              <input value={row.value} placeholder="Value (e.g. 100L)"
                 onChange={e => setSpecRows(r => r.map((x, j) => j === i ? { ...x, value: e.target.value } : x))}
                 className={`${inputCls} flex-1`} />
               <button type="button"
@@ -341,7 +338,6 @@ function AddProductDialog({
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [specRows, setSpecRows] = useState<SpecRow[]>([{ key: '', value: '' }])
 
-  // image state
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [imageError, setImageError] = useState<string | null>(null)
@@ -351,7 +347,8 @@ function AddProductDialog({
 
   const form = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
-    defaultValues: { brand: 'Aerosol Scientific', featured: false, tags: '', slug: '' },
+    // CHANGED: added subcategory default
+    defaultValues: { brand: 'Aerosol Scientific', featured: false, tags: '', slug: '', category: '', subcategory: '' },
   })
 
   const handleFileChange = useCallback((file: File) => {
@@ -392,6 +389,7 @@ function AddProductDialog({
         description:       data.description,
         short_description: data.short_description || null,
         category:          data.category,
+        subcategory:       data.subcategory || null,   // NEW
         brand:             data.brand || 'Aerosol Scientific',
         image_url,
         images:            image_url ? [image_url] : [],
@@ -400,7 +398,7 @@ function AddProductDialog({
         featured:          data.featured ?? false,
       }
 
-      console.log('[AddProduct] payload:', payload) // debug log
+      console.log('[AddProduct] payload:', payload)
 
       const res = await fetch('/api/admin/products', {
         method: 'POST',
@@ -408,7 +406,7 @@ function AddProductDialog({
         body: JSON.stringify(payload),
       })
       const json = await res.json()
-      console.log('[AddProduct] response:', res.status, json) // debug log
+      console.log('[AddProduct] response:', res.status, json)
       if (!res.ok) throw new Error(json.error || `POST failed (${res.status})`)
 
       onSuccess()
@@ -426,7 +424,6 @@ function AddProductDialog({
       <Overlay onClick={onClose} />
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl pointer-events-auto overflow-hidden flex flex-col max-h-[92vh]">
-          {/* Header */}
           <div className="bg-gradient-to-r from-[#1565C0] to-[#00838F] p-5 flex items-center justify-between shrink-0">
             <div>
               <h2 className="text-white font-bold text-lg">Add New Product</h2>
@@ -438,7 +435,6 @@ function AddProductDialog({
             </button>
           </div>
 
-          {/* Body */}
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col flex-1 min-h-0">
             <div className="overflow-y-auto flex-1 p-5">
               <ProductFormBody
@@ -460,7 +456,6 @@ function AddProductDialog({
               )}
             </div>
 
-            {/* Footer */}
             <div className="p-4 border-t border-gray-100 flex gap-3 shrink-0 bg-gray-50/50">
               <button type="button" onClick={onClose} disabled={loading}
                 className="flex-1 py-2.5 rounded-xl border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-100 transition-colors disabled:opacity-50">
@@ -488,7 +483,6 @@ function EditProductDialog({
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [specRows, setSpecRows] = useState<SpecRow[]>(defaultSpecRows(product))
 
-  // image state
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(product.image_url ?? null)
   const [imageError, setImageError] = useState<string | null>(null)
@@ -503,6 +497,7 @@ function EditProductDialog({
       name:              product.name,
       slug:              product.slug,
       category:          product.category,
+      subcategory:       (product as any).subcategory ?? '',   // NEW
       brand:             product.brand ?? 'Aerosol Scientific',
       short_description: product.short_description ?? '',
       description:       product.description ?? '',
@@ -511,9 +506,10 @@ function EditProductDialog({
     },
   })
 
-  // Sync category into RHF on mount (since it's a controlled select)
+  // CHANGED: sync both category and subcategory into RHF on mount
   useEffect(() => {
     form.setValue('category', product.category, { shouldValidate: false })
+    form.setValue('subcategory', (product as any).subcategory ?? '', { shouldValidate: false })
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleFileChange = useCallback((file: File) => {
@@ -561,6 +557,7 @@ function EditProductDialog({
         description:       data.description,
         short_description: data.short_description || null,
         category:          data.category,
+        subcategory:       data.subcategory || null,   // NEW
         brand:             data.brand || 'Aerosol Scientific',
         image_url,
         images:            image_url ? [image_url] : [],
@@ -591,7 +588,6 @@ function EditProductDialog({
       <Overlay onClick={onClose} />
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl pointer-events-auto overflow-hidden flex flex-col max-h-[92vh]">
-          {/* Header */}
           <div className="bg-gradient-to-r from-[#1565C0] to-[#00838F] p-5 flex items-start justify-between shrink-0">
             <div>
               <h2 className="text-white font-bold text-lg">Edit Product</h2>
@@ -603,7 +599,6 @@ function EditProductDialog({
             </button>
           </div>
 
-          {/* Body */}
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col flex-1 min-h-0">
             <div className="overflow-y-auto flex-1 p-5">
               <ProductFormBody
@@ -626,7 +621,6 @@ function EditProductDialog({
               )}
             </div>
 
-            {/* Footer */}
             <div className="p-4 border-t border-gray-100 flex gap-3 shrink-0 bg-gray-50/50">
               <button type="button" onClick={onClose} disabled={loading}
                 className="flex-1 py-2.5 rounded-xl border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-100 transition-colors disabled:opacity-50">
@@ -656,7 +650,8 @@ export default function AdminProducts() {
   const [deleteTarget, setDeleteTarget] = useState<Product | null>(null)
   const [deleteLoading, setDeleteLoading] = useState(false)
   const [toast, setToast] = useState<{ message: string; type: 'success'|'error' } | null>(null)
- const {invalidateCache} = useProductStore()
+  const { invalidateCache } = useProductStore()
+
   const showToast = (message: string, type: 'success'|'error') => {
     setToast({ message, type })
     setTimeout(() => setToast(null), 3500)
@@ -682,7 +677,7 @@ export default function AdminProducts() {
       const json = await res.json()
       if (!res.ok) throw new Error(json.error || 'Delete failed')
       setDeleteTarget(null)
-    invalidateCache() // Clear product cache to reflect deletion
+      invalidateCache()
       showToast('Product deleted', 'success')
       fetchProducts()
     } catch (err) {
@@ -725,6 +720,7 @@ export default function AdminProducts() {
               <thead className="bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wide">
                 <tr>
                   <th className="px-4 py-3 text-left">Product</th>
+                  {/* CHANGED: merged Category + Subcategory into one column */}
                   <th className="px-4 py-3 text-left">Category</th>
                   <th className="px-4 py-3 text-left">Brand</th>
                   <th className="px-4 py-3 text-left">Featured</th>
@@ -747,10 +743,18 @@ export default function AdminProducts() {
                         </div>
                       </div>
                     </td>
+                    {/* CHANGED: show subcategory below category when present */}
                     <td className="px-4 py-3">
-                      <span className="text-xs bg-blue-50 text-blue-700 font-semibold px-2.5 py-1 rounded-full whitespace-nowrap">
-                        {product.category}
-                      </span>
+                      <div className="flex flex-col gap-1">
+                        <span className="text-xs bg-blue-50 text-blue-700 font-semibold px-2.5 py-1 rounded-full whitespace-nowrap w-fit">
+                          {product.category}
+                        </span>
+                        {(product as any).subcategory && (
+                          <span className="text-xs bg-teal-50 text-teal-700 font-medium px-2.5 py-0.5 rounded-full whitespace-nowrap w-fit">
+                            {(product as any).subcategory}
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="px-4 py-3">
                       <span className="text-xs text-gray-500">{product.brand || '—'}</span>
@@ -794,7 +798,6 @@ export default function AdminProducts() {
         </div>
       </div>
 
-      {/* Add dialog */}
       {showAdd && (
         <AddProductDialog
           onClose={() => setShowAdd(false)}
@@ -802,16 +805,14 @@ export default function AdminProducts() {
         />
       )}
 
-      {/* Edit dialog */}
       {editTarget && (
         <EditProductDialog
           product={editTarget}
           onClose={() => setEditTarget(null)}
-          onSuccess={() => { setEditTarget(null); showToast('Product updated!', 'success'); invalidateCache();  fetchProducts() }}
+          onSuccess={() => { setEditTarget(null); showToast('Product updated!', 'success'); invalidateCache(); fetchProducts() }}
         />
       )}
 
-      {/* Delete dialog */}
       {deleteTarget && (
         <DeleteDialog
           product={deleteTarget}
@@ -821,7 +822,6 @@ export default function AdminProducts() {
         />
       )}
 
-      {/* Toast */}
       {toast && <Toast message={toast.message} type={toast.type} />}
     </>
   )

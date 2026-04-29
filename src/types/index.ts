@@ -6,6 +6,7 @@ export interface Product {
   description: string | null
   short_description: string | null
   category: string
+  subcategory: string | null
   brand: string
   image_url: string | null
   images: string[]

@@ -74,6 +74,7 @@ export async function POST(req: NextRequest) {
       description: description || null,
       short_description: short_description || null,
       category,
+      subcategory: null,
       brand: brand || 'Aerosol Scientific',
       image_url: image_url || null,
       images: images || [],

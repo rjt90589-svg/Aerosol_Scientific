@@ -11,7 +11,6 @@ interface Props {
   index?: number
 }
 
-
 export default function ProductCard({ product, index = 0 }: Props) {
   const [quoteOpen, setQuoteOpen] = useState(false)
 
@@ -45,10 +44,17 @@ export default function ProductCard({ product, index = 0 }: Props) {
               </svg>
             </div>
           )}
-          <div className="absolute top-3 left-3">
+
+          {/* Category + optional subcategory badge */}
+          <div className="absolute top-3 left-3 flex flex-col gap-1">
             <span className="text-[10px] font-bold bg-blue-600 text-white px-2 py-0.5 rounded-full">
               {product.category}
             </span>
+            {product.subcategory && (
+              <span className="text-[10px] font-medium bg-white/90 text-blue-700 px-2 py-0.5 rounded-full border border-blue-100 backdrop-blur-sm">
+                {product.subcategory}
+              </span>
+            )}
           </div>
         </Link>
 
