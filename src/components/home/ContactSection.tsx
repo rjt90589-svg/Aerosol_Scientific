@@ -32,7 +32,8 @@ const OFFICES = [
     address: '108-AL MAZROUA, AN-2',
     city: 'Dubai, United Arab Emirates',
     phone: '+971-547598109',
-    email: 'sales@aerosolscientific.com',
+    email1: 'support@aerosolscientific.com', 
+    email2: 'sales@aerosolscientific.com',
     hours: 'Sun–Thu, 9AM–6PM GST',
     gradient: 'from-[#1251A3] to-[#0891B2]',
   },
@@ -41,7 +42,8 @@ const OFFICES = [
     address: 'F-4, 1st Floor, Karka Duma',
     city: 'New Delhi - 110092',
     phone: '+91 98919 38724',
-    email: 'support@aerosolscientific.com',
+    email1: 'support@aerosolscientific.com',
+    email2: 'sales@aerosolscientific.com',
     hours: 'Mon–Sat, 9AM–6PM IST',
     gradient: 'from-[#0891B2] to-[#6366F1]',
   },
@@ -135,7 +137,11 @@ export default function ContactSection() {
                     </div>
                     <div className="flex gap-2.5 items-center">
                       <Mail size={13} className="text-[#0891B2] shrink-0" />
-                      <a href={`mailto:${office.email}`} className="text-[#3D5276] hover:text-[#0891B2] transition-colors text-[12px]">{office.email}</a>
+                      <a href={`mailto:${office.email1}`} className="text-[#3D5276] hover:text-[#0891B2] transition-colors text-[12px]">{office.email1}</a>
+                    </div>
+                    <div className="flex gap-2.5 items-center">
+                      <Mail size={13} className="text-[#0891B2] shrink-0" />
+                      <a href={`mailto:${office.email2}`} className="text-[#3D5276] hover:text-[#0891B2] transition-colors text-[12px]">{office.email2}</a>
                     </div>
                   </div>
                 </div>

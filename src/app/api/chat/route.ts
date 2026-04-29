@@ -39,7 +39,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error('Chat route error:', error)
     return NextResponse.json(
-      { reply: "I'm having trouble connecting. Please contact us at sales@aerosolscientific.com or call +971-547598109." },
+      { reply: "I'm having trouble connecting. Please contact us at sales@aerosolscientific.com or support@aerosolscientific.com or call +971-547598109." },
       { status: 200 }
     )
   }

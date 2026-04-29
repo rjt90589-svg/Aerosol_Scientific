@@ -320,6 +320,11 @@ export default function Chatbot() {
                   <a href="mailto:sales@aerosolscientific.com" className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors" title="Email">
                     <Mail size={13} className="text-white" />
                   </a>
+                   <a href="mailto: support@aerosolscientific.com" className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors" title="Email">
+                    <Mail size={13} className="text-white" />
+                  </a>
+
+                  
                   <button onClick={() => setIsOpen(false)} className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors">
                     <X size={13} className="text-white" />
                   </button>
