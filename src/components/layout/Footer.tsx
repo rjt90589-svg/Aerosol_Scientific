@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { FlaskConical, Mail, Phone, MapPin,} from 'lucide-react'
 import { SITE_ADDRESS_UAE, SITE_ADDRESS_INDIA, SITE_EMAIL_SALES, SITE_EMAIL_SUPPORT, SITE_PHONE_UAE, SITE_PHONE_INDIA } from '@/lib/constants'
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from 'react-icons/fa'
+import ReactCountryFlag from 'react-country-flag'
 
 export default function Footer() {
   return (
@@ -56,7 +57,10 @@ export default function Footer() {
 
           {/* UAE Office */}
           <div>
-            <h4 className="font-semibold text-sm uppercase tracking-wider text-[#00ACC1] mb-4">🇦🇪 UAE Office</h4>
+            <h4 className="font-semibold text-sm uppercase tracking-wider text-[#00ACC1] mb-4">
+              
+               <ReactCountryFlag  countryCode="AE" svg style={{ width: '16px', height: '12px' }} />
+                                UAE Office</h4>
             <ul className="space-y-3">
               <li className="flex gap-2.5 text-gray-400 text-sm">
                 <MapPin size={14} className="shrink-0 mt-0.5 text-[#00ACC1]" />
@@ -79,7 +83,9 @@ export default function Footer() {
 
           {/* India Office */}
           <div>
-            <h4 className="font-semibold text-sm uppercase tracking-wider text-[#00ACC1] mb-4">🇮🇳 India Office</h4>
+            <h4 className="font-semibold text-sm uppercase tracking-wider text-[#00ACC1] mb-4"> <ReactCountryFlag  countryCode="IN" svg style={{ width: '16px', height: '12px' }} />
+                              INDIA Office
+                              </h4>
             <ul className="space-y-3">
               <li className="flex gap-2.5 text-gray-400 text-sm">
                 <MapPin size={14} className="shrink-0 mt-0.5 text-[#00ACC1]" />
