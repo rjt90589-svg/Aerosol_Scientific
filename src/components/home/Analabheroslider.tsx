@@ -9,7 +9,7 @@ import { useProductStore } from '@/lib/store/productStore'
 import type { Product } from '@/types'
 
 
-const DURATION = 4000
+const DURATION = 3000
 
 
 // ─── Static bg images served from /public/bg-img/ ────────────────────────────
@@ -58,6 +58,19 @@ function SlideUp({ children, delay = 0 }: { children: React.ReactNode; delay?: n
   return (
     <motion.div
       initial={{ opacity: 0, y: 28 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -12, transition: { duration: 0.2 } }}
+      transition={{ duration: 0.52, delay, ease: [0.22, 1, 0.36, 1] }}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+function SlideDown({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -28 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -12, transition: { duration: 0.2 } }}
       transition={{ duration: 0.52, delay, ease: [0.22, 1, 0.36, 1] }}
@@ -212,7 +225,7 @@ const slides = getFeatured().map((p, i) => productToSlide(p, i))
     <section
       className="relative w-full overflow-hidden select-none"
       style={{ minHeight: 'min(90vh, 660px)' }}
-      onMouseEnter={() => setPaused(true)}
+      // onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
       {/* ── Full-screen panning background ── */}
@@ -233,14 +246,12 @@ const slides = getFeatured().map((p, i) => productToSlide(p, i))
 
 
               {/* Category badge */}
-              <SlideUp delay={0}>
+              <SlideDown delay={0.3}>
                 <div className="mb-4">
                   <span
                     className="inline-flex bg-sci-navy text-white items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] px-3.5 py-1.5 rounded-full border"
                     style={{
-                      // color: '#7dd3fc',
                       borderColor: 'rgba(125,211,254,0.95)',
-                      // background: 'rgba(125,211,252,0.90)',
                       backdropFilter: 'blur(8px)',
                     }}
                   >
@@ -248,11 +259,11 @@ const slides = getFeatured().map((p, i) => productToSlide(p, i))
                     {s.tag}
                   </span>
                 </div>
-              </SlideUp>
+              </SlideDown>
 
 
               {/* Product title */}
-              <SlideUp delay={0.08}>
+              <SlideDown delay={0.3}>
                 <Link href={`/products/${s.slug}`}>
                   <h1
                     className="font-bold leading-tight mb-1 text-sci-blue hover:text-sky-600 transition-colors cursor-pointer"
@@ -261,32 +272,17 @@ const slides = getFeatured().map((p, i) => productToSlide(p, i))
                     {s.title}
                   </h1>
                 </Link>
-              </SlideUp>
+              </SlideDown>
 
 
               {/* Model / brand */}
-              <SlideUp delay={0.15}>
+              <SlideUp delay={0.3}>
                 <p className="font-semibold mb-5 tracking-wide" style={{ color: '#38bdf8', fontSize: '0.83rem' }}>
                   {s.model}
                 </p>
               </SlideUp>
 
-  
-              {/* Specs (tags) */}
-              {/* {s.specs.map((spec, i) => (
-                <SlideUp key={`${epoch}-spec-${i}`} delay={0.2 + i * 0.07}>
-                  <div className="flex items-start gap-2.5 text-sm mb-1.5" style={{ color: 'rgba(226,232,240,0.90)' }}>
-                    <svg className="mt-1.25 shrink-0" width="13" height="13" viewBox="0 0 13 13" fill="none">
-                      <circle cx="6.5" cy="6.5" r="6" stroke="#38bdf8" strokeOpacity="0.35" />
-                      <circle cx="6.5" cy="6.5" r="2.8" fill="#38bdf8" />
-                    </svg>
-                    <span>{spec}</span>
-                  </div>
-                </SlideUp>
-              ))} */}
-
-
-               <SlideUp >
+               <SlideUp delay={0.3} >
                   <div className="flex items-start gap-2.5 text-sm mb-1.5" style={{ color: 'rgba(226,232,240,0.90)' }}>
                     <svg className="mt-1.25 shrink-0" width="13" height="13" viewBox="0 0 13 13" fill="none">
                       <circle cx="6.5" cy="6.5" r="6" stroke="#38bdf8" strokeOpacity="0.35" />
@@ -298,7 +294,7 @@ const slides = getFeatured().map((p, i) => productToSlide(p, i))
 
 
               {/* CTA buttons */}
-              <SlideUp delay={0.2 + s.specs.length * 0.07 + 0.07}>
+              <SlideUp delay={0.3 + s.specs.length * 0.07 + 0.07}>
                 <div className="mt-7 flex items-center gap-3 flex-wrap">
                   <Link
                     href={`/products/${s.slug}`}
@@ -403,7 +399,7 @@ const slides = getFeatured().map((p, i) => productToSlide(p, i))
 
       {/* ── Left accent bar ── */}
       <div
-        className="absolute left-0 top-[10%] bottom-[10%] w-[3px] rounded-r-full pointer-events-none"
+        className="absolute left-0 top-[10%] bottom-[10%] w-0.75 rounded-r-full pointer-events-none"
         style={{ background: 'linear-gradient(180deg, transparent, #38bdf8 22%, #38bdf8 78%, transparent)' }}
       />
 
