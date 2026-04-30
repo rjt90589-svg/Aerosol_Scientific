@@ -74,7 +74,7 @@ function SlideBackground({ bgImage, epoch }: { bgImage: string; epoch: number })
     <AnimatePresence mode="wait">
       <motion.div
         key={`bg-${epoch}`}
-        className="absolute inset-0   will-change-transform blur-[4px] overflow-hidden"
+        className="absolute inset-0   will-change-transform blur-[1px] overflow-hidden"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -96,10 +96,10 @@ function SlideBackground({ bgImage, epoch }: { bgImage: string; epoch: number })
           style={{
             background:`linear-gradient(
   105deg,
-  rgba(5,12,32,0.45) 40%,
+  rgba(5,12,32,0.75) 20%,
   rgba(5,12,32,0.55) 45%,
-  rgba(5,12,32,0.75) 80%,
-  rgba(5,12,32,0.95) 120%
+  rgba(5,12,32,0.75) 60%,
+  rgba(5,12,32,0.95) 100%
 )`,
           }}
         />
