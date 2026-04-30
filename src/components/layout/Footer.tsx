@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { FlaskConical, Mail, Phone, MapPin,} from 'lucide-react'
 import { SITE_ADDRESS_UAE, SITE_ADDRESS_INDIA, SITE_EMAIL_SALES, SITE_EMAIL_SUPPORT, SITE_PHONE_UAE, SITE_PHONE_INDIA } from '@/lib/constants'
+import { FaFacebookF, FaInstagram, FaLinkedinIn } from 'react-icons/fa'
 
 export default function Footer() {
   return (
@@ -105,6 +106,19 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-2 text-xs text-gray-500">
           <span>© 2026 Aerosol Scientific. All rights reserved.</span>
+          <div className="flex items-center gap-3">
+            <a href="#" className="text-white">
+              <FaFacebookF size={16} />
+            </a>
+          
+            <a href="#" className="text-white">
+              <FaInstagram size={16} />
+            </a>
+          
+            <a href="https://www.linkedin.com/company/aerosol-scientific/" className="text-white">
+              <FaLinkedinIn  size={16} />
+            </a>
+          </div>
           <div className="flex gap-4">
             <Link href="/admin" className="hover:text-gray-300">Admin</Link>
             <a href="#" className="hover:text-gray-300">Privacy Policy</a>
