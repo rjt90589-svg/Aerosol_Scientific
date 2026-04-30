@@ -5,13 +5,14 @@ import { FlaskConical, Wrench, GraduationCap, Microscope, Settings, FileCheck, A
 import SectionHeading from '@/components/ui/SectionHeading'
 
 const services = [
-  {
-    icon: Wrench,
-    title: 'Turnkey Laboratory Projects',
-    description: 'Complete lab setup including instruments, furniture, safety equipment, fume hoods, gas systems, and SS furniture. Full compliance environment.',
-    color: 'from-[#1565C0] to-[#0D47A1]',
-    tag: 'End-to-End',
+    {
+    icon: Microscope,
+    title: 'Laboratory Instrument Sales',
+    description: 'Full range of instruments from leading global manufacturers with warranty service support and extended options.',
+    color: 'from-[#2E7D32] to-[#1B5E20]',
+    tag: 'Global OEM',
   },
+ 
   {
     icon: Settings,
     title: 'After-Sales Service',
@@ -26,12 +27,12 @@ const services = [
     color: 'from-[#6A1B9A] to-[#4A148C]',
     tag: 'Workshops',
   },
-  {
-    icon: Microscope,
-    title: 'Laboratory Instrument Sales',
-    description: 'Full range of instruments from leading global manufacturers with warranty service support and extended options.',
-    color: 'from-[#2E7D32] to-[#1B5E20]',
-    tag: 'Global OEM',
+ {
+    icon: Wrench,
+    title: 'Turnkey Laboratory Projects',
+    description: 'Complete lab setup including instruments, furniture, safety equipment, fume hoods, gas systems, and SS furniture. Full compliance environment.',
+    color: 'from-[#1565C0] to-[#0D47A1]',
+    tag: 'End-to-End',
   },
   {
     icon: FlaskConical,
