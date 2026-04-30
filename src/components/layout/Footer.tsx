@@ -21,7 +21,7 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed mb-4">
-              Delivering excellence in scientific instruments, consumables, and complete laboratory solutions across UAE and India.
+              Delivering excellence in scientific instruments, consumables, and complete laboratory solutions.
             </p>
             {/* <div className="flex gap-3">
               {[Linkedin, Twitter, Facebook].map((Icon, i) => (
@@ -65,6 +65,14 @@ export default function Footer() {
                 <Phone size={14} className="shrink-0 mt-0.5 text-[#00ACC1]" />
                 <a href={`tel:${SITE_PHONE_UAE}`} className="hover:text-white">{SITE_PHONE_UAE}</a>
               </li>
+               <li className="flex gap-2.5 text-gray-400 text-sm">
+                <Mail size={14} className="shrink-0 mt-0.5 text-[#00ACC1]" />
+                <a href={`mailto:${SITE_EMAIL_SUPPORT}`} className="hover:text-white">{SITE_EMAIL_SUPPORT}</a>
+              </li>
+              <li className="flex gap-2.5 text-gray-400 text-sm">
+                <Mail size={14} className="shrink-0 mt-0.5 text-[#00ACC1]" />
+                <a href={`mailto:${SITE_EMAIL_SALES}`} className="hover:text-white">{SITE_EMAIL_SALES}</a>
+              </li>
             </ul>
           </div>
 
@@ -79,6 +87,10 @@ export default function Footer() {
               <li className="flex gap-2.5 text-gray-400 text-sm">
                 <Phone size={14} className="shrink-0 mt-0.5 text-[#00ACC1]" />
                 <a href={`tel:${SITE_PHONE_INDIA}`} className="hover:text-white">{SITE_PHONE_INDIA}</a>
+              </li>
+               <li className="flex gap-2.5 text-gray-400 text-sm">
+                <Mail size={14} className="shrink-0 mt-0.5 text-[#00ACC1]" />
+                <a href={`mailto:${SITE_EMAIL_SUPPORT}`} className="hover:text-white">{SITE_EMAIL_SUPPORT}</a>
               </li>
               <li className="flex gap-2.5 text-gray-400 text-sm">
                 <Mail size={14} className="shrink-0 mt-0.5 text-[#00ACC1]" />
