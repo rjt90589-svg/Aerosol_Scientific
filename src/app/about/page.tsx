@@ -62,7 +62,7 @@ export default function AboutPage() {
 
             <div className="space-y-4 text-gray-600 mt-6 text-sm leading-relaxed">
               <p>
-                <strong>AEROSOL SCIENTIFIC</strong> is a leading laboratory solutions provider established in the UAE and India. 
+                <strong>AEROSOL SCIENTIFIC</strong> is a leading laboratory solutions provider establishing in the UAE and India. 
                 We deliver comprehensive services including instrument sales, consumables, and technical support across life sciences, 
                 analytical, diagnostic, medical, and pharmaceutical industries.
               </p>
@@ -127,7 +127,7 @@ export default function AboutPage() {
             and uncompromising quality — enabling laboratories to achieve precision, efficiency, and excellence in every operation.
           </p>
            <p className="mt-5 font-semibold text-white">
-            🚀 Shaping the Future of Science with Innovation & Excellence
+             Shaping the Future of Science with Innovation & Excellence
           </p>
         </div>
       </motion.div>
