@@ -131,6 +131,11 @@ export const PRODUCT_CATEGORIES = [
       "GC/GCMS",
     ],
   },
+  { name: "Turn key projects",
+     subcategories: [
+        "Laboratory civil work",
+     "Furnitures"
+     ] },
 ] as const;
 
 export const CATEGORY_ICONS: Record<string, string> = {
@@ -153,6 +158,8 @@ export const CATEGORY_ICONS: Record<string, string> = {
   "Medical and Pharma Consumables": "🏥", // healthcare
 
   "Refurbished Analytical Instruments": "♻️", // reused / refurbished
+
+  "Turn key projects": "🔧", // services / projects
 }
 
 // Derived flat list of all category names — useful for validation / select inputs

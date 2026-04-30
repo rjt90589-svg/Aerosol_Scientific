@@ -20,7 +20,7 @@ export default function SectionHeading({ eyebrow, title, subtitle, centered = fa
       className={cn(centered ? 'text-center' : '', className)}
     >
       {eyebrow && (
-        <span className="inline-block text-xs font-bold uppercase tracking-[0.2em] text-[#1565C0] bg-blue-50 px-3 py-1 rounded-full mb-3">
+        <span className="inline-block text-xs font-bold uppercase tracking-[0.2em] text-white bg-sci-blue px-3 py-1 rounded-full mb-3">
           {eyebrow}
         </span>
       )}

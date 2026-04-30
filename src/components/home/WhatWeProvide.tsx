@@ -12,7 +12,7 @@ const categories = [
     description: 'GC & HPLC vials, septa, caps, crimpers — ND9, ND11, ND18, ND20 formats in amber and clear glass.',
     items: ['Screw Vials', 'Crimp Vials', 'Septa', 'Caps & Crimpers'],
     gradient: 'from-[#1565C0] to-[#0097A7]',
-    href: '/products?category=Vials',
+    href: '/products?category=Chromatography Consumables',
     image: 'https://aerosolscientific.com/wp-content/uploads/2026/04/Wholesale-Amber-1-5ml-9mm-Vial-Screw-HPLC-Gc-Vial-V935-V937-Economy-.avif',
   },
   {
@@ -21,7 +21,7 @@ const categories = [
     description: 'HPLC, GC, LCMS, GCMS, ICPMS, spectroscopy instruments from Agilent, Waters, Shimadzu, Sciex.',
     items: ['HPLC Systems', 'GC Systems', 'Mass Spectrometers', 'Spectroscopy'],
     gradient: 'from-[#6A1B9A] to-[#1565C0]',
-    href: '/products',
+    href: '/products?category=Analytical Instruments',
     image: null,
   },
   {
@@ -30,7 +30,7 @@ const categories = [
     description: 'SS furniture, chemical storage, fume hoods, anti-vibration tables, safety cabinets for lab compliance.',
     items: ['Lab Benches', 'Fume Hoods', 'Chemical Cabinets', 'Safety Equipment'],
     gradient: 'from-[#2E7D32] to-[#00838F]',
-    href: '/services',
+    href: '/products?category=Turn key projects',
     image: null,
   },
   {
@@ -39,7 +39,7 @@ const categories = [
     description: 'General laboratory supplies, glassware, plasticware, and consumables from Witeg Germany and other brands.',
     items: ['Glassware', 'Plasticware', 'Lab Consumables', 'Safety Equipment'],
     gradient: 'from-[#E65100] to-[#AD1457]',
-    href: '/products',
+    href: '/products?category=Core Laboratory Equipment (Thermolab Scientific)',
     image: null,
   },
 ]

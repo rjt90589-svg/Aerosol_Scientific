@@ -249,7 +249,7 @@ const slides = getFeatured().map((p, i) => productToSlide(p, i))
               <SlideDown delay={0.3}>
                 <div className="mb-4">
                   <span
-                    className="inline-flex bg-sci-navy text-white items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] px-3.5 py-1.5 rounded-full border"
+                    className="inline-flex bg-sci-blue text-white items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] px-3.5 py-1.5 rounded-full border"
                     style={{
                       borderColor: 'rgba(125,211,254,0.95)',
                       backdropFilter: 'blur(8px)',
@@ -266,7 +266,7 @@ const slides = getFeatured().map((p, i) => productToSlide(p, i))
               <SlideDown delay={0.3}>
                 <Link href={`/products/${s.slug}`}>
                   <h1
-                    className="font-bold leading-tight mb-1 text-sci-blue hover:text-sky-600 transition-colors cursor-pointer"
+                    className="font-bold leading-tight mb-1 text-sky-600 hover:text-sky-950 transition-colors cursor-pointer"
                     style={{ fontSize: 'clamp(22px, 2.8vw, 42px)', textShadow: '0 2px 16px rgba(0,0,0,0.2)' }}
                   >
                     {s.title}

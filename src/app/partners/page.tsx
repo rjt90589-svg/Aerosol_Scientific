@@ -391,13 +391,13 @@ export default function PartnersPage() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.04 }}
                 whileHover={{ scale: 1.05, y: -3 }}
-                className="group flex flex-col items-center gap-2.5 p-4 bg-white rounded-2xl border border-[rgba(18,81,163,0.08)] hover:border-[rgba(18,81,163,0.2)] hover:shadow-lg transition-all cursor-pointer"
+                className="group flex flex-col items-center gap-2.5 p-4 bg-white rounded-2xl border-2 border-[rgba(18,81,163,0.09)] hover:border-[rgba(18,81,163,0.2)] hover:shadow-lg transition-all cursor-pointer"
               >
-                <div className="w-14 h-14 rounded-xl bg-gray-50 overflow-hidden flex items-center justify-center">
+                <div className="w-20 h-20 rounded-xl bg-gray-50 overflow-hidden flex items-center justify-center">
                   <img
                     src={partner.logo}
                     alt={partner.name}
-                    className="w-full h-full object-contain p-1.5 filter grayscale group-hover:grayscale-0 transition-all duration-400"
+                    className="w-full h-full object-contain p-1.5 filter  transition-all duration-400"
                     onError={e => { (e.target as HTMLImageElement).style.display = 'none' }}
                   />
                 </div>
