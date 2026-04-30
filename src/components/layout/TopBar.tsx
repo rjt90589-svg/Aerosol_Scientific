@@ -1,7 +1,7 @@
 'use client'
 import { Phone, Mail, MapPin, ChevronDown } from 'lucide-react'
 import { useState } from 'react'
-import { SITE_PHONE_UAE, SITE_PHONE_INDIA, SITE_EMAIL_SALES, SITE_ADDRESS_UAE, SITE_ADDRESS_INDIA } from '@/lib/constants'
+import { SITE_PHONE_UAE, SITE_PHONE_INDIA, SITE_EMAIL_SALES, SITE_EMAIL_SUPPORT, SITE_ADDRESS_UAE, SITE_ADDRESS_INDIA } from '@/lib/constants'
 
 export default function TopBar() {
   const [office, setOffice] = useState<'uae' | 'india'>('uae')
@@ -12,7 +12,7 @@ export default function TopBar() {
   }
 
   return (
-    <div className="bg-[#0586D3] from-[#0D47A1]  text-white text-xs">
+    <div className="bg-red-500  text-white text-xs">
       <div className="max-w-7xl mx-auto px-4 py-2 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1.5">
@@ -28,7 +28,13 @@ export default function TopBar() {
           <div className="flex items-center gap-1.5">
             <Mail size={12} className="opacity-80" />
             <a href={`mailto:${SITE_EMAIL_SALES}`} className="opacity-90 hover:opacity-100 hover:underline">
-              {SITE_EMAIL_SALES}
+              {SITE_EMAIL_SALES} {}
+            </a>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Mail size={12} className="opacity-80" />
+            <a href={`mailto:${SITE_EMAIL_SALES}`} className="opacity-90 hover:opacity-100 hover:underline">
+              {SITE_EMAIL_SUPPORT} 
             </a>
           </div>
         </div>
