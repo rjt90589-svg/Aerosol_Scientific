@@ -105,7 +105,7 @@ export default function ServicesPage() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col items-center mb-14">
-            <SectionHeading eyebrow="Our Services" title="Looking for | Laboratory Instruments & Services?" centered />
+            <SectionHeading eyebrow="Our Services" title="Looking for | Laboratory Instruments Services & Support?" centered />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[

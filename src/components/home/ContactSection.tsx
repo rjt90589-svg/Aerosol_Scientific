@@ -94,7 +94,7 @@ export default function ContactSection() {
           <SectionHeading
             eyebrow="Get In Touch"
             title="Let's Build Your |Perfect Lab"
-            subtitle="From a single consumable order to a complete turnkey laboratory — our experts are ready to help within 24 hours."
+            subtitle="From a single consumable order to a complete turnkey laboratory — our experts are ready to help and grow together."
             centered
           />
         </div>
