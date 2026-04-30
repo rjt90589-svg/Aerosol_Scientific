@@ -8,7 +8,7 @@ import {
   Menu, X, ChevronDown, FlaskConical, ArrowRight,
   Search, Package, Phone, Loader2, Grid3x3, ChevronRight,
 } from 'lucide-react'
-import { NAV_LINKS, PRODUCT_CATEGORIES } from '@/lib/constants'
+import { NAV_LINKS, CATEGORY_ICONS } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
 import { useProductStore } from '@/lib/store/productStore'
@@ -31,21 +31,6 @@ const SERVICE_QUICK = [
   { label: 'Training & Workshop', href: '/services#training', icon: '🎓' },
 ]
 
-const CATEGORY_ICONS: Record<string, string> = {
-  'Laboratory Equipment': '🧪',
-  'Septa': '⭕',
-  'Manual Vial Crimpers & Decappers': '🔧',
-  'Photometry': '💡',
-  'Pharma consumables (Gloves/cap/covers/Lab coat)': '💧',
-  'Thermolab Chambers': '🌡️',
-  'Gas Handling': '💨',
-  'Laboratory Balances': '🏗️',
-  'Gas Generators': '⚡',
-  'Consumables': '💊',
-  'Gas Safety': '🛡️',
-  'pH & Electrochemistry': '⚗️',
-  'Ultrasonic Equipment': '📡',
-}
 
 import { CATEGORY_NAMES } from '@/lib/constants'
 const MENU_CATEGORIES = CATEGORY_NAMES
@@ -56,24 +41,18 @@ interface MegaMenuProps {
   onClose: () => void
 }
 
+// ── ProductsMegaMenu ──────────────────────────────────────────────────────────
 function ProductsMegaMenu({ products, onClose }: MegaMenuProps) {
-  const [activeCategory, setActiveCategory] = useState(MENU_CATEGORIES[0])
+  const [activeCategory, setActiveCategory] = useState<string | null>(null)
   const [activeSubcategory, setActiveSubcategory] = useState<string | null>(null)
-
   const closeTimeout = useRef<NodeJS.Timeout | null>(null)
 
-  const handleEnter = () => {
-    if (closeTimeout.current) clearTimeout(closeTimeout.current)
-  }
+  const cancelClose = () => { if (closeTimeout.current) clearTimeout(closeTimeout.current) }
+  const scheduleClose = () => { closeTimeout.current = setTimeout(onClose, 180) }
 
-  const handleLeave = () => {
-    closeTimeout.current = setTimeout(() => {
-      onClose()
-    }, 120)
-  }
-
-  // ── Derived data ─────────────────────────
-  const categoryProducts = products.filter(p => p.category === activeCategory)
+  const categoryProducts = activeCategory
+    ? products.filter(p => p.category === activeCategory)
+    : []
 
   const grouped = categoryProducts.reduce((acc, product) => {
     const key = product.subcategory || 'Other'
@@ -82,140 +61,169 @@ function ProductsMegaMenu({ products, onClose }: MegaMenuProps) {
     return acc
   }, {} as Record<string, Product[]>)
 
-  // auto select first subcategory
-  useEffect(() => {
-    const first = Object.keys(grouped)[0] || null
-    setActiveSubcategory(first)
-  }, [activeCategory])
+  const subcategoryProducts = activeSubcategory ? grouped[activeSubcategory] ?? [] : []
+  const subcategoryKeys = Object.keys(grouped)
 
   return (
     <motion.div
-      onMouseEnter={handleEnter}
-      onMouseLeave={handleLeave}
-      initial={{ opacity: 0, y: 10, scale: 0.97 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: 10, scale: 0.97 }}
+      onMouseEnter={cancelClose}
+      onMouseLeave={scheduleClose}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 8 }}
       transition={{ duration: 0.15 }}
-      className="absolute top-full pt-3 z-50"
-      style={{ left: '50%', transform: 'translateX(-50%)', width: 850 } }
+      className="absolute top-full pt-2 z-50"
+      style={{ left: '50%', transform: 'translateX(-50%)' }}
     >
-      <div className="bg-white rounded-2xl shadow-[0_30px_80px_rgba(18,81,163,0.18)] border border-[rgba(18,81,163,0.08)] overflow-hidden">
+      {/* Single unified card — no gaps between columns so mouse never leaves */}
+      <div className="flex bg-white rounded-2xl shadow-[0_24px_64px_rgba(18,81,163,0.16)] overflow-hidden">
 
-        {/* Top Accent */}
-        <div className="h-0.5 bg-gradient-to-r from-[#1251A3] via-[#0891B2] to-[#22D3EE]" />
+        {/* ── Col 1: Categories ── */}
+        <div className="w-88 flex flex-col border-r border-[rgba(18,81,163,0.07)]">
+          <div className="h-0.5 bg-gradient-to-r from-[#1251A3] to-[#0891B2]" />
 
-        <div className="flex min-h-80 ">
-
-          {/* ───────── LEFT: Categories ───────── */}
-          <div className="w-54 bg-[rgba(18,81,163,0.02)] border-r py-3">
-            <div className="px-4 pb-2 text-[10px] font-bold uppercase text-[#7B90B2] tracking-wider">
+          <div
+            className="overflow-y-auto py-1.5 flex-1 scrollbar-thin"
+            style={{ maxHeight: 420 }}
+          >
+            <p className="px-3.5 pt-2 pb-1.5 text-[10px]  font-bold uppercase tracking-widest text-[#A0B0C8]">
               Categories
-            </div>
+            </p>
 
             {MENU_CATEGORIES.map(cat => {
               const isActive = cat === activeCategory
-
               return (
                 <button
                   key={cat}
-                  onMouseEnter={() => setActiveCategory(cat)}
+                  onMouseEnter={() => {
+                    setActiveCategory(cat)
+                    setActiveSubcategory(null)
+                  }}
                   className={cn(
-                    'w-full flex items-center gap-2 px-4 py-2 text-left text-[12.5px] font-semibold transition',
+                    'w-full flex items-center gap-2.5 px-3.5 py-2 text-left text-[12px] font-medium transition-all duration-150',
                     isActive
-                      ? 'bg-white text-[#1251A3]'
-                      : 'text-[#3D5276] hover:bg-white'
+                      ? 'bg-[#1251A3] text-white'
+                      : 'text-[#3D5276] hover:bg-[rgba(18,81,163,0.06)] hover:text-[#1251A3]'
                   )}
                 >
-                  <span>{CATEGORY_ICONS[cat] ?? '🔬'}</span>
-                  {cat}
+                  <span className="text-[13px] shrink-0">{CATEGORY_ICONS[cat] ?? '🔬'}</span>
+                  <span className="truncate flex-1 leading-tight">{cat}</span>
+                  <ChevronRight
+                    size={11}
+                    className={cn(
+                      'shrink-0 transition-opacity',
+                      isActive ? 'opacity-70 text-white' : 'opacity-20'
+                    )}
+                  />
                 </button>
               )
             })}
-
-            <div className="px-4 pt-3 mt-2 border-t">
-              <Link
-                href="/products"
-                onClick={onClose}
-                className="flex items-center gap-2 text-[12px] font-bold text-[#1251A3]"
-              >
-                <Grid3x3 size={13} /> All Products
-              </Link>
-            </div>
           </div>
 
-          {/* ───────── MIDDLE: Subcategories ───────── */}
-          <div className="w-44 border-r py-3 bg-white">
-            <div className="px-4 pb-2 text-[10px] font-bold uppercase text-[#7B90B2] tracking-wider">
+          <div className="px-3.5 py-2.5 border-t border-[rgba(18,81,163,0.07)]">
+            <Link
+              href="/products"
+              onClick={onClose}
+              className="flex items-center gap-1.5 text-[11.5px] font-bold text-[#1251A3] hover:underline"
+            >
+              <Grid3x3 size={12} /> All Products
+            </Link>
+          </div>
+        </div>
+
+        {/* ── Col 2: Subcategories (slides in when category active) ── */}
+        <div
+          className={cn(
+            'border-r border-[rgba(18,81,163,0.07)] flex flex-col transition-all duration-200 overflow-hidden',
+            activeCategory && subcategoryKeys.length > 0
+              ? 'w-58 opacity-100'
+              : 'w-0 opacity-0'
+          )}
+        >
+          <div className="h-0.5 bg-gradient-to-r from-[#0891B2] to-[#22D3EE]" />
+
+          <div className="overflow-y-auto py-1.5 flex-1" style={{ maxHeight: 420, minWidth: 192 }}>
+            <p className="px-3.5 pt-2 pb-1.5 text-[10px] font-bold uppercase tracking-widest text-[#A0B0C8]">
               Subcategories
-            </div>
+            </p>
 
-            {Object.keys(grouped).map(sub => {
+            {subcategoryKeys.map(sub => {
               const isActive = sub === activeSubcategory
-
+              const count = grouped[sub]?.length ?? 0
               return (
                 <button
                   key={sub}
                   onMouseEnter={() => setActiveSubcategory(sub)}
                   className={cn(
-                    'w-full flex items-center justify-between px-4 py-2 text-[12px] transition',
+                    'w-full flex items-center justify-between gap-2 px-3.5 py-2 text-[12px] transition-all duration-150',
                     isActive
-                      ? 'text-[#1251A3] bg-[rgba(18,81,163,0.05)]'
-                      : 'text-[#3D5276] hover:bg-[rgba(18,81,163,0.04)]'
+                      ? 'bg-[rgba(18,81,163,0.08)] text-[#1251A3] font-semibold'
+                      : 'text-[#3D5276] hover:bg-[rgba(18,81,163,0.05)] hover:text-[#1251A3]'
                   )}
                 >
-                  {sub}
-                  <ChevronRight size={12} className="opacity-40" />
+                  <span className="truncate flex-1 leading-tight text-left">{sub}</span>
+                  <span className="flex items-center gap-1 shrink-0">
+                    <span className="text-[10px] text-[#A0B0C8] font-semibold">{count}</span>
+                    <ChevronRight size={11} className={cn('opacity-20 transition-opacity', isActive && 'opacity-60')} />
+                  </span>
                 </button>
               )
             })}
           </div>
-
-          {/* ───────── RIGHT: Products ───────── */}
-          <div className=" flex-1 p-4 bg-white">
-            {activeSubcategory && grouped[activeSubcategory]?.length > 0 ? (
-              <>
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-sm font-bold text-[#0A1628]">
-                    {activeSubcategory}
-                  </h3>
-
-                  <Link
-                    href={`/products?category=${activeCategory}&subcategory=${activeSubcategory}`}
-                    onClick={onClose}
-                    className="text-xs text-[#1251A3] font-semibold hover:underline"
-                  >
-                    View all →
-                  </Link>
-                </div>
-
-                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 min-w-auto ">
-                  {grouped[activeSubcategory].slice(0, 6).map(product => (
-                    <Link
-                      key={product.id}
-                      href={`/products/${product.slug}`}
-                      onClick={onClose}
-                      className="flex items-center gap-2 p-2 rounded-lg hover:bg-[rgba(18,81,163,0.05)] transition"
-                    >
-                      <div className="w-10 h-10 rounded bg-blue-50 flex items-center justify-center">
-                        {product.image_url
-                          ? <img src={product.image_url} className="w-full h-full object-contain p-1" />
-                          : <Package size={14} />
-                        }
-                      </div>
-
-                      <span className="text-[12px] font-medium truncate">
-                        {product.name}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <div className="text-sm text-[#7B90B2]">No products</div>
-            )}
-          </div>
-
         </div>
+
+        {/* ── Col 3: Products (slides in when subcategory active) ── */}
+        <div
+          className={cn(
+            'flex flex-col transition-all duration-200 overflow-hidden',
+            activeSubcategory && subcategoryProducts.length > 0
+              ? 'w-64 opacity-100'
+              : 'w-0 opacity-0'
+          )}
+        >
+          <div className="h-0.5 bg-gradient-to-r from-[#22D3EE] to-[#6EE7B7]" />
+
+          <div className="overflow-y-auto flex-1" style={{ maxHeight: 420, minWidth: 256 }}>
+            <div className="flex items-center justify-between px-3.5 pt-3 pb-1.5">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#A0B0C8] truncate flex-1 mr-2">
+                {activeSubcategory}
+              </p>
+              <Link
+                href={`/products?category=${encodeURIComponent(activeCategory ?? '')}&subcategory=${encodeURIComponent(activeSubcategory ?? '')}`}
+                onClick={onClose}
+                className="text-[11px] text-[#1251A3] font-bold hover:underline shrink-0"
+              >
+                View all →
+              </Link>
+            </div>
+
+            <div className="p-2 pt-1 space-y-0.5">
+              {subcategoryProducts.slice(0, 8).map(product => (
+                <Link
+                  key={product.id}
+                  href={`/products/${product.slug}`}
+                  onClick={onClose}
+                  className="flex items-center gap-2.5 px-2 py-2 rounded-xl hover:bg-[rgba(18,81,163,0.05)] transition-colors group/prod"
+                >
+                  <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-50 to-cyan-50 flex items-center justify-center shrink-0 overflow-hidden">
+                    {product.image_url
+                      ? <img src={product.image_url} className="w-full h-full object-contain p-0.5" alt="" />
+                      : <Package size={13} className="text-[#1251A3] opacity-40" />
+                    }
+                  </div>
+                  <span className="text-[12px] font-medium text-[#3D5276] group-hover/prod:text-[#1251A3] transition-colors leading-tight line-clamp-2 flex-1">
+                    {product.name}
+                  </span>
+                  <ArrowRight
+                    size={11}
+                    className="shrink-0 text-[#1251A3] opacity-0 group-hover/prod:opacity-40 transition-opacity"
+                  />
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+
       </div>
     </motion.div>
   )

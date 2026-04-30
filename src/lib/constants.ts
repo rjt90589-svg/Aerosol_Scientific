@@ -9,12 +9,13 @@ export const SITE_ADDRESS_INDIA = 'F-4, 1st Floor, Karka Duma, New Delhi-110092'
 export const WHATSAPP_NUMBER = '+971547598109'
 export const NAV_LINKS = [
   { label: 'Home', href: '/' },
-  { label: 'About Us', href: '/about', children: [
-    { label: 'Mission & Vision', href: '/about#mission' }
-  ]},
+  
   { label: 'Products', href: '/products' },
   { label: 'Services', href: '/services' },
   { label: 'Partners', href: '/partners' },
+  { label: 'About Us', href: '/about', children: [
+    { label: 'Mission & Vision', href: '/about#mission' }
+  ]},
   { label: 'Contact Us', href: '/contact' },
 ]
 
@@ -131,6 +132,28 @@ export const PRODUCT_CATEGORIES = [
     ],
   },
 ] as const;
+
+export const CATEGORY_ICONS: Record<string, string> = {
+  "Core Laboratory Equipment (Thermolab Scientific)": "🏭", // heavy systems / infrastructure
+
+  "General Laboratory Equipment": "🧪", // generic lab tools
+
+  "Chromatography Consumables": "🧬", // precision / separation science
+
+  "Liquid Handling (Purifiers/Pipettes/Tips)": "💧", // fluid handling
+
+  "General Laboratory Consumables": "📦", // bulk / everyday items
+
+  "Analytical Instruments": "📊", // analysis / data
+
+  "Gas and Vacuum Technology": "💨", // gas systems
+
+  "Measurement and Testing Equipment": "📏", // measurement
+
+  "Medical and Pharma Consumables": "🏥", // healthcare
+
+  "Refurbished Analytical Instruments": "♻️", // reused / refurbished
+}
 
 // Derived flat list of all category names — useful for validation / select inputs
 export const CATEGORY_NAMES = PRODUCT_CATEGORIES.map(c => c.name)
