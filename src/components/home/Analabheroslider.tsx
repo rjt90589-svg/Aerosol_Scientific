@@ -74,7 +74,7 @@ function SlideBackground({ bgImage, epoch }: { bgImage: string; epoch: number })
     <AnimatePresence mode="wait">
       <motion.div
         key={`bg-${epoch}`}
-        className="absolute inset-0 overflow-hidden"
+        className="absolute inset-0   will-change-transform blur-[4px] overflow-hidden"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
