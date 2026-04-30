@@ -164,7 +164,7 @@ export default function ProductsContent() {
 
         {/* ── Subcategory filters (only when the active category has them) ── */}
         <AnimatePresence>
-          {activeCategoryConfig && activeCategoryConfig.subcategories.length > 0 && (
+          {activeCategoryConfig && activeCategoryConfig.subcategories.length < 1 && (
             <motion.div
               key={activeCategoryConfig.name}
               initial={{ opacity: 0, height: 0 }}
