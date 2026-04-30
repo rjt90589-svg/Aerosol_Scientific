@@ -372,7 +372,7 @@ export default function PartnersPage() {
       <PageHero
         eyebrow="Our Network"
         title="Partners & Brands"
-        subtitle="We collaborate with world-class manufacturers to deliver the finest instruments, consumables, and laboratory solutions — trusted globally."
+        subtitle="We collaborate with world-wide manufacturers to deliver the best suitable instruments, consumables, and laboratory solutions to meet your expectations."
         breadcrumbs={[{ label: 'Partners' }]}
       />
 
