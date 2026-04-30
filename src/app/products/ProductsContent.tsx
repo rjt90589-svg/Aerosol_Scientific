@@ -100,7 +100,7 @@ export default function ProductsContent() {
       <div className="max-w-7xl mx-auto px-4 py-12">
 
         {/* Search bar */}
-        <div className="relative mb-6 max-w-md">
+        {/* <div className="relative mb-6 max-w-md">
           <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             type="text"
@@ -117,7 +117,7 @@ export default function ProductsContent() {
               <X size={14} />
             </button>
           )}
-        </div>
+        </div> */}
 
         {/* ── Top-level category filters ───────────────────────────────────── */}
         <div className="flex flex-wrap gap-2 mb-3">
@@ -164,7 +164,7 @@ export default function ProductsContent() {
 
         {/* ── Subcategory filters (only when the active category has them) ── */}
         <AnimatePresence>
-          {activeCategoryConfig && activeCategoryConfig.subcategories.length < 1 && (
+          {activeCategoryConfig && activeCategoryConfig.subcategories.length > 0 && (
             <motion.div
               key={activeCategoryConfig.name}
               initial={{ opacity: 0, height: 0 }}

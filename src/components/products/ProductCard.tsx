@@ -48,7 +48,7 @@ export default function ProductCard({ product, index = 0 }: Props) {
           )}
 
           {/* Category + optional subcategory badge */}
-          <div className="absolute top-3 left-3 flex flex-col gap-1">
+          {/* <div className="absolute top-3 left-3 flex flex-col gap-1">
             <span className="pill pill-blue">
               {product.category}
             </span>
@@ -57,7 +57,7 @@ export default function ProductCard({ product, index = 0 }: Props) {
                 {product.subcategory}
               </span>
             )}
-          </div>
+          </div> */}
         </Link>
 
         {/* Info */}

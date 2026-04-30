@@ -297,7 +297,7 @@ export default function Navbar() {
   return (
     <>
       <nav className={cn(
-        'sticky top-0 z-50 transition-all duration-500',
+        'sticky top-0 z-50 py-2 transition-all duration-500',
         scrolled
           ? 'bg-white/95 backdrop-blur-2xl shadow-[0_2px_30px_rgba(18,81,163,0.1)] border-b border-[rgba(18,81,163,0.07)]'
           : 'bg-white border-b border-[rgba(18,81,163,0.05)]'
@@ -312,7 +312,7 @@ export default function Navbar() {
 
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 group shrink-0">
-              <img src="/logo.png" alt="Aerosol Scientific" className="w-20 h-20 relative" />
+              <img src="/logo.png" alt="Aerosol Scientific" className="w-24 h-24  relative" />
             </Link>
 
             {/* Desktop Nav */}

@@ -56,6 +56,13 @@
 @utility shadow-glow {
   box-shadow: 0 0 40px rgba(0, 194, 255, 0.35);
 }
+.gradient-text-brand {
+  background: linear-gradient(90deg, #7B2FF7 0%, #2F6BFF 20%, #00C2FF 40%, #22C55E 60%, #FACC15 80%, #F97316 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% auto;
+}
 
 /* ════════════════════════════════════════════════
    TAILWIND V4 THEME — color & font tokens
