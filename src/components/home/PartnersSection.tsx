@@ -13,14 +13,14 @@ function PartnerCard({ partner }: { partner: typeof PARTNERS[number] }) {
   return (
     <a
       href={partner.href}
-      className="group inline-flex flex-col items-center gap-2.5 mx-3 px-5 py-4 rounded-2xl border border-[rgba(18,81,163,0.08)] bg-white hover:border-[rgba(18,81,163,0.22)] hover:shadow-[0_8px_32px_rgba(18,81,163,0.10)] transition-all duration-300 cursor-pointer select-none"
+      className="group inline-flex flex-col items-center gap-4  rounded-2xl  bg-white  transition-all duration-300 cursor-pointer select-none"
       style={{ minWidth: 130 }}
     >
-      <div className="w-14 h-14 relative rounded-xl overflow-hidden bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+      <div className="w-22 h-22 relative rounded-xl hover:border-[rgba(18,81,163,0.22)] hover:shadow-[0_8px_32px_rgba(18,81,163,0.10)] overflow-hidden bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
         <img
           src={partner.logo}
           alt={partner.name}
-          className="w-full h-full object-contain p-1.5 filter grayscale group-hover:grayscale-0 transition-all duration-300"
+          className="w-full h-full object-contain p-1.5 group-hover:scale-110 transition-all duration-300"
         />
       </div>
       <span className="text-[11px] font-semibold text-[#7B90B2] group-hover:text-[#1251A3] text-center leading-tight transition-colors whitespace-nowrap">
@@ -136,11 +136,11 @@ export default function PartnersSection() {
         </VelocityRow>
 
         {/* Row 2 — scrolls left */}
-        <VelocityRow baseVelocity={-50} numCopies={5}>
+        {/* <VelocityRow baseVelocity={-50} numCopies={5}>
           {ROW_2.map(partner => (
             <PartnerCard key={partner.name} partner={partner} />
           ))}
-        </VelocityRow>
+        </VelocityRow> */}
       </div>
 
       {/* Fade edges */}
