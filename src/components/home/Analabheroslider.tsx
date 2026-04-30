@@ -42,6 +42,8 @@ function productToSlide(p: Product, index: number) {
     id:      p.id,
     tag:     p.category,
     title:   p.name,
+    description: p.short_description ?? '',
+    detail_description: p.description ?? '',
     model:   p.brand ?? '',
     slug:    p.slug,
     specs:   (p.tags ?? []).slice(0, 6),
@@ -269,9 +271,9 @@ const slides = getFeatured().map((p, i) => productToSlide(p, i))
                 </p>
               </SlideUp>
 
-
+  
               {/* Specs (tags) */}
-              {s.specs.map((spec, i) => (
+              {/* {s.specs.map((spec, i) => (
                 <SlideUp key={`${epoch}-spec-${i}`} delay={0.2 + i * 0.07}>
                   <div className="flex items-start gap-2.5 text-sm mb-1.5" style={{ color: 'rgba(226,232,240,0.90)' }}>
                     <svg className="mt-1.25 shrink-0" width="13" height="13" viewBox="0 0 13 13" fill="none">
@@ -281,7 +283,18 @@ const slides = getFeatured().map((p, i) => productToSlide(p, i))
                     <span>{spec}</span>
                   </div>
                 </SlideUp>
-              ))}
+              ))} */}
+
+
+               <SlideUp >
+                  <div className="flex items-start gap-2.5 text-sm mb-1.5" style={{ color: 'rgba(226,232,240,0.90)' }}>
+                    <svg className="mt-1.25 shrink-0" width="13" height="13" viewBox="0 0 13 13" fill="none">
+                      <circle cx="6.5" cy="6.5" r="6" stroke="#38bdf8" strokeOpacity="0.35" />
+                      <circle cx="6.5" cy="6.5" r="2.8" fill="#38bdf8" />
+                    </svg>
+                    <span>{s.detail_description}</span>
+                  </div>
+                </SlideUp>
 
 
               {/* CTA buttons */}
