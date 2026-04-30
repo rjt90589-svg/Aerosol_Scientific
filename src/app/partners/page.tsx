@@ -193,10 +193,9 @@ const FEATURED: {
       { label: 'Dedicated Indian Support', detail: 'Local manufacturer means faster support, spares, and service across India' },
     ],
     productCategories: [
-      { title: 'Gas Generators', items: ['PreCiGen Nitrogen Generators', 'Hydrogen Gas Generators', 'Zero Air Generators'] },
-      { title: 'Analytical Instruments', items: ['HPLC Column Ovens', 'Digital Gas Flow Meters', 'Probe Sonicators', 'Ultrasonic Bath Sonicators'] },
-      { title: 'Consumables & Accessories', items: ['GC/HPLC Consumables', 'FTIR Accessories', 'AAS Accessories', 'Precision Fittings'] },
-      { title: 'Laboratory Equipment', items: ['Oil-free Diaphragm Vacuum Pumps', 'Positive Pressure Processors for SPE', 'Sample Evaporators', 'Vortex Mixers'] },
+      { title: 'Economical Gas Solutions & Instruments', items: ['PreCiGen Nitrogen Generators', 'Hydrogen Gas Generators', 'Zero Air Generators','HPLC Column Ovens', 'Digital Gas Flow Meters', 'Probe Sonicators', 'Ultrasonic Bath Sonicators'] },
+      { title: 'Consumables Accessories & Laboratory Equipment', items: ['GC/HPLC Consumables', 'FTIR Accessories', 'AAS Accessories', 'Precision Fittings','Oil-free Diaphragm Vacuum Pumps', 'Positive Pressure Processors for SPE', 'Sample Evaporators', 'Vortex Mixers'] },
+      
     ],
     products: [
       { name: 'Hydrogen Gas Generators', image: 'https://aerosolscientific.com/wp-content/uploads/2025/11/hydrogen-gas-generator1-300x267.jpg' },
