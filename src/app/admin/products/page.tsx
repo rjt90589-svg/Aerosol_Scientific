@@ -314,18 +314,27 @@ function ProductFormBody({
       </div>
 
       {/* Featured toggle */}
-      <label className="flex items-center gap-3 cursor-pointer group">
-        <div className="relative shrink-0">
-          <input type="checkbox" {...register('featured')} className="sr-only" />
-          <div onClick={() => setValue('featured', !featured)}
-            className={`w-10 h-5 rounded-full transition-colors cursor-pointer ${featured ? 'bg-gradient-to-r from-[#1565C0] to-[#00838F]' : 'bg-gray-200'}`}>
-            <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${featured ? 'translate-x-5' : 'translate-x-0.5'}`} />
-          </div>
-        </div>
-        <span className="text-sm font-medium text-gray-700">Featured product
-          <span className="text-gray-400 font-normal ml-1">(shown on homepage)</span>
-        </span>
-      </label>
+     {/* Featured toggle */}
+<div className="flex items-center gap-3 cursor-pointer">
+  <div
+    role="switch"
+    aria-checked={featured}
+    tabIndex={0}
+    onClick={() => setValue('featured', !featured, { shouldDirty: true })}
+    onKeyDown={e => (e.key === ' ' || e.key === 'Enter') && setValue('featured', !featured, { shouldDirty: true })}
+    className={`relative w-10 h-5 rounded-full transition-colors cursor-pointer shrink-0 ${
+      featured ? 'bg-gradient-to-r from-[#1565C0] to-[#00838F]' : 'bg-gray-200'
+    }`}
+  >
+    <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${
+      featured ? 'translate-x-5' : 'translate-x-0.5'
+    }`} />
+  </div>
+  <span className="text-sm font-medium text-gray-700">
+    Featured product
+    <span className="text-gray-400 font-normal ml-1">(shown on homepage)</span>
+  </span>
+</div>
     </div>
   )
 }
