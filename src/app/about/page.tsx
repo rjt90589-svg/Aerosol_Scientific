@@ -12,26 +12,22 @@ const values = [
     icon: Users,
     title: 'Partnership',
     description:
-      'We collaborate closely with our customers, working as one team with shared ownership and accountability to build long-term, meaningful partnerships.',
-  },
+      'Being an onsite service provider, we collaborate with our customers in all our engagements, work as a team and take ownership and responsibility of things, to create long lasting partnerships.' },
   {
     icon: Heart,
     title: 'Integrity',
     description:
-      'We uphold transparency, ethical practices, and confidentiality in every engagement, ensuring trust, credibility, and professional excellence.',
-  },
+      'Our services are aimed at our customer’s interests. By adopting transparent processes and adhering to highest ethical standards, we ensure customer confidentiality and our own credibility. Collaborating with customers and maintain the professional values.'  },
   {
     icon: Award,
     title: 'Passion',
     description:
-      'We are deeply committed to our customers’ success, driven by dedication, continuous improvement, and a focus on delivering complete solutions.',
-  },
+      'We are passionate for our customer’s success. By creating a highly stimulating work environment, working with utmost dedication and commitment and focusing on delivery and execution, we perform to not just satisfy but focus on complete solution.' },
   {
     icon: Lightbulb,
     title: 'Excellence',
     description:
-      'We strive for excellence by maintaining the highest quality standards, adopting best practices, and consistently delivering value beyond expectations.',
-  },
+      'By continually focusing on quality and deploying best practices, we bring excellence in our work, add value for our customers and strive to enter the realm of supremacy.' },
 ]
 
 // ── Why Choose Us ────────────────────────────────────
@@ -123,8 +119,12 @@ export default function AboutPage() {
           </h2>
 
           <p className="text-blue-100 leading-relaxed text-sm">
-            To deliver innovative, reliable, and end-to-end laboratory solutions by combining advanced technology, expert support,
-            and uncompromising quality — enabling laboratories to achieve precision, efficiency, and excellence in every operation.
+         <li> •	Deliver high-quality laboratory equipment and consumables that meet the evolving needs of the scientific community.</li>
+            <li>•	Ensure customer satisfaction through excellence in products, services, and support.</li>
+            <li>•	Provide turnkey solutions, technical support, and after-sales services for laboratories.</li>
+            <li>• Stay at the forefront of scientific innovation, enabling groundbreaking research. </li>
+            <li>•	Promote sustainability by offering eco-friendly and efficient laboratory solutions.</li>
+              <li>•	Foster long-term partnerships with research institutions, testing labs, and industries worldwide.</li>
           </p>
            <p className="mt-5 font-semibold text-white">
              Shaping the Future of Science with Innovation & Excellence
