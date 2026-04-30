@@ -31,7 +31,7 @@ export default function ProductCard({ product, index = 0 }: Props) {
         {/* Image */}
         <Link
           href={`/products/${product.slug}`}
-          className="block aspect-square overflow-hidden bg-gray-50 relative"
+          className="block h-44  overflow-hidden bg-gray-50 relative"
         >
           {product.image_url ? (
             <img
@@ -47,17 +47,7 @@ export default function ProductCard({ product, index = 0 }: Props) {
             </div>
           )}
 
-          {/* Category + optional subcategory badge */}
-          {/* <div className="absolute top-3 left-3 flex flex-col gap-1">
-            <span className="pill pill-blue">
-              {product.category}
-            </span>
-            {product.subcategory && (
-              <span className="pill pill-teal">
-                {product.subcategory}
-              </span>
-            )}
-          </div> */}
+          
         </Link>
 
         {/* Info */}
