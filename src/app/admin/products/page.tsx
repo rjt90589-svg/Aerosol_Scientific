@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState, useCallback, useRef } from 'react'
+import { useEffect, useState, useCallback, useRef, memo } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -90,12 +90,11 @@ function DeleteDialog({
 }
 
 // ─── Zod schema ───────────────────────────────────────────────────────────────
-// CHANGED: added `subcategory` field
 const productSchema = z.object({
   name:              z.string().min(1, 'Product name is required'),
   slug:              z.string().min(1, 'Slug is required').regex(/^[a-z0-9-]+$/, 'Lowercase, numbers and hyphens only'),
   category:          z.string().min(1, 'Category is required'),
-  subcategory:       z.string().optional(),   // NEW
+  subcategory:       z.string().optional(),
   brand:             z.string().optional(),
   short_description: z.string().optional(),
   description:       z.string().min(1, 'Description is required'),
@@ -128,7 +127,9 @@ interface ImagePickerProps {
   uploadStatus: 'idle' | 'uploading' | 'done' | 'error'
   error: string | null
 }
-function ImagePicker({
+
+// Memoized so drag state changes don't propagate up to ProductFormBody
+const ImagePicker = memo(function ImagePicker({
   preview, isDragging, onFileChange, onRemove,
   onDragOver, onDragLeave, onDrop, fileInputRef, uploadStatus, error,
 }: ImagePickerProps) {
@@ -177,7 +178,7 @@ function ImagePicker({
       {error && <p className="text-red-500 text-xs flex items-center gap-1"><X size={10} />{error}</p>}
     </div>
   )
-}
+})
 
 // ─── Shared form body ─────────────────────────────────────────────────────────
 interface ProductFormBodyProps {
@@ -197,7 +198,8 @@ interface ProductFormBodyProps {
   isEdit?: boolean
 }
 
-function ProductFormBody({
+// ─── KEY FIX: memo stops parent image/drag state re-renders from hitting this ──
+const ProductFormBody = memo(function ProductFormBody({
   form, specRows, setSpecRows,
   imagePreview, isDragging, uploadStatus, imageError,
   onFileChange, onRemoveImage, onDragOver, onDragLeave, onDrop, fileInputRef,
@@ -208,10 +210,24 @@ function ProductFormBody({
   const generateSlug = (name: string) =>
     name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
 
-  const featured = watch('featured')
-  // CHANGED: watch both category and subcategory for CategorySubcategorySelect
-  const category = watch('category') ?? ''
+  const featured    = watch('featured')
+  const category    = watch('category')    ?? ''
   const subcategory = watch('subcategory') ?? ''
+
+  // ─── KEY FIX: stable references so CategorySubcategorySelect never sees
+  //     new function identities on drag/upload state changes ─────────────────
+  const handleCategoryChange = useCallback((val: string) => {
+    setValue('category',    val, { shouldValidate: true  })
+    setValue('subcategory', '',  { shouldValidate: false }) // reset sub when cat changes
+  }, [setValue])
+
+  const handleSubcategoryChange = useCallback((val: string) => {
+    setValue('subcategory', val, { shouldValidate: false })
+  }, [setValue])
+
+  const handleFeaturedToggle = useCallback(() => {
+    setValue('featured', !form.getValues('featured'), { shouldDirty: true })
+  }, [setValue, form])
 
   return (
     <div className="space-y-4">
@@ -233,20 +249,19 @@ function ProductFormBody({
         </div>
       </div>
 
-      {/* CHANGED: Category + Subcategory via shared component, + Brand alongside */}
-      <div className="grid grid-cols-2 gap-3">
-        {/* CategorySubcategorySelect spans both columns on its own row */}
-        <div className="col-span-2">
+      {/* Category + Subcategory */}
+      <div className="space-y-3">
+        <div>
           <CategorySubcategorySelect
             category={category}
             subcategory={subcategory}
-            onCategoryChange={val => setValue('category', val, { shouldValidate: true })}
-            onSubcategoryChange={val => setValue('subcategory', val, { shouldValidate: false })}
+            onCategoryChange={handleCategoryChange}
+            onSubcategoryChange={handleSubcategoryChange}
             required
           />
           {errors.category && <p className={errCls}>{errors.category.message}</p>}
         </div>
-        <div className="col-span-2">
+        <div>
           <label className={labelCls}>Brand</label>
           <input {...register('brand')} className={inputCls} placeholder="Aerosol Scientific" />
         </div>
@@ -313,31 +328,30 @@ function ProductFormBody({
         />
       </div>
 
-      {/* Featured toggle */}
-     {/* Featured toggle */}
-<div className="flex items-center gap-3 cursor-pointer">
-  <div
-    role="switch"
-    aria-checked={featured}
-    tabIndex={0}
-    onClick={() => setValue('featured', !featured, { shouldDirty: true })}
-    onKeyDown={e => (e.key === ' ' || e.key === 'Enter') && setValue('featured', !featured, { shouldDirty: true })}
-    className={`relative w-10 h-5 rounded-full transition-colors cursor-pointer shrink-0 ${
-      featured ? 'bg-gradient-to-r from-[#1565C0] to-[#00838F]' : 'bg-gray-200'
-    }`}
-  >
-    <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${
-      featured ? 'translate-x-5' : 'translate-x-0.5'
-    }`} />
-  </div>
-  <span className="text-sm font-medium text-gray-700">
-    Featured product
-    <span className="text-gray-400 font-normal ml-1">(shown on homepage)</span>
-  </span>
-</div>
+      {/* Featured toggle — no register(), purely setValue/watch controlled */}
+      <div className="flex items-center gap-3">
+        <div
+          role="switch"
+          aria-checked={featured}
+          tabIndex={0}
+          onClick={handleFeaturedToggle}
+          onKeyDown={e => (e.key === ' ' || e.key === 'Enter') && handleFeaturedToggle()}
+          className={`relative w-10 h-5 rounded-full transition-colors cursor-pointer shrink-0 ${
+            featured ? 'bg-gradient-to-r from-[#1565C0] to-[#00838F]' : 'bg-gray-200'
+          }`}
+        >
+          <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${
+            featured ? 'translate-x-5' : 'translate-x-0.5'
+          }`} />
+        </div>
+        <span className="text-sm font-medium text-gray-700 select-none">
+          Featured product
+          <span className="text-gray-400 font-normal ml-1">(shown on homepage)</span>
+        </span>
+      </div>
     </div>
   )
-}
+})
 
 // ─── Add Product Dialog ────────────────────────────────────────────────────────
 function AddProductDialog({
@@ -347,7 +361,7 @@ function AddProductDialog({
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [specRows, setSpecRows] = useState<SpecRow[]>([{ key: '', value: '' }])
 
-  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imageFile, setImageFile]   = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [imageError, setImageError] = useState<string | null>(null)
   const [uploadStatus, setUploadStatus] = useState<'idle'|'uploading'|'done'|'error'>('idle')
@@ -356,10 +370,13 @@ function AddProductDialog({
 
   const form = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
-    // CHANGED: added subcategory default
-    defaultValues: { brand: 'Aerosol Scientific', featured: false, tags: '', slug: '', category: '', subcategory: '' },
+    defaultValues: {
+      brand: 'Aerosol Scientific', featured: false,
+      tags: '', slug: '', category: '', subcategory: '',
+    },
   })
 
+  // ─── Stable callbacks so ProductFormBody memo is never broken ──────────────
   const handleFileChange = useCallback((file: File) => {
     setImageError(null)
     if (!ACCEPTED.includes(file.type)) { setImageError('Invalid file type'); return }
@@ -374,12 +391,22 @@ function AddProductDialog({
     if (fileInputRef.current) fileInputRef.current.value = ''
   }, [])
 
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault(); setIsDragging(true)
+  }, [])
+
+  const handleDragLeave = useCallback(() => setIsDragging(false), [])
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault(); setIsDragging(false)
+    const f = e.dataTransfer.files?.[0]; if (f) handleFileChange(f)
+  }, [handleFileChange])
+
   const onSubmit = async (data: ProductFormData) => {
     setLoading(true)
     setSubmitError(null)
     try {
       let image_url: string | null = null
-
       if (imageFile) {
         setUploadStatus('uploading')
         image_url = await uploadProductImage(imageFile, data.slug)
@@ -398,7 +425,7 @@ function AddProductDialog({
         description:       data.description,
         short_description: data.short_description || null,
         category:          data.category,
-        subcategory:       data.subcategory || null,   // NEW
+        subcategory:       data.subcategory || null,
         brand:             data.brand || 'Aerosol Scientific',
         image_url,
         images:            image_url ? [image_url] : [],
@@ -407,20 +434,15 @@ function AddProductDialog({
         featured:          data.featured ?? false,
       }
 
-      console.log('[AddProduct] payload:', payload)
-
       const res = await fetch('/api/admin/products', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       })
       const json = await res.json()
-      console.log('[AddProduct] response:', res.status, json)
       if (!res.ok) throw new Error(json.error || `POST failed (${res.status})`)
-
       onSuccess()
     } catch (err) {
-      console.error('[AddProduct] error:', err)
       setSubmitError((err as Error).message)
       if (uploadStatus === 'uploading') setUploadStatus('error')
     } finally {
@@ -451,12 +473,9 @@ function AddProductDialog({
                 imagePreview={imagePreview} isDragging={isDragging}
                 uploadStatus={uploadStatus} imageError={imageError}
                 onFileChange={handleFileChange} onRemoveImage={handleRemoveImage}
-                onDragOver={e => { e.preventDefault(); setIsDragging(true) }}
-                onDragLeave={() => setIsDragging(false)}
-                onDrop={e => { e.preventDefault(); setIsDragging(false); const f = e.dataTransfer.files?.[0]; if (f) handleFileChange(f) }}
+                onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}
                 fileInputRef={fileInputRef}
               />
-
               {submitError && (
                 <div className="mt-4 flex items-start gap-2.5 text-red-600 text-sm bg-red-50 px-4 py-3 rounded-xl border border-red-200">
                   <AlertTriangle size={15} className="shrink-0 mt-0.5" />
@@ -492,7 +511,7 @@ function EditProductDialog({
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [specRows, setSpecRows] = useState<SpecRow[]>(defaultSpecRows(product))
 
-  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imageFile, setImageFile]   = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(product.image_url ?? null)
   const [imageError, setImageError] = useState<string | null>(null)
   const [uploadStatus, setUploadStatus] = useState<'idle'|'uploading'|'done'|'error'>('idle')
@@ -506,7 +525,7 @@ function EditProductDialog({
       name:              product.name,
       slug:              product.slug,
       category:          product.category,
-      subcategory:       (product as any).subcategory ?? '',   // NEW
+      subcategory:       (product as any).subcategory ?? '',
       brand:             product.brand ?? 'Aerosol Scientific',
       short_description: product.short_description ?? '',
       description:       product.description ?? '',
@@ -515,12 +534,7 @@ function EditProductDialog({
     },
   })
 
-  // CHANGED: sync both category and subcategory into RHF on mount
-  useEffect(() => {
-    form.setValue('category', product.category, { shouldValidate: false })
-    form.setValue('subcategory', (product as any).subcategory ?? '', { shouldValidate: false })
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
+  // ─── Stable callbacks so ProductFormBody memo is never broken ──────────────
   const handleFileChange = useCallback((file: File) => {
     setImageError(null)
     if (!ACCEPTED.includes(file.type)) { setImageError('Invalid file type'); return }
@@ -534,6 +548,17 @@ function EditProductDialog({
     setImageError(null); setRemovedExisting(true)
     if (fileInputRef.current) fileInputRef.current.value = ''
   }, [])
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault(); setIsDragging(true)
+  }, [])
+
+  const handleDragLeave = useCallback(() => setIsDragging(false), [])
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault(); setIsDragging(false)
+    const f = e.dataTransfer.files?.[0]; if (f) handleFileChange(f)
+  }, [handleFileChange])
 
   const onSubmit = async (data: ProductFormData) => {
     setLoading(true)
@@ -566,7 +591,7 @@ function EditProductDialog({
         description:       data.description,
         short_description: data.short_description || null,
         category:          data.category,
-        subcategory:       data.subcategory || null,   // NEW
+        subcategory:       data.subcategory || null,
         brand:             data.brand || 'Aerosol Scientific',
         image_url,
         images:            image_url ? [image_url] : [],
@@ -584,7 +609,6 @@ function EditProductDialog({
       if (!res.ok) throw new Error(json.error || `PUT failed (${res.status})`)
       onSuccess()
     } catch (err) {
-      console.error('[EditProduct] error:', err)
       setSubmitError((err as Error).message)
       if (uploadStatus === 'uploading') setUploadStatus('error')
     } finally {
@@ -615,13 +639,10 @@ function EditProductDialog({
                 imagePreview={imagePreview} isDragging={isDragging}
                 uploadStatus={uploadStatus} imageError={imageError}
                 onFileChange={handleFileChange} onRemoveImage={handleRemoveImage}
-                onDragOver={e => { e.preventDefault(); setIsDragging(true) }}
-                onDragLeave={() => setIsDragging(false)}
-                onDrop={e => { e.preventDefault(); setIsDragging(false); const f = e.dataTransfer.files?.[0]; if (f) handleFileChange(f) }}
+                onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}
                 fileInputRef={fileInputRef}
                 isEdit
               />
-
               {submitError && (
                 <div className="mt-4 flex items-start gap-2.5 text-red-600 text-sm bg-red-50 px-4 py-3 rounded-xl border border-red-200">
                   <AlertTriangle size={15} className="shrink-0 mt-0.5" />
@@ -651,11 +672,11 @@ function EditProductDialog({
 
 // ─── Main page ─────────────────────────────────────────────────────────────────
 export default function AdminProducts() {
-  const [products, setProducts]       = useState<Product[]>([])
-  const [search, setSearch]           = useState('')
-  const [loading, setLoading]         = useState(true)
-  const [showAdd, setShowAdd]         = useState(false)
-  const [editTarget, setEditTarget]   = useState<Product | null>(null)
+  const [products, setProducts]         = useState<Product[]>([])
+  const [search, setSearch]             = useState('')
+  const [loading, setLoading]           = useState(true)
+  const [showAdd, setShowAdd]           = useState(false)
+  const [editTarget, setEditTarget]     = useState<Product | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<Product | null>(null)
   const [deleteLoading, setDeleteLoading] = useState(false)
   const [toast, setToast] = useState<{ message: string; type: 'success'|'error' } | null>(null)
@@ -729,7 +750,6 @@ export default function AdminProducts() {
               <thead className="bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wide">
                 <tr>
                   <th className="px-4 py-3 text-left">Product</th>
-                  {/* CHANGED: merged Category + Subcategory into one column */}
                   <th className="px-4 py-3 text-left">Category</th>
                   <th className="px-4 py-3 text-left">Brand</th>
                   <th className="px-4 py-3 text-left">Featured</th>
@@ -752,7 +772,6 @@ export default function AdminProducts() {
                         </div>
                       </div>
                     </td>
-                    {/* CHANGED: show subcategory below category when present */}
                     <td className="px-4 py-3">
                       <div className="flex flex-col gap-1">
                         <span className="text-xs bg-blue-50 text-blue-700 font-semibold px-2.5 py-1 rounded-full whitespace-nowrap w-fit">
