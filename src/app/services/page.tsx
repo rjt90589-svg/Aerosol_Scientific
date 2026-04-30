@@ -143,7 +143,7 @@ export default function ServicesPage() {
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center mb-10">
               <div>
-                <div className="inline-flex items-center gap-2 bg-blue-50 text-[#1251A3] border border-blue-100 px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider mb-4">
+                <div className="inline-flex items-center gap-2 bg-sci-blue text-white border border-blue-100 px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider mb-4">
                   Multi-Vendor Support
                 </div>
                 <h2 className="text-3xl font-bold text-[#050E1D] mb-3">We support your lab instruments and supplies</h2>
@@ -197,7 +197,7 @@ export default function ServicesPage() {
                 <img src={services[1].image} alt="Service contracts" className="w-full h-64 object-cover" />
               </div>
               <div className="lg:order-1">
-                <div className="inline-flex items-center gap-2 bg-teal-50 text-[#0891B2] border border-teal-100 px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider mb-4">
+                <div className="inline-flex items-center gap-2 bg-sci-blue text-white border border-teal-100 px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider mb-4">
                   Service Contracts
                 </div>
                 <h2 className="text-3xl font-bold text-[#050E1D] mb-3">{services[1].tagline}</h2>
@@ -226,7 +226,7 @@ export default function ServicesPage() {
         <section id="lab-supplies">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <div className="mb-8">
-              <div className="inline-flex items-center gap-2 bg-green-50 text-[#2E7D32] border border-green-100 px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider mb-4">
+              <div className="inline-flex items-center gap-2 bg-sci-blue text-white border border-green-100 px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider mb-4">
                 Lab Supplies
               </div>
               <h2 className="text-3xl font-bold text-[#050E1D] mb-2">{services[2].tagline}</h2>
@@ -256,7 +256,7 @@ export default function ServicesPage() {
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
               <div>
-                <div className="inline-flex items-center gap-2 bg-purple-50 text-[#6A1B9A] border border-purple-100 px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider mb-4">
+                <div className="inline-flex items-center gap-2 bg-sci-blue text-white border border-purple-100 px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider mb-4">
                   Trainings & Workshop
                 </div>
                 <h2 className="text-3xl font-bold text-[#050E1D] mb-3">{services[3].tagline}</h2>
