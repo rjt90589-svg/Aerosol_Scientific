@@ -11,9 +11,10 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#1565C0] to-[#00838F] flex items-center justify-center">
-                <FlaskConical size={18} className="text-white" />
-              </div>
+              {/* Logo */}
+            <Link href="/" className="flex items-center gap-3 group shrink-0">
+              <img src="/logo.png" alt="Aerosol Scientific" className="w-24 h-24  relative" />
+            </Link>
               <div>
                 <span className="font-bold text-lg leading-tight block">Aerosol Scientific</span>
                 <span className="text-[10px] text-[#00ACC1] uppercase tracking-widest">Lab Excellence</span>
