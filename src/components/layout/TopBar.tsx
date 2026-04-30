@@ -32,7 +32,7 @@ export default function TopBar() {
           <div className="flex items-center gap-4 flex-wrap">
 
             {/* Address (hide on small screens) */}
-            <div className="hidden lg:flex items-center gap-1.5 max-w-[260px] truncate">
+            <div className="hidden lg:flex items-center gap-1.5  ">
               <MapPin size={12} className="opacity-80 shrink-0" />
               <span className="opacity-90 truncate">
                 {data[office].address}
