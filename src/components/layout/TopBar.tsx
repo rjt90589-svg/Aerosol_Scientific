@@ -2,6 +2,7 @@
 import { Phone, Mail, MapPin, ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { SITE_PHONE_UAE, SITE_PHONE_INDIA, SITE_EMAIL_SALES, SITE_EMAIL_SUPPORT, SITE_ADDRESS_UAE, SITE_ADDRESS_INDIA } from '@/lib/constants'
+import { FaFacebookF, FaInstagram, FaLinkedinIn } from 'react-icons/fa'
 
 export default function TopBar() {
   const [office, setOffice] = useState<'uae' | 'india'>('uae')
@@ -38,6 +39,21 @@ export default function TopBar() {
             </a>
           </div>
         </div>
+      
+<div className="flex items-center gap-3">
+  <a href="#" className="text-white">
+    <FaFacebookF size={16} />
+  </a>
+
+  <a href="#" className="text-white">
+    <FaInstagram size={16} />
+  </a>
+
+  <a href="#" className="text-white">
+    <FaLinkedinIn  size={16} />
+  </a>
+</div>
+
         <div className="flex items-center gap-1">
           <button
             onClick={() => setOffice('uae')}
