@@ -4,7 +4,7 @@ import { SITE_ADDRESS_UAE, SITE_ADDRESS_INDIA, SITE_EMAIL_SALES, SITE_EMAIL_SUPP
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-br from-[#0A1628] via-[#0D2240] to-[#0A2535] text-white">
+    <footer className="bg-grad-hero text-white">
       {/* Main Footer */}
       <div className="max-w-7xl mx-auto px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">

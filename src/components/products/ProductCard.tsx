@@ -14,7 +14,6 @@ interface Props {
 export default function ProductCard({ product, index = 0 }: Props) {
   const [quoteOpen, setQuoteOpen] = useState(false)
 
-  // Use pre-computed fields from the API (joined from reviews table)
   const rating = product.average_rating ?? 0
   const reviewCount = product.review_count ?? 0
   const displayRating = rating > 0 ? rating.toFixed(1) : null
@@ -27,10 +26,13 @@ export default function ProductCard({ product, index = 0 }: Props) {
         viewport={{ once: true }}
         transition={{ delay: index * 0.07 }}
         whileHover={{ y: -4 }}
-        className="group bg-white rounded-2xl border border-gray-200 hover:scale-3d overflow-hidden hover:shadow-2xl hover:border-blue-200 transition-all duration-300"
+        className="group card-spectrum grad-border overflow-hidden transition-all duration-300"
       >
         {/* Image */}
-        <Link href={`/products/${product.slug}`} className="block aspect-square overflow-hidden bg-gray-50 relative">
+        <Link
+          href={`/products/${product.slug}`}
+          className="block aspect-square overflow-hidden bg-gray-50 relative"
+        >
           {product.image_url ? (
             <img
               src={product.image_url}
@@ -47,11 +49,11 @@ export default function ProductCard({ product, index = 0 }: Props) {
 
           {/* Category + optional subcategory badge */}
           <div className="absolute top-3 left-3 flex flex-col gap-1">
-            <span className="text-[10px] font-bold bg-blue-600 text-white px-2 py-0.5 rounded-full">
+            <span className="pill pill-blue">
               {product.category}
             </span>
             {product.subcategory && (
-              <span className="text-[10px] font-medium bg-white/90 text-blue-700 px-2 py-0.5 rounded-full border border-blue-100 backdrop-blur-sm">
+              <span className="pill pill-teal">
                 {product.subcategory}
               </span>
             )}
@@ -61,14 +63,16 @@ export default function ProductCard({ product, index = 0 }: Props) {
         {/* Info */}
         <div className="p-4">
           <Link href={`/products/${product.slug}`}>
-            <h3 className="font-bold text-gray-900 text-sm leading-tight mb-1 group-hover:text-[#1565C0] transition-colors line-clamp-2">
+            <h3 className="font-bold text-[var(--text-primary)] text-sm leading-tight mb-1 group-hover:text-sci-blue transition-colors line-clamp-2">
               {product.name}
             </h3>
           </Link>
 
-          <p className="text-gray-400 text-xs mb-3 line-clamp-2">{product.short_description}</p>
+          <p className="text-[var(--text-muted)] text-xs mb-3 line-clamp-2">
+            {product.short_description}
+          </p>
 
-          {/* Real rating from joined reviews */}
+          {/* Rating */}
           <div className="flex items-center gap-1 mb-3">
             {[1, 2, 3, 4, 5].map(i => {
               const filled = rating >= i
@@ -86,18 +90,18 @@ export default function ProductCard({ product, index = 0 }: Props) {
               )
             })}
             {displayRating ? (
-              <span className="text-xs text-gray-400 ml-1">
+              <span className="text-xs text-[var(--text-muted)] ml-1">
                 {displayRating} ({reviewCount})
               </span>
             ) : (
-              <span className="text-xs text-gray-300 ml-1">No reviews yet</span>
+              <span className="text-xs text-[var(--text-muted)] ml-1">No reviews yet</span>
             )}
           </div>
 
-          {/* Opens modal in-place — no redirect */}
+          {/* CTA */}
           <button
             onClick={() => setQuoteOpen(true)}
-            className="flex items-center justify-center gap-1.5 w-full bg-gradient-to-r from-[#1565C0] to-[#00838F] text-white text-xs font-semibold py-2.5 rounded-xl hover:shadow-md hover:shadow-blue-500/20 transition-all"
+            className="flex items-center justify-center gap-1.5 w-full bg-grad-primary text-white text-xs font-semibold py-2.5 rounded-xl hover:shadow-md hover:shadow-blue-500/20 transition-all duration-300"
           >
             <Quote size={12} />
             Get a Quote
@@ -105,7 +109,6 @@ export default function ProductCard({ product, index = 0 }: Props) {
         </div>
       </motion.div>
 
-      {/* Inline modal — renders at card level so no full-page redirect */}
       <QuoteModal
         product={product}
         isOpen={quoteOpen}

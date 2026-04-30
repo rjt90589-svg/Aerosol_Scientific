@@ -3,11 +3,111 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ════════════════════════════════════════════════
+   TAILWIND V4 — CUSTOM UTILITY CLASSES
+   Use these directly in className="..."
+════════════════════════════════════════════════ */
+
+/* ── Gradient backgrounds ── */
+@utility bg-brand-gradient {
+  background-image: linear-gradient(90deg, #7B2FF7 0%, #2F6BFF 20%, #00C2FF 40%, #22C55E 60%, #FACC15 80%, #F97316 100%);
+}
+@utility bg-grad-primary {
+  background-image: linear-gradient(135deg, #1D5FD4 0%, #0D9488 100%);
+}
+@utility bg-grad-spectrum {
+  background-image: linear-gradient(90deg, #7B2FBE 0%, #4338CA 15%, #1D5FD4 30%, #06B6D4 45%, #16A34A 58%, #CA8A04 72%, #EA580C 86%, #DC2626 100%);
+}
+@utility bg-grad-spectrum-135 {
+  background-image: linear-gradient(135deg, #7B2FBE 0%, #1D5FD4 30%, #06B6D4 55%, #16A34A 72%, #EA580C 100%);
+}
+@utility bg-grad-warm {
+  background-image: linear-gradient(135deg, #CA8A04 0%, #EA580C 55%, #DC2626 100%);
+}
+@utility bg-grad-cool {
+  background-image: linear-gradient(135deg, #7B2FBE 0%, #1D5FD4 50%, #06B6D4 100%);
+}
+@utility bg-grad-dark {
+  background-image: linear-gradient(135deg, #050E1D 0%, #0D2240 50%, #051A28 100%);
+}
+@utility bg-grad-hero {
+  background-image: linear-gradient(135deg, #030A14 0%, #0A1F45 40%, #042535 100%);
+}
+
+/* ── Shadow utilities ── */
+@utility shadow-blue {
+  box-shadow: 0 8px 32px rgba(29, 95, 212, 0.16);
+}
+@utility shadow-card {
+  box-shadow: 0 2px 12px rgba(10, 22, 40, 0.06);
+}
+@utility shadow-card-hover {
+  box-shadow: 0 12px 40px rgba(10, 22, 40, 0.14);
+}
+@utility shadow-violet {
+  box-shadow: 0 8px 32px rgba(123, 47, 190, 0.15);
+}
+@utility shadow-orange {
+  box-shadow: 0 8px 32px rgba(234, 88, 12, 0.15);
+}
+@utility shadow-primary {
+  box-shadow: 0 6px 30px rgba(27, 79, 216, 0.25);
+}
+@utility shadow-glow {
+  box-shadow: 0 0 40px rgba(0, 194, 255, 0.35);
+}
+
+/* ════════════════════════════════════════════════
+   TAILWIND V4 THEME — color & font tokens
+════════════════════════════════════════════════ */
+@theme {
+  /* ── Colors → text-*, bg-*, border-* ── */
+  --color-sci-navy:        #0E1A3A;
+  --color-sci-blue:        #1D5FD4;
+  --color-sci-blue-mid:    #2563EB;
+  --color-sci-blue-light:  #60A5FA;
+  --color-sci-teal:        #0D9488;
+  --color-sci-teal-light:  #2DD4BF;
+  --color-sci-cyan:        #06B6D4;
+  --color-sci-orange:      #EA580C;
+  --color-sci-amber:       #D97706;
+  --color-sci-gold:        #F59E0B;
+  --color-sci-violet:      #7B2FBE;
+  --color-sci-indigo:      #4338CA;
+  --color-sci-green:       #16A34A;
+
+  --color-spec-violet:     #7B2FBE;
+  --color-spec-indigo:     #4338CA;
+  --color-spec-blue:       #1D5FD4;
+  --color-spec-sky:        #0EA5E9;
+  --color-spec-cyan:       #06B6D4;
+  --color-spec-teal:       #0D9488;
+  --color-spec-green:      #16A34A;
+  --color-spec-lime:       #65A30D;
+  --color-spec-yellow:     #CA8A04;
+  --color-spec-amber:      #D97706;
+  --color-spec-orange:     #EA580C;
+  --color-spec-red:        #DC2626;
+
+  --color-bg-primary:      #FAFBFF;
+  --color-bg-card:         #FFFFFF;
+  --color-bg-subtle:       #F0F4FF;
+
+  --color-text-primary:    #0A1628;
+  --color-text-secondary:  #3D5276;
+  --color-text-muted:      #7B90B2;
+
+  /* ── Fonts → font-display, font-body, font-mono ── */
+  --font-display: 'Clash Display', 'Satoshi', sans-serif;
+  --font-body:    'Satoshi', -apple-system, sans-serif;
+  --font-mono:    monospace;
+}
+
+/* ════════════════════════════════════════════════
+   CSS CUSTOM PROPERTIES (used by component classes below)
+════════════════════════════════════════════════ */
 :root {
-  /* ══════════════════════════════════════════════
-     LOGO SPECTRUM — exact stops from the swirl arcs
-     violet → indigo → blue → cyan → green → yellow → orange → red
-  ══════════════════════════════════════════════ */
+  /* ── Spectrum stops ── */
   --spec-violet:   #7B2FBE;
   --spec-indigo:   #4338CA;
   --spec-blue:     #1D5FD4;
@@ -21,38 +121,32 @@
   --spec-orange:   #EA580C;
   --spec-red:      #DC2626;
 
-  /* ── Primary brand (blue-indigo — the dominant logo arc) ── */
-  --sci-navy:      #0E1A3A;
-  --sci-blue:      #1D5FD4;        /* was #1251A3 */
-  --sci-blue-mid:  #2563EB;        /* was #1667C9 */
-  --sci-blue-light:#60A5FA;        /* was #3B82F6 */
-  --sci-teal:      #0D9488;        /* was #0891B2 */
-  --sci-teal-light:#2DD4BF;        /* was #22D3EE */
-  --sci-cyan:      #06B6D4;        /* was #00F5FF */
+  /* ── Brand primitives ── */
+  --sci-navy:       #0E1A3A;
+  --sci-blue:       #1D5FD4;
+  --sci-blue-mid:   #2563EB;
+  --sci-blue-light: #60A5FA;
+  --sci-teal:       #0D9488;
+  --sci-teal-light: #2DD4BF;
+  --sci-cyan:       #06B6D4;
+  --sci-orange:     #EA580C;
+  --sci-amber:      #D97706;
+  --sci-gold:       #F59E0B;
+  --sci-violet:     #7B2FBE;
+  --sci-indigo:     #4338CA;
+  --sci-green:      #16A34A;
 
-  /* ── Accent warm (orange arc — right side of swirl) ── */
-  --sci-orange:    #EA580C;
-  --sci-amber:     #D97706;
-  --sci-gold:      #F59E0B;        /* kept — also present in logo */
-
-  /* ── Accent cool (violet/indigo arc — left side of swirl) ── */
-  --sci-violet:    #7B2FBE;
-  --sci-indigo:    #4338CA;
-
-  /* ── Accent green (mid-spectrum) ── */
-  --sci-green:     #16A34A;
-
-  /* ── Backgrounds (clean white, mirroring logo's white disc) ── */
+  /* ── Backgrounds ── */
   --bg-primary:    #FAFBFF;
   --bg-card:       #FFFFFF;
   --bg-subtle:     #F0F4FF;
 
   /* ── Text ── */
-  --text-primary:  #0A1628;
-  --text-secondary:#3D5276;
-  --text-muted:    #7B90B2;
+  --text-primary:   #0A1628;
+  --text-secondary: #3D5276;
+  --text-muted:     #7B90B2;
 
-  /* ── Borders (blue-tinted, as before but slightly warmer) ── */
+  /* ── Borders ── */
   --border-light:  rgba(29, 95, 212, 0.08);
   --border-mid:    rgba(29, 95, 212, 0.16);
 
@@ -62,68 +156,44 @@
   --shadow-violet: 0 8px 32px rgba(123, 47, 190, 0.15);
   --shadow-orange: 0 8px 32px rgba(234, 88, 12, 0.15);
 
-  /* ── Gradients (pulled straight from the logo arcs) ── */
-
-  /* Primary — blue → teal (dominant cool arc) */
+  /* ── Gradients ── */
   --grad-primary:  linear-gradient(135deg, #1D5FD4 0%, #0D9488 100%);
-
-  /* Spectrum — full logo sweep L→R */
   --grad-spectrum: linear-gradient(
     90deg,
-    #7B2FBE 0%,
-    #4338CA 15%,
-    #1D5FD4 30%,
-    #06B6D4 45%,
-    #16A34A 58%,
-    #CA8A04 72%,
-    #EA580C 86%,
-    #DC2626 100%
+    #7B2FBE 0%, #4338CA 15%, #1D5FD4 30%,
+    #06B6D4 45%, #16A34A 58%, #CA8A04 72%,
+    #EA580C 86%, #DC2626 100%
   );
-
-  /* Spectrum diagonal — for hero/section accents */
   --grad-spectrum-135: linear-gradient(
     135deg,
-    #7B2FBE 0%,
-    #1D5FD4 30%,
-    #06B6D4 55%,
-    #16A34A 72%,
-    #EA580C 100%
+    #7B2FBE 0%, #1D5FD4 30%, #06B6D4 55%,
+    #16A34A 72%, #EA580C 100%
   );
-
-  /* Warm arc — yellow → orange → red */
   --grad-warm:     linear-gradient(135deg, #CA8A04 0%, #EA580C 55%, #DC2626 100%);
-
-  /* Cool arc — violet → blue → cyan */
   --grad-cool:     linear-gradient(135deg, #7B2FBE 0%, #1D5FD4 50%, #06B6D4 100%);
-
-  /* Dark section bg */
   --grad-dark:     linear-gradient(135deg, #050E1D 0%, #0D2240 50%, #051A28 100%);
   --grad-hero:     linear-gradient(135deg, #030A14 0%, #0A1F45 40%, #042535 100%);
   --grad-glass:    linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%);
 
-  /* ── ShadCN tokens (mapped to new spectrum primary) ── */
-  --background:              var(--bg-primary);
-  --foreground:              var(--text-primary);
-  --card:                    var(--bg-card);
-  --card-foreground:         var(--text-primary);
-  --primary:                 #1D5FD4;
-  --primary-foreground:      #ffffff;
-  --secondary:               var(--bg-subtle);
-  --secondary-foreground:    var(--text-primary);
-  --muted:                   var(--bg-subtle);
-  --muted-foreground:        var(--text-muted);
-  --border:                  var(--border-light);
-  --input:                   var(--border-mid);
-  --ring:                    #1D5FD4;
-  --radius:                  0.75rem;
-
-  /* Destructive mapped to logo red */
-  --destructive:             #DC2626;
-  --destructive-foreground:  #ffffff;
-
-  /* Accent mapped to logo teal */
-  --accent:                  rgba(13, 148, 136, 0.08);
-  --accent-foreground:       #0D9488;
+  /* ── ShadCN tokens ── */
+  --background:           var(--bg-primary);
+  --foreground:           var(--text-primary);
+  --card:                 var(--bg-card);
+  --card-foreground:      var(--text-primary);
+  --primary:              #1D5FD4;
+  --primary-foreground:   #ffffff;
+  --secondary:            var(--bg-subtle);
+  --secondary-foreground: var(--text-primary);
+  --muted:                var(--bg-subtle);
+  --muted-foreground:     var(--text-muted);
+  --border:               var(--border-light);
+  --input:                var(--border-mid);
+  --ring:                 #1D5FD4;
+  --radius:               0.75rem;
+  --destructive:          #DC2626;
+  --destructive-foreground: #ffffff;
+  --accent:               rgba(13, 148, 136, 0.08);
+  --accent-foreground:    #0D9488;
 }
 
 /* ════════════════════════════════════════════════
@@ -161,7 +231,6 @@ body {
   background-size: 52px 52px;
 }
 
-/* Spectrum grid — subtle rainbow tint */
 .sci-grid-spectrum {
   background-image:
     linear-gradient(rgba(123, 47, 190, 0.03) 1px, transparent 1px),
@@ -174,7 +243,6 @@ body {
   background-size: 24px 24px;
 }
 
-/* Noise grain overlay */
 .noise::after {
   content: '';
   position: absolute;
@@ -187,8 +255,6 @@ body {
 /* ════════════════════════════════════════════════
    TYPOGRAPHY UTILITIES
 ════════════════════════════════════════════════ */
-
-/* Cool arc — blue → cyan (primary brand sweep) */
 .gradient-text {
   background: var(--grad-cool);
   -webkit-background-clip: text;
@@ -196,7 +262,6 @@ body {
   background-clip: text;
 }
 
-/* Full spectrum sweep — for hero headlines */
 .gradient-text-spectrum {
   background: var(--grad-spectrum);
   -webkit-background-clip: text;
@@ -205,7 +270,6 @@ body {
   background-size: 200% auto;
 }
 
-/* Warm arc — amber → orange → red */
 .gradient-text-warm {
   background: var(--grad-warm);
   -webkit-background-clip: text;
@@ -213,7 +277,6 @@ body {
   background-clip: text;
 }
 
-/* Violet → indigo */
 .gradient-text-violet {
   background: linear-gradient(135deg, #7B2FBE, #4338CA);
   -webkit-background-clip: text;
@@ -221,7 +284,6 @@ body {
   background-clip: text;
 }
 
-/* Legacy alias kept for backward compat */
 .gradient-text-gold {
   background: var(--grad-warm);
   -webkit-background-clip: text;
@@ -299,18 +361,11 @@ body {
   pointer-events: none;
 }
 
-/* Full spectrum border variant */
-.grad-border-spectrum::before {
-  background: var(--grad-spectrum);
-}
-
-/* Warm border variant */
-.grad-border-warm::before {
-  background: var(--grad-warm);
-}
+.grad-border-spectrum::before { background: var(--grad-spectrum); }
+.grad-border-warm::before     { background: var(--grad-warm); }
 
 /* ════════════════════════════════════════════════
-   PREMIUM CARD
+   PREMIUM CARDS
 ════════════════════════════════════════════════ */
 .card-premium {
   background: #fff;
@@ -321,13 +376,10 @@ body {
 }
 .card-premium:hover {
   border-color: rgba(29, 95, 212, 0.18);
-  box-shadow:
-    0 20px 60px rgba(29, 95, 212, 0.10),
-    0 4px 16px rgba(29, 95, 212, 0.06);
+  box-shadow: 0 20px 60px rgba(29, 95, 212, 0.10), 0 4px 16px rgba(29, 95, 212, 0.06);
   transform: translateY(-4px);
 }
 
-/* Spectrum card — top border sweeps the full logo palette */
 .card-spectrum {
   background: #fff;
   border: 1px solid rgba(29, 95, 212, 0.08);
@@ -354,7 +406,7 @@ body {
 }
 
 /* ════════════════════════════════════════════════
-   SPECTRUM ACCENT BAR  (reusable 3px top bar)
+   SPECTRUM ACCENT BARS
 ════════════════════════════════════════════════ */
 .spectrum-bar {
   height: 3px;
@@ -373,8 +425,6 @@ body {
 /* ════════════════════════════════════════════════
    ANIMATIONS
 ════════════════════════════════════════════════ */
-
-/* Float */
 @keyframes float {
   0%,100% { transform: translateY(0) rotate(0deg); }
   33%      { transform: translateY(-14px) rotate(1deg); }
@@ -384,26 +434,22 @@ body {
 .animate-float-delay-1  { animation: float 6s ease-in-out 1.5s infinite; }
 .animate-float-delay-2  { animation: float 6s ease-in-out 3s infinite; }
 
-/* Rotate slow */
 @keyframes rotate-slow { to { transform: rotate(360deg); } }
 .animate-rotate-slow     { animation: rotate-slow 30s linear infinite; }
 .animate-rotate-slow-rev { animation: rotate-slow 22s linear infinite reverse; }
 
-/* Pulse glow — spectrum-aware */
 @keyframes pulse-glow {
   0%,100% { box-shadow: 0 0 20px rgba(6,182,212,0.22), 0 0 60px rgba(29,95,212,0.12); }
   50%      { box-shadow: 0 0 50px rgba(6,182,212,0.50), 0 0 120px rgba(29,95,212,0.26); }
 }
 .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
 
-/* Pulse glow warm (orange side) */
 @keyframes pulse-glow-warm {
   0%,100% { box-shadow: 0 0 20px rgba(234,88,12,0.20), 0 0 60px rgba(202,138,4,0.10); }
   50%      { box-shadow: 0 0 50px rgba(234,88,12,0.46), 0 0 120px rgba(202,138,4,0.24); }
 }
 .animate-pulse-glow-warm { animation: pulse-glow-warm 3s ease-in-out infinite; }
 
-/* Shimmer */
 @keyframes shimmer {
   from { background-position: -200% 0; }
   to   { background-position:  200% 0; }
@@ -414,48 +460,40 @@ body {
   animation: shimmer 1.5s ease-in-out infinite;
 }
 
-/* Spectrum shimmer */
 .shimmer-spectrum {
   background: linear-gradient(
     90deg,
-    rgba(123,47,190,0.06) 0%,
-    rgba(29,95,212,0.10) 25%,
-    rgba(6,182,212,0.10) 50%,
-    rgba(234,88,12,0.06) 75%,
+    rgba(123,47,190,0.06) 0%, rgba(29,95,212,0.10) 25%,
+    rgba(6,182,212,0.10) 50%, rgba(234,88,12,0.06) 75%,
     rgba(123,47,190,0.06) 100%
   );
   background-size: 200% 100%;
   animation: shimmer 2.4s ease-in-out infinite;
 }
 
-/* Scan line */
 @keyframes scan {
   0%   { top: 0%;   opacity: 1;   }
   90%  { top: 100%; opacity: 0.3; }
   100% { top: 100%; opacity: 0;   }
 }
 
-/* Data ticker */
 @keyframes ticker {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
 }
 .animate-ticker { animation: ticker 28s linear infinite; }
 
-/* Orb pulse */
 @keyframes orb-pulse {
   0%,100% { transform: scale(1);    opacity: 0.6; }
   50%      { transform: scale(1.15); opacity: 0.9; }
 }
 .animate-orb { animation: orb-pulse 5s ease-in-out infinite; }
 
-/* Particle rise */
 @keyframes particle-rise {
-  0%   { transform: translateY(0) scale(1);   opacity: 0.7; }
-  100% { transform: translateY(-120px) scale(0.3); opacity: 0; }
+  0%   { transform: translateY(0) scale(1);       opacity: 0.7; }
+  100% { transform: translateY(-120px) scale(0.3); opacity: 0;   }
 }
 
-/* Lab sweep */
 @keyframes lab-sweep {
   0%   { transform: scaleX(0); transform-origin: left;  }
   45%  { transform: scaleX(1); transform-origin: left;  }
@@ -464,7 +502,6 @@ body {
 }
 .lab-line { animation: lab-sweep 2.4s ease-in-out infinite; }
 
-/* Spectrum rotate — animates the background-position of spectrum gradient */
 @keyframes spectrum-shift {
   0%   { background-position: 0% 50%;   }
   50%  { background-position: 100% 50%; }
@@ -476,7 +513,6 @@ body {
   animation: spectrum-shift 6s ease infinite;
 }
 
-/* Fade up stagger */
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(28px); }
   to   { opacity: 1; transform: translateY(0);    }
@@ -488,7 +524,7 @@ body {
 .fade-up-4 { animation-delay: 0.4s; }
 
 /* ════════════════════════════════════════════════
-   SCROLLBAR — spectrum gradient
+   SCROLLBAR
 ════════════════════════════════════════════════ */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: var(--bg-subtle); }
@@ -498,7 +534,7 @@ body {
 }
 
 /* ════════════════════════════════════════════════
-   SELECTION — blue tint
+   SELECTION
 ════════════════════════════════════════════════ */
 ::selection { background: rgba(29, 95, 212, 0.16); color: #1D5FD4; }
 
@@ -553,14 +589,14 @@ body {
     transparent,
     rgba(123, 47, 190, 0.15) 15%,
     rgba(29, 95, 212, 0.25) 35%,
-    rgba(13, 148, 136, 0.25) 65%,
-    rgba(234, 88, 12, 0.15) 85%,
+    rgba(13, 148, 136, 0.25) 55%,
+    rgba(234, 88, 12, 0.15) 65%,
     transparent
   );
 }
 
 /* ════════════════════════════════════════════════
-   TAG PILLS — one per spectrum stop
+   TAG PILLS
 ════════════════════════════════════════════════ */
 .pill {
   display: inline-flex;
@@ -574,49 +610,42 @@ body {
   text-transform: uppercase;
 }
 
-/* Blue (primary) */
 .pill-blue {
   background: rgba(29, 95, 212, 0.08);
   color: #1D5FD4;
   border: 1px solid rgba(29, 95, 212, 0.16);
 }
 
-/* Teal (mid-cool) */
 .pill-teal {
   background: rgba(13, 148, 136, 0.08);
   color: #0D9488;
   border: 1px solid rgba(13, 148, 136, 0.16);
 }
 
-/* Violet (left arc) */
 .pill-violet {
   background: rgba(123, 47, 190, 0.08);
   color: #7B2FBE;
   border: 1px solid rgba(123, 47, 190, 0.16);
 }
 
-/* Green (mid-spectrum) */
 .pill-green {
   background: rgba(22, 163, 74, 0.08);
   color: #16A34A;
   border: 1px solid rgba(22, 163, 74, 0.16);
 }
 
-/* Orange (warm arc) */
 .pill-orange {
   background: rgba(234, 88, 12, 0.08);
   color: #C2410C;
   border: 1px solid rgba(234, 88, 12, 0.16);
 }
 
-/* Gold / Amber */
 .pill-gold {
   background: rgba(217, 119, 6, 0.08);
   color: #B45309;
   border: 1px solid rgba(217, 119, 6, 0.18);
 }
 
-/* Spectrum — gradient text + matching border */
 .pill-spectrum {
   background: linear-gradient(
     135deg,
