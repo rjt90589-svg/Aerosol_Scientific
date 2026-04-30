@@ -94,13 +94,13 @@ function SlideBackground({ bgImage, epoch }: { bgImage: string; epoch: number })
         <div
           className="absolute inset-0"
           style={{
-            background: `linear-gradient(
-              105deg,
-              rgba(5,12,32,0.92) 20%,
-              rgba(5,12,32,0.80) 45%,
-              rgba(5,12,32,0.50) 80%,
-              rgba(5,12,32,0.25) 120%
-            )`,
+            background:`linear-gradient(
+  105deg,
+  rgba(5,12,32,0.45) 40%,
+  rgba(5,12,32,0.55) 45%,
+  rgba(5,12,32,0.75) 80%,
+  rgba(5,12,32,0.95) 120%
+)`,
           }}
         />
         {/* Blue brand tint on left */}
