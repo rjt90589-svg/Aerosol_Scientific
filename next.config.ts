@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: '*.supabase.co' },
       { protocol: 'https', hostname: '*.supabase.in' },
     ],
-     domains: ["images.unsplash.com"],
+     
   },
   experimental: {
     optimizePackageImports: ['framer-motion', 'lucide-react'],

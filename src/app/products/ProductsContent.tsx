@@ -205,7 +205,7 @@ export default function ProductsContent() {
         </AnimatePresence>
 
         {/* If no subcategory row, add spacing */}
-        {(!activeCategoryConfig || activeCategoryConfig.subcategories.length === 0) && (
+        {(!activeCategoryConfig || activeCategoryConfig.subcategories.length < 1) && (
           <div className="mb-6" />
         )}
 
