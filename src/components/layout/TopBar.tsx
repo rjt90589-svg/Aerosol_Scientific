@@ -49,7 +49,7 @@ export default function TopBar() {
     <FaInstagram size={16} />
   </a>
 
-  <a href="#" className="text-white">
+  <a href="https://www.linkedin.com/company/aerosol-scientific/" className="text-white">
     <FaLinkedinIn  size={16} />
   </a>
 </div>
