@@ -57,9 +57,9 @@ function productToSlide(p: Product, index: number) {
 function SlideUp({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 28 }}
+      initial={{ opacity: 0, y: 58 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -12, transition: { duration: 0.2 } }}
+      exit={{ opacity: 0, y: -12, transition: { duration: 0.3 } }}
       transition={{ duration: 0.52, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
@@ -70,9 +70,9 @@ function SlideUp({ children, delay = 0 }: { children: React.ReactNode; delay?: n
 function SlideDown({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: -28 }}
+      initial={{ opacity: 0, y: -58 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -12, transition: { duration: 0.2 } }}
+      exit={{ opacity: 0, y: -12, transition: { duration: 0.3 } }}
       transition={{ duration: 0.52, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
