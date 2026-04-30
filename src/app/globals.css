@@ -56,13 +56,6 @@
 @utility shadow-glow {
   box-shadow: 0 0 40px rgba(0, 194, 255, 0.35);
 }
-.gradient-text-brand {
-  background: linear-gradient(90deg, #7B2FF7 0%, #2F6BFF 20%, #00C2FF 40%, #22C55E 60%, #FACC15 80%, #F97316 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  background-size: 200% auto;
-}
 
 /* ════════════════════════════════════════════════
    TAILWIND V4 THEME — color & font tokens
@@ -176,6 +169,7 @@
     #7B2FBE 0%, #1D5FD4 30%, #06B6D4 55%,
     #16A34A 72%, #EA580C 100%
   );
+  --grad-brand:    linear-gradient(90deg, #7B2FF7 0%, #2F6BFF 20%, #00C2FF 40%, #22C55E 60%, #FACC15 80%, #F97316 100%);
   --grad-warm:     linear-gradient(135deg, #CA8A04 0%, #EA580C 55%, #DC2626 100%);
   --grad-cool:     linear-gradient(135deg, #7B2FBE 0%, #1D5FD4 50%, #06B6D4 100%);
   --grad-dark:     linear-gradient(135deg, #050E1D 0%, #0D2240 50%, #051A28 100%);
@@ -262,6 +256,8 @@ body {
 /* ════════════════════════════════════════════════
    TYPOGRAPHY UTILITIES
 ════════════════════════════════════════════════ */
+
+/* Cool arc — blue → cyan (primary brand sweep) */
 .gradient-text {
   background: var(--grad-cool);
   -webkit-background-clip: text;
@@ -269,6 +265,7 @@ body {
   background-clip: text;
 }
 
+/* Full spectrum sweep */
 .gradient-text-spectrum {
   background: var(--grad-spectrum);
   -webkit-background-clip: text;
@@ -277,6 +274,7 @@ body {
   background-size: 200% auto;
 }
 
+/* Warm arc — amber → orange → red */
 .gradient-text-warm {
   background: var(--grad-warm);
   -webkit-background-clip: text;
@@ -284,6 +282,7 @@ body {
   background-clip: text;
 }
 
+/* Violet → indigo */
 .gradient-text-violet {
   background: linear-gradient(135deg, #7B2FBE, #4338CA);
   -webkit-background-clip: text;
@@ -291,11 +290,31 @@ body {
   background-clip: text;
 }
 
+/* Legacy warm alias */
 .gradient-text-gold {
   background: var(--grad-warm);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Brand logo sweep — violet → blue → cyan → green → yellow → orange */
+.gradient-text-brand {
+  background: var(--grad-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% auto;
+}
+
+/* Brand logo sweep — animated */
+.gradient-text-brand-animated {
+  background: linear-gradient(90deg, #7B2FF7 0%, #2F6BFF 20%, #00C2FF 40%, #22C55E 60%, #FACC15 80%, #F97316 100%, #7B2FF7 120%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% auto;
+  animation: spectrum-shift 4s linear infinite;
 }
 
 .text-glow {
@@ -369,6 +388,7 @@ body {
 }
 
 .grad-border-spectrum::before { background: var(--grad-spectrum); }
+.grad-border-brand::before    { background: var(--grad-brand); }
 .grad-border-warm::before     { background: var(--grad-warm); }
 
 /* ════════════════════════════════════════════════
