@@ -236,7 +236,7 @@ function PartnerSection({ partner, index }: { partner: typeof FEATURED[0]; index
           {/* Info side */}
           <div className={isEven ? 'lg:order-2' : ''}>
             <div className="flex items-center gap-4 mb-5">
-              <div className="w-16 h-16 rounded-2xl bg-white border border-[rgba(18,81,163,0.1)] shadow-md overflow-hidden flex items-center justify-center p-2 shrink-0">
+              <div className="w-22 h-22 rounded-2xl bg-white border border-[rgba(18,81,163,0.1)] shadow-md overflow-hidden flex items-center justify-center p-2 shrink-0">
                 <img
                   src={partner.logo}
                   alt={partner.name}
