@@ -9,7 +9,7 @@ import { useProductStore } from '@/lib/store/productStore'
 import type { Product } from '@/types'
 
 
-const DURATION = 3000
+const DURATION = 3500
 
 
 // ─── Static bg images served from /public/bg-img/ ────────────────────────────
@@ -84,7 +84,7 @@ function SlideDown({ children, delay = 0 }: { children: React.ReactNode; delay?:
 // ─── Full-screen Ken Burns background ────────────────────────────────────────
 function SlideBackground({ bgImage, epoch }: { bgImage: string; epoch: number }) {
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="sync">
       <motion.div
         key={`bg-${epoch}`}
         className="absolute inset-0  overflow-hidden"
@@ -93,29 +93,29 @@ function SlideBackground({ bgImage, epoch }: { bgImage: string; epoch: number })
         exit={{ opacity: 0 }}
         transition={{ duration: 0.9, ease: 'easeInOut' }}
       >
-        {/* <motion.img
+        <motion.img
           src={bgImage}
           alt=""
           aria-hidden
           className="absolute w-full h-full object-cover"
           style={{ scale: 1.12 }}
           initial={{ x: '6%' }}
-          animate={{ x: '-6%' }}
-          transition={{ duration: (DURATION + 900) / 1000, ease: 'linear' }}
-        /> */}
+          animate={{ x: '-8%' }}
+          transition={{ duration: (DURATION + 900) / 1000, ease: 'easeInOut' }}
+        />
         {/* Heavy left overlay for text legibility */}
-        {/* <div
+        <div
           className="absolute inset-0"
           style={{
             background:`linear-gradient(
   105deg,
-  rgba(5,12,32,0.75) 20%,
-  rgba(5,12,32,0.55) 45%,
-  rgba(5,12,32,0.75) 60%,
+  rgba(5,12,32,0.65) 20%,
+  rgba(5,12,32,0.75) 45%,
+  rgba(5,12,32,0.85) 60%,
   rgba(5,12,32,0.95) 100%
 )`,
           }}
-        /> */}
+        />
         {/* Blue brand tint on left */}
         {/* <div
           className="absolute inset-0"
@@ -229,7 +229,7 @@ const slides = getFeatured().map((p, i) => productToSlide(p, i))
       onMouseLeave={() => setPaused(false)}
     >
       {/* ── Full-screen panning background ── */}
-      {/* <SlideBackground bgImage={s.bgImage} epoch={epoch} /> */}
+      <SlideBackground bgImage={s.bgImage} epoch={epoch} />
 
 
       {/* ── Main content grid ── */}
@@ -266,7 +266,7 @@ const slides = getFeatured().map((p, i) => productToSlide(p, i))
               <SlideDown delay={0.3}>
                 <Link href={`/products/${s.slug}`}>
                   <h1
-                    className="font-bold leading-tight mb-1 text-sky-600 hover:text-sky-950 transition-colors cursor-pointer"
+                    className="font-bold leading-tight mb-1 text-sci-cyan hover:text-white transition-colors cursor-pointer"
                     style={{ fontSize: 'clamp(22px, 2.8vw, 42px)', textShadow: '0 2px 16px rgba(0,0,0,0.2)' }}
                   >
                     {s.title}
@@ -288,7 +288,7 @@ const slides = getFeatured().map((p, i) => productToSlide(p, i))
                       <circle cx="6.5" cy="6.5" r="6" stroke="#38bdf8" strokeOpacity="0.35" />
                       <circle cx="6.5" cy="6.5" r="2.8" fill="#38bdf8" />
                     </svg>
-                    <span className='text-sci-navy'>{s.detail_description}</span>
+                    <span className='text-white/65'>{s.detail_description}</span>
                   </div>
                 </SlideUp>
 
@@ -298,7 +298,7 @@ const slides = getFeatured().map((p, i) => productToSlide(p, i))
                 <div className="mt-7 flex items-center gap-3 flex-wrap">
                   <Link
                     href={`/products/${s.slug}`}
-                    className="inline-flex items-center gap-2 px-7 py-3 rounded-md text-sm font-bold text-white transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5 active:translate-y-0"
+                    className="inline-flex items-center gap-2 px-7 py-3 rounded-3xl text-sm font-bold text-white transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5 active:translate-y-0"
                     style={{
                       background: 'linear-gradient(135deg, #1a5dab 0%, #0ea5e9 100%)',
                       boxShadow: '0 6px 28px rgba(14,165,233,0.35)',
@@ -309,7 +309,7 @@ const slides = getFeatured().map((p, i) => productToSlide(p, i))
                   </Link>
                   <Link
                     href={`/contact?product=${encodeURIComponent(s.title)}`}
-                    className="inline-flex text-sci-blue/90 items-center gap-2 px-5 py-3 rounded-md text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5"
+                    className="inline-flex text-white items-center gap-2 px-5 py-3 rounded-3xl text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5"
                     style={{
                       // color: '#bae6fd',
                       border: '1px solid rgba(186,230,253,0.95)',
