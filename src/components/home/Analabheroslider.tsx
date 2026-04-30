@@ -96,18 +96,18 @@ function SlideBackground({ bgImage, epoch }: { bgImage: string; epoch: number })
           style={{
             background: `linear-gradient(
               105deg,
-              rgba(5,12,32,0.92) 0%,
-              rgba(5,12,32,0.80) 25%,
-              rgba(5,12,32,0.50) 50%,
-              rgba(5,12,32,0.25) 80%
+              rgba(5,12,32,0.92) 20%,
+              rgba(5,12,32,0.80) 45%,
+              rgba(5,12,32,0.50) 80%,
+              rgba(5,12,32,0.25) 120%
             )`,
           }}
         />
         {/* Blue brand tint on left */}
-        <div
+        {/* <div
           className="absolute inset-0"
           style={{ background: 'linear-gradient(90deg, rgba(18,81,163,0.22) 0%, transparent 55%)' }}
-        />
+        /> */}
         {/* Bottom vignette for nav bar */}
         <div
           className="absolute bottom-0 left-0 right-0 h-24"
