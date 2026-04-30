@@ -8,6 +8,7 @@ export interface Product {
   category: string
   subcategory: string | null
   brand: string
+  features?: string[]
   image_url: string | null
   images: string[]
   specifications: Record<string, string | number | boolean>

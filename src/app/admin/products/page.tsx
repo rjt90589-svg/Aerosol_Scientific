@@ -1,17 +1,17 @@
 'use client'
 import { useEffect, useState, useCallback, useRef, memo } from 'react'
 import { useForm } from 'react-hook-form'
+import { useWatch } from 'react-hook-form'          // ← FIX 1: import useWatch
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import {
   Plus, Edit, Trash2, Search, X, Loader2,
   AlertTriangle, CheckCircle2, Package, Upload, ImageIcon,
 } from 'lucide-react'
-import { CATEGORY_NAMES } from '@/lib/constants'
+import { PRODUCT_CATEGORIES } from '@/lib/constants'
 import { uploadProductImage, deleteProductImage } from '@/lib/supabase/storage'
 import type { Product } from '@/types'
 import { useProductStore } from '@/lib/store/productStore'
-import CategorySubcategorySelect from '@/components/CategorySubcategorySelect'
 
 // ─── Shared primitives ────────────────────────────────────────────────────────
 function Overlay({ onClick }: { onClick: () => void }) {
@@ -128,7 +128,6 @@ interface ImagePickerProps {
   error: string | null
 }
 
-// Memoized so drag state changes don't propagate up to ProductFormBody
 const ImagePicker = memo(function ImagePicker({
   preview, isDragging, onFileChange, onRemove,
   onDragOver, onDragLeave, onDrop, fileInputRef, uploadStatus, error,
@@ -185,6 +184,8 @@ interface ProductFormBodyProps {
   form: ReturnType<typeof useForm<ProductFormData>>
   specRows: SpecRow[]
   setSpecRows: React.Dispatch<React.SetStateAction<SpecRow[]>>
+  featureRows: string[]
+  setFeatureRows: React.Dispatch<React.SetStateAction<string[]>>
   imagePreview: string | null
   isDragging: boolean
   uploadStatus: 'idle' | 'uploading' | 'done' | 'error'
@@ -198,36 +199,38 @@ interface ProductFormBodyProps {
   isEdit?: boolean
 }
 
-// ─── KEY FIX: memo stops parent image/drag state re-renders from hitting this ──
 const ProductFormBody = memo(function ProductFormBody({
   form, specRows, setSpecRows,
+  featureRows, setFeatureRows,
   imagePreview, isDragging, uploadStatus, imageError,
   onFileChange, onRemoveImage, onDragOver, onDragLeave, onDrop, fileInputRef,
   isEdit,
 }: ProductFormBodyProps) {
-  const { register, setValue, watch, formState: { errors } } = form
+  // ── FIX 2: destructure `control` alongside the rest ───────────────────────
+  const { register, setValue, control, formState: { errors } } = form
 
   const generateSlug = (name: string) =>
     name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
 
-  const featured    = watch('featured')
-  const category    = watch('category')    ?? ''
-  const subcategory = watch('subcategory') ?? ''
+  // ── FIX 3: useWatch — proper React hook subscription that works reliably
+  //    inside memo(). Unlike form.watch(), useWatch has its own internal
+  //    useState so it always triggers a re-render when the value changes,
+  //    regardless of memo's props comparison. ─────────────────────────────────
+  const featured  = useWatch({ control, name: 'featured' }) ?? false
+  const category  = useWatch({ control, name: 'category' }) ?? ''
 
-  // ─── KEY FIX: stable references so CategorySubcategorySelect never sees
-  //     new function identities on drag/upload state changes ─────────────────
-  const handleCategoryChange = useCallback((val: string) => {
-    setValue('category',    val, { shouldValidate: true  })
-    setValue('subcategory', '',  { shouldValidate: false }) // reset sub when cat changes
-  }, [setValue])
+  // Subcategory options derived from the live `category` value
+  const subcategoryOptions = PRODUCT_CATEGORIES.find(c => c.name === category)?.subcategories ?? []
 
-  const handleSubcategoryChange = useCallback((val: string) => {
-    setValue('subcategory', val, { shouldValidate: false })
-  }, [setValue])
+  const handleFeaturedToggle = () => {
+    setValue('featured', !featured, { shouldDirty: true })
+  }
 
-  const handleFeaturedToggle = useCallback(() => {
-    setValue('featured', !form.getValues('featured'), { shouldDirty: true })
-  }, [setValue, form])
+  // ── FIX 4: Capture the category register object so we can call BOTH its
+  //    own onChange (which notifies RHF internally) AND our reset logic.
+  //    Spreading {...register('category')} then adding a new onChange prop
+  //    silently replaces RHF's handler — useWatch never sees the change. ──────
+  const categoryField = register('category')
 
   return (
     <div className="space-y-4">
@@ -235,11 +238,15 @@ const ProductFormBody = memo(function ProductFormBody({
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label className={labelCls}>Name <span className="text-red-500">*</span></label>
-          <input {...register('name')} className={inputCls} placeholder="e.g. Stability Chamber 100L"
+          <input
+            {...register('name')}
+            className={inputCls}
+            placeholder="e.g. Stability Chamber 100L"
             onChange={e => {
               register('name').onChange(e)
               if (!isEdit) setValue('slug', generateSlug(e.target.value))
-            }} />
+            }}
+          />
           {errors.name && <p className={errCls}>{errors.name.message}</p>}
         </div>
         <div>
@@ -249,22 +256,42 @@ const ProductFormBody = memo(function ProductFormBody({
         </div>
       </div>
 
-      {/* Category + Subcategory */}
-      <div className="space-y-3">
+      {/* Category */}
+      <div>
+        <label className={labelCls}>Category <span className="text-red-500">*</span></label>
+        <select
+          {...categoryField}
+          className={inputCls}
+          onChange={e => {
+            categoryField.onChange(e)                            // ← RHF's own handler first
+            setValue('subcategory', '', { shouldValidate: false }) // then reset subcategory
+          }}
+        >
+          <option value="">Select a category…</option>
+          {PRODUCT_CATEGORIES.map(cat => (
+            <option key={cat.name} value={cat.name}>{cat.name}</option>
+          ))}
+        </select>
+        {errors.category && <p className={errCls}>{errors.category.message}</p>}
+      </div>
+
+      {/* Subcategory — only visible when a category with subcategories is chosen */}
+      {category && subcategoryOptions.length > 0 && (
         <div>
-          <CategorySubcategorySelect
-            category={category}
-            subcategory={subcategory}
-            onCategoryChange={handleCategoryChange}
-            onSubcategoryChange={handleSubcategoryChange}
-            required
-          />
-          {errors.category && <p className={errCls}>{errors.category.message}</p>}
+          <label className={labelCls}>Subcategory</label>
+          <select {...register('subcategory')} className={inputCls}>
+            <option value="">Select a subcategory…</option>
+            {subcategoryOptions.map(sub => (
+              <option key={sub} value={sub}>{sub}</option>
+            ))}
+          </select>
         </div>
-        <div>
-          <label className={labelCls}>Brand</label>
-          <input {...register('brand')} className={inputCls} placeholder="Aerosol Scientific" />
-        </div>
+      )}
+
+      {/* Brand */}
+      <div>
+        <label className={labelCls}>Brand</label>
+        <input {...register('brand')} className={inputCls} placeholder="Aerosol Scientific" />
       </div>
 
       {/* Short description */}
@@ -284,9 +311,45 @@ const ProductFormBody = memo(function ProductFormBody({
 
       {/* Tags */}
       <div>
-        <label className={labelCls}>Tags <span className="text-gray-300 font-normal normal-case tracking-normal">comma-separated</span></label>
-        <input {...register('tags')} className={inputCls}
-          placeholder="stability, chamber, thermolab" />
+        <label className={labelCls}>
+          Tags <span className="text-gray-300 font-normal normal-case tracking-normal">comma-separated</span>
+        </label>
+        <input {...register('tags')} className={inputCls} placeholder="stability, chamber, thermolab" />
+      </div>
+
+      {/* Key Features */}
+      <div>
+        <label className={labelCls}>
+          Key Features{' '}
+          <span className="text-gray-300 font-normal normal-case tracking-normal">shown as bullet points</span>
+        </label>
+        <div className="space-y-2">
+          {featureRows.map((feat, i) => (
+            <div key={i} className="flex gap-2 items-center">
+              <span className="text-gray-300 text-base shrink-0 select-none">•</span>
+              <input
+                value={feat}
+                placeholder={`Feature ${i + 1} (e.g. ±0.1°C temperature accuracy)`}
+                onChange={e => setFeatureRows(r => r.map((x, j) => j === i ? e.target.value : x))}
+                className={`${inputCls} flex-1`}
+              />
+              <button
+                type="button"
+                onClick={() => setFeatureRows(r => r.filter((_, j) => j !== i))}
+                className="p-1.5 rounded-lg hover:bg-red-50 text-red-400 hover:text-red-600 transition-colors shrink-0"
+              >
+                <X size={14} />
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => setFeatureRows(r => [...r, ''])}
+            className="flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors"
+          >
+            <Plus size={12} /> Add feature
+          </button>
+        </div>
       </div>
 
       {/* Specifications */}
@@ -328,7 +391,7 @@ const ProductFormBody = memo(function ProductFormBody({
         />
       </div>
 
-      {/* Featured toggle — no register(), purely setValue/watch controlled */}
+      {/* Featured toggle — reads from useWatch so it always reflects live form state */}
       <div className="flex items-center gap-3">
         <div
           role="switch"
@@ -360,12 +423,13 @@ function AddProductDialog({
   const [loading, setLoading] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [specRows, setSpecRows] = useState<SpecRow[]>([{ key: '', value: '' }])
+  const [featureRows, setFeatureRows] = useState<string[]>([''])
 
-  const [imageFile, setImageFile]   = useState<File | null>(null)
+  const [imageFile, setImageFile]       = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const [imageError, setImageError] = useState<string | null>(null)
+  const [imageError, setImageError]     = useState<string | null>(null)
   const [uploadStatus, setUploadStatus] = useState<'idle'|'uploading'|'done'|'error'>('idle')
-  const [isDragging, setIsDragging] = useState(false)
+  const [isDragging, setIsDragging]     = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const form = useForm<ProductFormData>({
@@ -376,7 +440,6 @@ function AddProductDialog({
     },
   })
 
-  // ─── Stable callbacks so ProductFormBody memo is never broken ──────────────
   const handleFileChange = useCallback((file: File) => {
     setImageError(null)
     if (!ACCEPTED.includes(file.type)) { setImageError('Invalid file type'); return }
@@ -391,13 +454,9 @@ function AddProductDialog({
     if (fileInputRef.current) fileInputRef.current.value = ''
   }, [])
 
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault(); setIsDragging(true)
-  }, [])
-
+  const handleDragOver  = useCallback((e: React.DragEvent) => { e.preventDefault(); setIsDragging(true) }, [])
   const handleDragLeave = useCallback(() => setIsDragging(false), [])
-
-  const handleDrop = useCallback((e: React.DragEvent) => {
+  const handleDrop      = useCallback((e: React.DragEvent) => {
     e.preventDefault(); setIsDragging(false)
     const f = e.dataTransfer.files?.[0]; if (f) handleFileChange(f)
   }, [handleFileChange])
@@ -432,6 +491,7 @@ function AddProductDialog({
         specifications,
         tags:              data.tags ? data.tags.split(',').map(t => t.trim()).filter(Boolean) : [],
         featured:          data.featured ?? false,
+        features:          featureRows.map(f => f.trim()).filter(Boolean),
       }
 
       const res = await fetch('/api/admin/products', {
@@ -470,6 +530,7 @@ function AddProductDialog({
             <div className="overflow-y-auto flex-1 p-5">
               <ProductFormBody
                 form={form} specRows={specRows} setSpecRows={setSpecRows}
+                featureRows={featureRows} setFeatureRows={setFeatureRows}
                 imagePreview={imagePreview} isDragging={isDragging}
                 uploadStatus={uploadStatus} imageError={imageError}
                 onFileChange={handleFileChange} onRemoveImage={handleRemoveImage}
@@ -510,13 +571,16 @@ function EditProductDialog({
   const [loading, setLoading] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [specRows, setSpecRows] = useState<SpecRow[]>(defaultSpecRows(product))
+  const [featureRows, setFeatureRows] = useState<string[]>(
+    product.features?.length ? product.features : ['']
+  )
 
-  const [imageFile, setImageFile]   = useState<File | null>(null)
+  const [imageFile, setImageFile]       = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(product.image_url ?? null)
-  const [imageError, setImageError] = useState<string | null>(null)
+  const [imageError, setImageError]     = useState<string | null>(null)
   const [uploadStatus, setUploadStatus] = useState<'idle'|'uploading'|'done'|'error'>('idle')
   const [removedExisting, setRemovedExisting] = useState(false)
-  const [isDragging, setIsDragging] = useState(false)
+  const [isDragging, setIsDragging]     = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const form = useForm<ProductFormData>({
@@ -534,7 +598,6 @@ function EditProductDialog({
     },
   })
 
-  // ─── Stable callbacks so ProductFormBody memo is never broken ──────────────
   const handleFileChange = useCallback((file: File) => {
     setImageError(null)
     if (!ACCEPTED.includes(file.type)) { setImageError('Invalid file type'); return }
@@ -549,13 +612,9 @@ function EditProductDialog({
     if (fileInputRef.current) fileInputRef.current.value = ''
   }, [])
 
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault(); setIsDragging(true)
-  }, [])
-
+  const handleDragOver  = useCallback((e: React.DragEvent) => { e.preventDefault(); setIsDragging(true) }, [])
   const handleDragLeave = useCallback(() => setIsDragging(false), [])
-
-  const handleDrop = useCallback((e: React.DragEvent) => {
+  const handleDrop      = useCallback((e: React.DragEvent) => {
     e.preventDefault(); setIsDragging(false)
     const f = e.dataTransfer.files?.[0]; if (f) handleFileChange(f)
   }, [handleFileChange])
@@ -598,6 +657,7 @@ function EditProductDialog({
         specifications,
         tags:              data.tags ? data.tags.split(',').map(t => t.trim()).filter(Boolean) : [],
         featured:          data.featured ?? false,
+        features:          featureRows.map(f => f.trim()).filter(Boolean),
       }
 
       const res = await fetch(`/api/admin/products/${product.id}`, {
@@ -636,6 +696,7 @@ function EditProductDialog({
             <div className="overflow-y-auto flex-1 p-5">
               <ProductFormBody
                 form={form} specRows={specRows} setSpecRows={setSpecRows}
+                featureRows={featureRows} setFeatureRows={setFeatureRows}
                 imagePreview={imagePreview} isDragging={isDragging}
                 uploadStatus={uploadStatus} imageError={imageError}
                 onFileChange={handleFileChange} onRemoveImage={handleRemoveImage}
@@ -672,12 +733,12 @@ function EditProductDialog({
 
 // ─── Main page ─────────────────────────────────────────────────────────────────
 export default function AdminProducts() {
-  const [products, setProducts]         = useState<Product[]>([])
-  const [search, setSearch]             = useState('')
-  const [loading, setLoading]           = useState(true)
-  const [showAdd, setShowAdd]           = useState(false)
-  const [editTarget, setEditTarget]     = useState<Product | null>(null)
-  const [deleteTarget, setDeleteTarget] = useState<Product | null>(null)
+  const [products, setProducts]           = useState<Product[]>([])
+  const [search, setSearch]               = useState('')
+  const [loading, setLoading]             = useState(true)
+  const [showAdd, setShowAdd]             = useState(false)
+  const [editTarget, setEditTarget]       = useState<Product | null>(null)
+  const [deleteTarget, setDeleteTarget]   = useState<Product | null>(null)
   const [deleteLoading, setDeleteLoading] = useState(false)
   const [toast, setToast] = useState<{ message: string; type: 'success'|'error' } | null>(null)
   const { invalidateCache } = useProductStore()

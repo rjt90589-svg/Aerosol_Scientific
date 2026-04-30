@@ -29,9 +29,10 @@ export async function GET(req: NextRequest) {
   return NextResponse.json(data ?? [])
 }
 
+
 // POST /api/admin/products
 export async function POST(req: NextRequest) {
-  const supabaseAdmin = createAdminClient() // ← moved inside
+  const supabaseAdmin = createAdminClient()
 
   let body: any
   try {
@@ -42,17 +43,17 @@ export async function POST(req: NextRequest) {
 
   const {
     name, slug: bodySlug, description, short_description, category,
+    subcategory,   // ← was missing
     brand, image_url, images, specifications, tags, featured,
+    features,      // ← was missing
   } = body
 
   if (!name || !category) {
     return NextResponse.json({ error: 'name and category are required' }, { status: 400 })
   }
 
-  // Use slug from form if provided, otherwise generate
   const slug = bodySlug || slugify(name)
 
-  // Check slug uniqueness
   const { data: existing } = await supabaseAdmin
     .from('products')
     .select('id')
@@ -74,13 +75,14 @@ export async function POST(req: NextRequest) {
       description: description || null,
       short_description: short_description || null,
       category,
-      subcategory: null,
+      subcategory: subcategory || null,   // ← was hardcoded null
       brand: brand || 'Aerosol Scientific',
       image_url: image_url || null,
       images: images || [],
       specifications: specifications || {},
       tags: tags || [],
       featured: featured ?? false,
+      features: features || [],           // ← was missing
     }])
     .select()
     .single()

@@ -158,6 +158,24 @@ export default function ProductDetailClient({ product, reviews: initialReviews, 
 
             <p className="text-gray-600 leading-relaxed mb-6">{product.description}</p>
 
+            {/* ── NEW: Key Features ──────────────────────────────────────────── */}
+            {product.features && product.features.length > 0 && (
+              <div className="mb-6">
+                <h3 className="font-semibold text-gray-900 mb-2.5 text-sm uppercase tracking-wide">
+                  Key Features
+                </h3>
+                <ul className="space-y-1.5">
+                  {product.features.map((feat, i) => (
+                    <li key={i} className="flex items-start gap-2.5 text-sm text-gray-600">
+                      <span className="mt-[5px] w-1.5 h-1.5 rounded-full bg-gradient-to-br from-[#1565C0] to-[#00838F] shrink-0" />
+                      {feat}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {/* ────────────────────────────────────────────────────────────────── */}
+
             {/* Specs */}
             {product.specifications && Object.keys(product.specifications).length > 0 && (
               <div className="bg-gray-50 rounded-xl p-4 mb-6">

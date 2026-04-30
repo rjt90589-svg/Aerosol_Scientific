@@ -13,6 +13,7 @@ export async function PUT(req: NextRequest, { params }: RouteContext) {
   const {
     name, description, short_description, category, subcategory,
     brand, image_url, images, specifications, tags, featured,
+    features,   // ← was missing
   } = body
 
   if (!name || !category) {
@@ -21,7 +22,6 @@ export async function PUT(req: NextRequest, { params }: RouteContext) {
 
   const supabase = createAdminClient()
 
-  
   const { data, error } = await supabase
     .from('products')
     .update({
@@ -36,6 +36,7 @@ export async function PUT(req: NextRequest, { params }: RouteContext) {
       specifications: specifications || {},
       tags: tags || [],
       featured: featured ?? false,
+      features: features || [],   // ← was missing
       updated_at: new Date().toISOString(),
     })
     .eq('id', id)
@@ -47,7 +48,6 @@ export async function PUT(req: NextRequest, { params }: RouteContext) {
   }
 
   if (!data || data.length === 0) {
-    console.error('[PUT /api/admin/products/[id]] 0 rows updated for id:', id)
     return NextResponse.json(
       { error: `No product found with id "${id}". It may have been deleted.` },
       { status: 404 },
