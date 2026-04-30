@@ -97,9 +97,9 @@ function SlideBackground({ bgImage, epoch }: { bgImage: string; epoch: number })
             background: `linear-gradient(
               105deg,
               rgba(5,12,32,0.92) 0%,
-              rgba(5,12,32,0.80) 15%,
-              rgba(5,12,32,0.50) 30%,
-              rgba(5,12,32,0.25) 50%
+              rgba(5,12,32,0.80) 25%,
+              rgba(5,12,32,0.50) 50%,
+              rgba(5,12,32,0.25) 80%
             )`,
           }}
         />
