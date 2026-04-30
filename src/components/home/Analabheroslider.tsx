@@ -20,16 +20,16 @@ const BG_POOL = [
   '/bg-img/3.jpg',
   '/bg-img/4.jpg',
   '/bg-img/5.jpg',
-  '/bg-img/6.jpg',
-  '/bg-img/7.jpg',
-  '/bg-img/8.jpg',
-'/bg-img/1.jpg',
+  '/bg-img/1.jpg',
   '/bg-img/2.jpg',
   '/bg-img/3.jpg',
   '/bg-img/4.jpg',
   '/bg-img/5.jpg',
-  '/bg-img/6.jpg',
-  '/bg-img/7.jpg',
+  '/bg-img/1.jpg',
+  '/bg-img/2.jpg',
+  '/bg-img/3.jpg',
+  '/bg-img/4.jpg',
+  '/bg-img/5.jpg',
 ]
 
 
@@ -95,9 +95,9 @@ function SlideBackground({ bgImage, epoch }: { bgImage: string; epoch: number })
             background: `linear-gradient(
               105deg,
               rgba(5,12,32,0.92) 0%,
-              rgba(5,12,32,0.80) 35%,
-              rgba(5,12,32,0.50) 60%,
-              rgba(5,12,32,0.25) 100%
+              rgba(5,12,32,0.80) 15%,
+              rgba(5,12,32,0.50) 30%,
+              rgba(5,12,32,0.25) 50%
             )`,
           }}
         />
