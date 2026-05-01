@@ -118,17 +118,19 @@ export default function AboutPage() {
             Our Mission
           </h2>
 
-          <p className="text-blue-100 leading-relaxed text-sm">
-         <li> 	Deliver high-quality laboratory equipment and consumables that meet the evolving needs of the scientific community.</li>
-            <li>	Ensure customer satisfaction through excellence in products, services, and support.</li>
-            <li>	Provide turnkey solutions, technical support, and after-sales services for laboratories.</li>
-            <li> Stay at the forefront of scientific innovation, enabling groundbreaking research. </li>
-            <li>	Promote sustainability by offering eco-friendly and efficient laboratory solutions.</li>
-              <li>	Foster long-term partnerships with research institutions, testing labs, and industries worldwide.</li>
-          </p>
+          <ul className="text-teal-100 space-y-2 text-sm leading-relaxed">
+         <li>•	Deliver high-quality laboratory equipment and consumables that meet the evolving needs of the scientific community.</li>
+            <li>•	Ensure customer satisfaction through excellence in products, services, and support.</li>
+            <li>•	Provide turnkey solutions, technical support, and after-sales services for laboratories.</li>
+            <li>• Stay at the forefront of scientific innovation, enabling groundbreaking research. </li>
+            <li>•	Promote sustainability by offering eco-friendly and efficient laboratory solutions.</li>
+              <li>•	Foster long-term partnerships with research institutions, testing labs, and industries worldwide.</li>
+          </ul>
+          
            <p className="mt-5 font-semibold text-white">
              Shaping the Future of Science with Innovation & Excellence
           </p>
+
         </div>
       </motion.div>
 
