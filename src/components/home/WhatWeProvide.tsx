@@ -6,6 +6,15 @@ import { ArrowRight, Package, Beaker, Microscope, Wrench } from 'lucide-react'
 import SectionHeading from '@/components/ui/SectionHeading'
 
 const categories = [
+   {
+    icon: Microscope,
+    title: 'Laboratory Instruments',
+    description: 'HPLC, GC, LCMS, GCMS, ICPMS, spectroscopy instruments from Agilent, Waters, Shimadzu, Sciex.',
+    items: ['HPLC Systems', 'GC Systems', 'Mass Spectrometers', 'Spectroscopy'],
+    gradient: 'from-[#6A1B9A] to-[#1565C0]',
+    href: '/products?category=Analytical Instruments',
+    image: null,
+  },
   {
     icon: Beaker,
     title: 'Chromatography Consumables',
@@ -15,18 +24,10 @@ const categories = [
     href: '/products?category=Chromatography Consumables',
     image: 'https://aerosolscientific.com/wp-content/uploads/2026/04/Wholesale-Amber-1-5ml-9mm-Vial-Screw-HPLC-Gc-Vial-V935-V937-Economy-.avif',
   },
-  {
-    icon: Microscope,
-    title: 'Analytical Instruments',
-    description: 'HPLC, GC, LCMS, GCMS, ICPMS, spectroscopy instruments from Agilent, Waters, Shimadzu, Sciex.',
-    items: ['HPLC Systems', 'GC Systems', 'Mass Spectrometers', 'Spectroscopy'],
-    gradient: 'from-[#6A1B9A] to-[#1565C0]',
-    href: '/products?category=Analytical Instruments',
-    image: null,
-  },
+ 
   {
     icon: Wrench,
-    title: 'Laboratory Furniture',
+    title: 'Laboratory Fitout & Turnkey projects',
     description: 'SS furniture, chemical storage, fume hoods, anti-vibration tables, safety cabinets for lab compliance.',
     items: ['Lab Benches', 'Fume Hoods', 'Chemical Cabinets', 'Safety Equipment'],
     gradient: 'from-[#2E7D32] to-[#00838F]',
