@@ -20,20 +20,20 @@ const BG_POOL = [
   '/bg-img/3.jpg',
   '/bg-img/4.jpg',
   '/bg-img/5.jpg',
-  '/bg-img/1.jpg',
+  '/bg-img/6.jpg',
   '/bg-img/2.jpg',
   '/bg-img/3.jpg',
   '/bg-img/4.jpg',
   '/bg-img/5.jpg',
+  '/bg-img/6.jpg',
   '/bg-img/1.jpg',
   '/bg-img/2.jpg',
   '/bg-img/3.jpg',
   '/bg-img/4.jpg',
-  '/bg-img/5.jpg',
 ]
 
 
-const FALLBACK_BG = '/bg-img/1.jpg'
+const FALLBACK_BG = '/bg-img/6.jpg'
 
 
 // ─── Map Supabase Product → slide shape ───────────────────────────────────────
