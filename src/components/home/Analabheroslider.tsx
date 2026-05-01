@@ -16,7 +16,7 @@ const DURATION = 3500
 // Indexed by slug — add an entry whenever you mark a new product as featured.
 const BG_POOL = [
   '/bg-img/1.jpg',
-  '/bg-img/2.jpg',
+  '/bg-img/2.png',
   '/bg-img/3.jpg',
   '/bg-img/4.jpg',
   '/bg-img/5.jpg',
