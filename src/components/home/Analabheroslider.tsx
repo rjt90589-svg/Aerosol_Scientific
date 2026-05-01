@@ -21,15 +21,16 @@ const BG_POOL = [
   '/bg-img/4.jpg',
   '/bg-img/5.jpg',
   '/bg-img/6.jpg',
-  '/bg-img/2.jpg',
+  '/bg-img/7.jpg',
+  '/bg-img/8.jpg',
+  '/bg-img/1.jpg',
+  '/bg-img/2.png',
   '/bg-img/3.jpg',
   '/bg-img/4.jpg',
   '/bg-img/5.jpg',
   '/bg-img/6.jpg',
-  '/bg-img/1.jpg',
-  '/bg-img/2.jpg',
-  '/bg-img/3.jpg',
-  '/bg-img/4.jpg',
+  '/bg-img/7.jpg',
+  
 ]
 
 
