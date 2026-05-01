@@ -122,7 +122,7 @@ function SlideBackground({ bgImage, epoch }: { bgImage: string; epoch: number })
           className="absolute inset-0"
           style={{ background: 'linear-gradient(90deg, rgba(18,81,163,0.22) 0%, transparent 55%)' }}
         /> */}
-        {/* Bottom vignette for nav bar */}
+        {/* Bottom vignette for nav bar */}   
         <div
           className="absolute bottom-0 left-0 right-0 h-24"
           style={{ background: 'linear-gradient(to top, rgba(5,12,32,0.70) 0%, transparent 100%)' }}
