@@ -95,7 +95,7 @@ const FEATURED: {
       },
     ],
     products: [
-      { name: 'Autoclave with Basket', image: '/partnerpage/witeg/autoclave-with-basket.png' },
+      // { name: 'Autoclave with Basket', image: '/partnerpage/witeg/autoclave-with-basket.png' },
       { name: 'Vortex Mixer', image: '/partnerpage/witeg/vortex-mixer.jpg' },
       { name: 'Thermal Shaker', image: '/partnerpage/witeg/thermal-shaker.jpg' },
       { name: 'Magnetic Stirrer 1500 RPM', image: '/partnerpage/witeg/magnetic-stirrer.jpg' },
