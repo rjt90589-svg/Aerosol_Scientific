@@ -11,6 +11,7 @@ import {
 } from 'lucide-react'
 import SectionHeading from '@/components/ui/SectionHeading'
 import { toast } from 'sonner'
+import ReactCountryFlag from 'react-country-flag'
 
 const schema = z.object({
   full_name: z.string().min(2, 'Name required'),
@@ -28,7 +29,8 @@ const AREAS   = ['Chromatography Consumables', 'Lab Instruments', 'Turnkey Lab S
 
 const OFFICES = [
   {
-    flag: '🇦🇪', title: 'Dubai, UAE',
+    flag: <ReactCountryFlag className='mx-2'  countryCode="AE" svg style={{ width: '16px', height: '12px' }} />
+                       , title: 'Dubai, UAE',
     address: '108-AL MAZROUA, AN-2',
     city: 'Dubai, United Arab Emirates',
     phone: '+971-547598109',
@@ -38,7 +40,8 @@ const OFFICES = [
     gradient: 'from-[#1251A3] to-[#0891B2]',
   },
   {
-    flag: '🇮🇳', title: 'New Delhi, India',
+    flag: <ReactCountryFlag className='mx-2'  countryCode="IN" svg style={{ width: '16px', height: '12px' }} />
+                       , title: 'New Delhi, India',
     address: 'F-4, 1st Floor, Karka Duma',
     city: 'New Delhi - 110092',
     phone: '+91 98919 38724',
@@ -115,7 +118,7 @@ export default function ContactSection() {
                 <div className={`h-1 w-full bg-gradient-to-r ${office.gradient}`} />
                 <div className="p-5">
                   <div className="flex items-center gap-2.5 mb-3">
-                    <span className="text-2xl">{office.flag}</span>
+                     {office.flag}                    
                     <div>
                       <div className="font-display font-bold text-[#0A1628] text-sm">{office.title}</div>
                       <div className="flex items-center gap-1 text-[11px] text-[#7B90B2]">

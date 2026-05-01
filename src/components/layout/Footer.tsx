@@ -59,7 +59,7 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold text-sm uppercase tracking-wider text-[#00ACC1] mb-4">
               
-               <ReactCountryFlag  countryCode="AE" svg style={{ width: '16px', height: '12px' }} />
+               <ReactCountryFlag className='mx-2'  countryCode="AE" svg style={{ width: '16px', height: '12px' }} />
                                 UAE Office</h4>
             <ul className="space-y-3">
               <li className="flex gap-2.5 text-gray-400 text-sm">
@@ -83,7 +83,8 @@ export default function Footer() {
 
           {/* India Office */}
           <div>
-            <h4 className="font-semibold text-sm uppercase tracking-wider text-[#00ACC1] mb-4"> <ReactCountryFlag  countryCode="IN" svg style={{ width: '16px', height: '12px' }} />
+            <h4 className="font-semibold text-sm uppercase tracking-wider text-[#00ACC1] mb-4">
+               <ReactCountryFlag className='mx-2'  countryCode="IN" svg style={{ width: '16px', height: '12px' }} />
                               INDIA Office
                               </h4>
             <ul className="space-y-3">
