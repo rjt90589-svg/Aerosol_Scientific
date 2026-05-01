@@ -23,7 +23,7 @@ export default function TopBar() {
 
   return (
     <div className="bg-sci-blue text-white text-xs">
-      <div className="max-w-7xl mx-auto px-4 py-2">
+      <div className="max-w-7xl mx-auto px-2 py-3">
 
         {/* ───────── DESKTOP ───────── */}
         <div className="hidden md:flex items-center justify-between gap-4">
@@ -65,11 +65,32 @@ export default function TopBar() {
           <div className="flex items-center gap-4">
 
             {/* Socials */}
-            <div className="flex items-center gap-3 mr-10">
-              <FaFacebookF />
-              <FaInstagram />
-              <FaLinkedinIn />
-            </div>
+           <div className="flex items-center gap-3 mr-10">
+
+  <a
+    href="#"
+    className="hover:opacity-80 transition"
+  >
+    <FaFacebookF size={16} />
+  </a>
+
+  <a
+    href="#"
+    className="hover:opacity-80 transition"
+  >
+    <FaInstagram size={16} />
+  </a>
+
+  <a
+    href="https://in.linkedin.com/company/aerosol-scientific"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="hover:opacity-80 transition"
+  >
+    <FaLinkedinIn size={16} />
+  </a>
+
+</div>
 
             {/* Office switch */}
             <div className="flex items-center gap-2 ">
@@ -156,7 +177,15 @@ export default function TopBar() {
             <div className="flex items-center gap-3 pt-1">
               <FaFacebookF />
               <FaInstagram />
-              <FaLinkedinIn />
+              
+             <a
+    href="https://in.linkedin.com/company/aerosol-scientific"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="hover:opacity-80 transition"
+  >
+    <FaLinkedinIn  />
+  </a>
             </div>
 
             {/* Office switch */}
