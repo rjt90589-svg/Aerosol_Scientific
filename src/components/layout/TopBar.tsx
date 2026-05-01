@@ -23,7 +23,7 @@ export default function TopBar() {
 
   return (
     <div className="bg-sci-blue text-white text-xs">
-      <div className="max-w-7xl mx-auto px-2 py-3">
+      <div className="max-w-7xl mx-auto px-2 py-2.5">
 
         {/* ───────── DESKTOP ───────── */}
         <div className="hidden md:flex items-center justify-between gap-4">
