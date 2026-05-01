@@ -4,30 +4,36 @@ import { motion } from 'framer-motion'
 import PageHero from '@/components/ui/PageHero'
 import SectionHeading from '@/components/ui/SectionHeading'
 import Link from 'next/link'
-import { Check, ArrowRight, ExternalLink } from 'lucide-react'
+import { Check, ArrowRight } from 'lucide-react'
 
+const imgs = {
+  "multivendor" : "/services/multivendor-1.jpg",
+  "contracts" : "/services/SERVICE-CONTRACT-1.jpg",
+  "lab-supplies" : "/services/multivendor-2.jpg",
+  "training" : "/services/Trainings-Workshop-1.jpg",
+}
 // Real images from aerosolscientific.com
 const services = [
   {
     id: 'multivendor',
     title: 'Multi-Vendor Support',
-    image: 'https://aerosolscientific.com/wp-content/uploads/2025/11/multivendor-1.jpg',
+    image: imgs.multivendor,
     tagline: 'All Brands — One Trusted Service Partner',
     description: 'Multivendor support for Analytical instruments in different industries with experienced professionals at low cost — maintaining quality with fast services. By associating with us, we ensure to give the best that will leverage your business to the next level.',
     subServices: [
       {
         title: 'Gas & Liquid Chromatography, Spectroscopy',
-        image: 'https://aerosolscientific.com/wp-content/uploads/2025/11/multivendor-350x204.jpg',
+        image: '/services/multivendor-350x204.jpg',
         items: ['Installations', 'Repair / Services', 'Maintenance / PM'],
       },
       {
         title: 'Gas Generators',
-        image: 'https://aerosolscientific.com/wp-content/uploads/2025/11/Generators-300x204.jpg',
+        image: '/services/Generators-300x204.jpg',
         items: ['Installations', 'Repair / Services', 'Maintenance / PM'],
       },
       {
         title: 'Small Equipment & Lab Solutions',
-        image: 'https://aerosolscientific.com/wp-content/uploads/2025/11/Lab-Supplies-350x204.jpg',
+        image: '/services/Lab-Supplies-350x204.jpg',
         items: ['Installations', 'Repair / Services', 'Maintenance / PM'],
       },
     ],
@@ -37,7 +43,7 @@ const services = [
   {
     id: 'contracts',
     title: 'Service Contracts',
-    image: 'https://aerosolscientific.com/wp-content/uploads/2025/11/SERVICE-CONTRACT-1.jpg',
+    image: imgs.contracts,
     tagline: 'Flexible Plans — Best Coverage & Fastest Support',
     description: 'Get the best, fastest service for your lab instruments with comprehensive, labor, or trade maintenance contracts. Our contracts are designed to minimize downtime and maximize the lifespan of your instruments.',
     features: [
@@ -56,25 +62,25 @@ const services = [
   {
     id: 'lab-supplies',
     title: 'Lab Supplies',
-    image: 'https://aerosolscientific.com/wp-content/uploads/2025/11/multivendor-2.jpg',
+    image: imgs['lab-supplies'],
     tagline: 'High-Quality Supplies for Every Lab Need',
     description: 'We provide a wide range of high-quality laboratory supplies designed to support analytical laboratories and enhance efficiency, accuracy, and compliance. Lab supplies we offer based on your needs and brand requirements.',
     supplyImages: [
-      { title: 'GC Columns', image: 'https://aerosolscientific.com/wp-content/uploads/2025/11/GC-Column-2-1.jpg' },
-      { title: 'HPLC Columns', image: 'https://aerosolscientific.com/wp-content/uploads/2025/11/HPLC-Columns-2.jpg' },
-      { title: 'PM Kits', image: 'https://aerosolscientific.com/wp-content/uploads/2025/11/PM-Kits-283x204.jpg' },
-      { title: 'Glass/PP Vials & Caps', image: 'https://aerosolscientific.com/wp-content/uploads/2025/11/40-350x204.jpg' },
-      { title: 'Liner & Septa for GC', image: 'https://aerosolscientific.com/wp-content/uploads/2025/11/Liner-and-Septa-3-300x204.jpg' },
-      { title: 'Centrifuge Tubes', image: 'https://aerosolscientific.com/wp-content/uploads/2025/11/Vials-Caps-315x204.png' },
-      { title: 'Pipette Tips & Sample Prep', image: 'https://aerosolscientific.com/wp-content/uploads/elementor/thumbs/6073303-P50-MDT-Pipette-Tips-50uL-700x700px-rfhgj23poapg2okc93sc1f9sh2fanxnedil0xgwmns.webp' },
-      { title: 'Aerosol Consumables', image: 'https://aerosolscientific.com/wp-content/uploads/2025/11/30.jpg' },
+      { title: 'GC Columns', image: '/services/GC-Column-2-1.jpg' },
+      { title: 'HPLC Columns', image: '/services/HPLC-Columns-2.jpg' },
+      { title: 'PM Kits', image: '/services/PM-Kits-283x204.jpg' },
+      { title: 'Glass/PP Vials & Caps', image: '/services/glasspp.jpg' },
+      { title: 'Liner & Septa for GC', image: '/services/Liner-and-Septa-3-300x204.jpg' },
+      { title: 'Centrifuge Tubes', image: '/services/Vials-Caps-315x204.png' },
+      { title: 'Pipette Tips & Sample Prep', image: '/services/6073303-P50-MDT-Pipette-Tips-50uL.jpg' },
+      { title: 'Aerosol Consumables', image: '/services/aerosol_consumable.jpg' },
     ],
     gradient: 'from-[#2E7D32] to-[#0891B2]',
   },
   {
     id: 'training',
     title: 'Trainings & Workshop',
-    image: 'https://aerosolscientific.com/wp-content/uploads/2025/11/Trainings-Workshop-1.jpg',
+    image: imgs.training,
     tagline: 'Knowledge Transfer — Academic & Corporate',
     description: 'Collaboration with academic institutions, pharma labs, and research organizations to train and support laboratory teams with practical hands-on knowledge in chromatography and analytical techniques.',
     features: [
@@ -109,10 +115,10 @@ export default function ServicesPage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { title: 'Trainings & Workshop', image: 'https://aerosolscientific.com/wp-content/uploads/2025/11/Trainings-Workshop-1.jpg', href: '#training' },
-              { title: 'Multivendor Support', image: 'https://aerosolscientific.com/wp-content/uploads/2025/11/multivendor-1.jpg', href: '#multivendor' },
-              { title: 'Service Contracts', image: 'https://aerosolscientific.com/wp-content/uploads/2025/11/SERVICE-CONTRACT-1.jpg', href: '#contracts' },
-              { title: 'Lab Supplies', image: 'https://aerosolscientific.com/wp-content/uploads/2025/11/multivendor-2.jpg', href: '#lab-supplies' },
+              { title: 'Trainings & Workshop', image: imgs.training, href: '#training' },
+              { title: 'Multivendor Support', image: imgs.multivendor, href: '#multivendor' },
+              { title: 'Service Contracts', image: imgs.contracts, href: '#contracts' },
+              { title: 'Lab Supplies', image: imgs['lab-supplies'], href: '#lab-supplies' },
             ].map((s, i) => (
               <motion.a
                 key={s.title}
