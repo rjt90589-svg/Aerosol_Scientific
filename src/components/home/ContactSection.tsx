@@ -216,8 +216,8 @@ export default function ContactSection() {
                   {/* Name + Email */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {([
-                      { name: 'full_name', label: 'Full Name',      placeholder: 'Dr. Raj Kumar', type: 'text'  },
-                      { name: 'email',     label: 'Email Address',   placeholder: 'raj@lab.com',   type: 'email' },
+                      { name: 'full_name', label: 'Full Name',      placeholder: 'Dr. kumar', type: 'text'  },
+                      { name: 'email',     label: 'Email Address',   placeholder: 'kumar@gmail.com',   type: 'email' },
                     ] as const).map(({ name, label, placeholder, type }) => (
                       <div key={name}>
                         <label className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#7B90B2] mb-2 block">
