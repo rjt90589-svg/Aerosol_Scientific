@@ -282,7 +282,7 @@ export default function ServicesPage() {
                 </Link>
               </div>
               <div className="rounded-2xl overflow-hidden shadow-xl">
-                <img src={services[3].image} alt="Training" className="w-full h-72 object-cover" />
+                <img src={services[3].image} alt="Training" className="w-full h-full object-cover" />
               </div>
             </div>
           </motion.div>
