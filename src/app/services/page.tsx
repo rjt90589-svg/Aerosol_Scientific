@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { Check, ArrowRight } from 'lucide-react'
 
 const imgs = {
-  "multivendor" : "/services/multivendor-1.jpg",
+  "multivendor" : "/services/multivendor-1.jpeg",
   "contracts" : "/services/SERVICE-CONTRACT-1.jpg",
   "lab-supplies" : "/services/multivendor-2.jpg",
   "training" : "/services/Trainings-Workshop-1.jpg",
@@ -23,7 +23,7 @@ const services = [
     subServices: [
       {
         title: 'Gas & Liquid Chromatography, Spectroscopy',
-        image: '/services/multivendor-350x204.jpg',
+        image: '/services/multivendor-1.jpeg',
         items: ['Installations', 'Repair / Services', 'Maintenance / PM'],
       },
       {
@@ -127,9 +127,9 @@ export default function ServicesPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="group relative overflow-hidden rounded-2xl aspect-[4/3] block cursor-pointer"
+                className="group relative overflow-hidden rounded-2xl aspect-4/3 block cursor-pointer"
               >
-                <img src={s.image} alt={s.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <img src={s.image} alt={s.title} className="w-full h-full object-fit group-hover:scale-105 transition-transform duration-500" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4">
                   <h3 className="font-bold text-white text-base">{s.title}</h3>
@@ -167,7 +167,7 @@ export default function ServicesPage() {
                 </Link>
               </div>
               <div className="rounded-2xl overflow-hidden shadow-xl">
-                <img src={services[0].image} alt="Multi-vendor support" className="w-full h-64 object-cover" />
+                <img src={services[0].image} alt="Multi-vendor support" className="w-full h-full object-cover" />
               </div>
             </div>
 
@@ -200,7 +200,7 @@ export default function ServicesPage() {
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
               <div className="rounded-2xl overflow-hidden shadow-xl lg:order-2">
-                <img src={services[1].image} alt="Service contracts" className="w-full h-64 object-cover" />
+                <img src={services[1].image} alt="Service contracts" className="w-full h-full object-cover" />
               </div>
               <div className="lg:order-1">
                 <div className="inline-flex items-center gap-2 bg-sci-blue text-white border border-teal-100 px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider mb-4">
