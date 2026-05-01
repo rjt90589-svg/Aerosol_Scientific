@@ -26,7 +26,7 @@ const FEATURED: {
   {
     id: 'thermolab',
     name: 'Thermolab Scientific Equipments',
-    logo: 'https://aerosolscientific.com/wp-content/uploads/2025/11/Thermolab-512x512-bg-300x300.jpg',
+    logo: PARTNERS.find((p) => p.name === 'Thermolab Scientific')?.logo ?? '',
     website: 'https://thermolabscientific.com/',
     tagline: 'Stability Chambers, Cold Rooms & Controlled Environment Solutions',
     accent: '#1251A3',
@@ -58,7 +58,7 @@ const FEATURED: {
   {
     id: 'witeg',
     name: 'Witeg Germany',
-    logo: 'https://aerosolscientific.com/wp-content/uploads/2025/10/Witeg-Germany-logo.jpg',
+    logo: PARTNERS.find((p) => p.name === 'Witeg Germany')?.logo ?? '',
     website: 'https://www.witeg.de/en/',
     tagline: 'Laboratory Glassware, Equipment & Liquid Handling — 30,000+ Products',
     accent: '#0891B2',
@@ -116,7 +116,7 @@ const FEATURED: {
   {
     id: 'fdgsi',
     name: 'FDGSi',
-    logo: 'https://aerosolscientific.com/wp-content/uploads/2025/10/FDGS-logo.jpg',
+    logo: PARTNERS.find((p) => p.name === 'FDGSi')?.logo ?? '',
     website: 'https://www.f-dgs.com/',
     tagline: 'French Manufacturer of High-Performance Gas Generators for Analytical Labs',
     accent: '#2E7D32',
@@ -179,7 +179,7 @@ const FEATURED: {
   {
     id: 'pci',
     name: 'PCi Analytics',
-    logo: 'https://aerosolscientific.com/wp-content/uploads/2025/10/Pci-Analytics-logo.jpg',
+    logo: PARTNERS.find((p) => p.name === 'PCi Analytics')?.logo ?? '',
     website: '#',
     tagline: 'Indian Manufacturer of Gas Generators, Analytical Instruments & Lab Utilities',
     accent: '#6A1B9A',
