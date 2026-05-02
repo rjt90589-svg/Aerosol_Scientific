@@ -9,7 +9,7 @@ import { useProductStore } from '@/lib/store/productStore'
 import type { Product } from '@/types'
 
 
-const DURATION = 3500
+const DURATION = 2500
 
 
 // ─── Static bg images served from /public/bg-img/ ────────────────────────────
@@ -58,10 +58,10 @@ function productToSlide(p: Product, index: number) {
 function SlideUp({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 58 }}
+      initial={{ opacity: 0, y: 60 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -12, transition: { duration: 0.3 } }}
-      transition={{ duration: 0.52, delay, ease: [0.22, 1, 0.36, 1] }}
+      exit={{ opacity: 0, y: -12, transition: { duration: 0.4 } }}
+      transition={{ duration: 0.60, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
@@ -71,10 +71,10 @@ function SlideUp({ children, delay = 0 }: { children: React.ReactNode; delay?: n
 function SlideDown({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: -58 }}
+      initial={{ opacity: 0, y: -60 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -12, transition: { duration: 0.3 } }}
-      transition={{ duration: 0.52, delay, ease: [0.22, 1, 0.36, 1] }}
+      exit={{ opacity: 0, y: -12, transition: { duration: 0.4 } }}
+      transition={{ duration: 0.60, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
@@ -227,7 +227,8 @@ const slides = getFeatured().map((p, i) => productToSlide(p, i))
       className="relative w-full overflow-hidden select-none"
       style={{ minHeight: 'min(90vh, 660px)' }}
       // onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
+      // onMouseLeave={() => setPaused(false)}
+      
     >
       {/* ── Full-screen panning background ── */}
       <SlideBackground bgImage={s.bgImage} epoch={epoch} />
@@ -264,7 +265,7 @@ const slides = getFeatured().map((p, i) => productToSlide(p, i))
 
 
               {/* Product title */}
-              <SlideDown delay={0.3}>
+              <SlideDown delay={0.4} >
                 <Link href={`/products/${s.slug}`}>
                   <h1
                     className="font-bold leading-tight mb-1 text-sci-cyan hover:text-white transition-colors cursor-pointer"
@@ -334,9 +335,11 @@ const slides = getFeatured().map((p, i) => productToSlide(p, i))
               <div
                 className="relative w-full flex items-center justify-center cursor-pointer group"
                 style={{ maxWidth: 500, aspectRatio: '1 / 1', margin: '0 auto' }}
+                  onMouseLeave={() => setPaused(false)} onMouseEnter={() => setPaused(true)} 
               >
                 {/* Glowing halo */}
                 <div
+               
                   className="absolute inset-0"
                   style={{
                     background: 'radial-gradient(ellipse 72% 62% at 50% 54%, rgba(56,189,248,0.18) 0%, transparent 68%)',
@@ -355,6 +358,8 @@ const slides = getFeatured().map((p, i) => productToSlide(p, i))
 
                 {/* Counter-spinning inner ring */}
                 <motion.div
+                 
+
                   className="absolute rounded-full pointer-events-none"
                   style={{ inset: '18%', border: '1px dashed rgba(56,189,248,0.12)' }}
                   animate={{ rotate: -360 }}
@@ -450,7 +455,7 @@ const slides = getFeatured().map((p, i) => productToSlide(p, i))
 
           {/* Auto-play progress bar */}
           <div
-            className="flex-1 hidden sm:block max-w-[180px] rounded-full overflow-hidden"
+            className="flex-1 hidden sm:block max-w-45 rounded-full overflow-hidden"
             style={{ height: 2, background: 'rgba(255,255,255,0.1)' }}
           >
             {!paused && (
