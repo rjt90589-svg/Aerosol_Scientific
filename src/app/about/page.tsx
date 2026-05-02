@@ -169,7 +169,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── Our Partners ───────────────────────────── */}
-      <section className="py-14 bg-gray-50 border-y border-gray-100">
+      {/* <section className="py-14 bg-gray-50 border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col items-center mb-10">
             <SectionHeading eyebrow="Trusted Brands" title="Our Partners" centered />
@@ -190,7 +190,7 @@ export default function AboutPage() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ── Mission & Vision ───────────────────────── */}
       <section className="py-16 bg-gradient-to-br from-gray-50 to-blue-50/30 relative overflow-hidden">
@@ -273,7 +273,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
             <div className="space-y-4">
               {thermolabProducts.map((product, i) => (
                 <motion.div
@@ -315,7 +315,7 @@ export default function AboutPage() {
                 </div>
               ))}
             </motion.div>
-          </div>
+          </div> */}
         </div>
       </section>
 
