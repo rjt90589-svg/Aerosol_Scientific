@@ -25,7 +25,7 @@ export const NAV_LINKS = [
 
 export const PRODUCT_CATEGORIES = [
   {
-    name: "Core Laboratory Equipment (Thermolab Scientific)",
+    name: "Pricision Lab Equipments-Thermolab Scientific",
     subcategories: [
       "Stability / Photostability chambers",
       "Biological/BOD Incubators",
@@ -139,7 +139,7 @@ export const PRODUCT_CATEGORIES = [
 ] as const;
 
 export const CATEGORY_ICONS: Record<string, string> = {
-  "Core Laboratory Equipment (Thermolab Scientific)": "🏭", // heavy systems / infrastructure
+  "Pricision Lab Equipments-Thermolab Scientific": "🏭", // heavy systems / infrastructure
 
   "General Laboratory Equipment": "🧪", // generic lab tools
 

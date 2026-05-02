@@ -10,7 +10,7 @@ const imgs = {
   "multivendor" : "/services/multivendor-1.jpeg",
   "contracts" : "/services/SERVICE-CONTRACT-1.jpg",
   "lab-supplies" : "/services/multivendor-2.jpg",
-  "training" : "/services/Trainings-Workshop-1.jpg",
+  "training" : "/services/Trainings-Workshop-1.png",
 }
 // Real images from aerosolscientific.com
 const services = [

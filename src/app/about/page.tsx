@@ -46,7 +46,7 @@ export default function AboutPage() {
       <PageHero
         eyebrow="Who We Are"
         title="Company Overview"
-        subtitle="A trusted partner for complete laboratory solutions — from instruments to turnkey lab projects."
+        subtitle="Aerosol Scientific aim to support customers with multi level holistic approach for all laboratory demands including turn key project as a trusted partner —Our focus is quality delivery and  meeting our customer's  expectation.  We assure to provide the on-time sales/services delivery and support"
       />
 
       {/* ── Overview ───────────────────────────────── */}
