@@ -147,7 +147,7 @@ export default function AboutPage() {
             <div className="mt-6 flex flex-col gap-2 text-sm text-gray-600">
               <div className="flex items-center gap-2">
                 <Phone size={14} className="text-[#1565C0]" />
-                <span>+971 547 598 109 &nbsp;|&nbsp; +971 562 394 450 &nbsp;|&nbsp; +971 4 324 7511</span>
+                <span>+971 547 598 109 |&nbsp; +91 98919 38724</span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail size={14} className="text-[#1565C0]" />
