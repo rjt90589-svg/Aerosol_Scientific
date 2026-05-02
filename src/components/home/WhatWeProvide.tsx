@@ -9,10 +9,29 @@ const categories = [
    {
     icon: Microscope,
     title: 'Laboratory Instruments',
-    description: 'HPLC, GC, LCMS, GCMS, ICPMS, spectroscopy instruments from Agilent, Waters, Shimadzu, Sciex.',
+    description: 'General laboratory equipments, Analytical instruments and Chromatography products, consumables, chemicals supplies, testing kits, gas solutions, medical and pharma products, refurbished hplc/gc instruments from various brands, turn key lab solutions and furnitures and many more to serve your lab needs.',
     items: ['HPLC Systems', 'GC Systems', 'Mass Spectrometers', 'Spectroscopy'],
     gradient: 'from-[#6A1B9A] to-[#1565C0]',
-    href: '/products?category=Analytical Instruments',
+    href: '/products?category=General Laboratory Equipment',
+    image: null,
+  },
+    {
+    icon: Wrench,
+    title: 'Laboratory Fitout & Turnkey projects',
+    description: "We facilitate complete lab setups in a fully compliant environment, including government approvals. Complete lab setup and instruments, Laboratory furnitures,chemical storage, lab seatings, Lab gas systems and fittings, Emergency equipment-safety shower & eye wash station, fume hood & extraction system etc.",
+    items: ['Lab Benches', 'Fume Hoods', 'Chemical Cabinets', 'Safety Equipment'],
+    gradient: 'from-[#2E7D32] to-[#00838F]',
+    href: '/products?category=Turn key projects',
+    image: null,
+  },
+  
+  {
+    icon: Package,
+    title: 'Lab Supplies',
+    description: 'General laboratory supplies, glassware, plasticware, and consumables from multiple brands world wide- Witeg, Kern, BRAND, ABDOS, Thermoscientific, waters, Agilent, shimadzu, Sartorius,  Eppendorf, MiliQ and many more as per you demand.',
+    items: ['Glassware', 'Plasticware', 'Lab Consumables', 'Safety Equipment'],
+    gradient: 'from-[#E65100] to-[#AD1457]',
+    href: '/products?category=Pricision Lab Equipments-Thermolab Scientific',
     image: null,
   },
   {
@@ -25,24 +44,7 @@ const categories = [
     image: 'https://aerosolscientific.com/wp-content/uploads/2026/04/Wholesale-Amber-1-5ml-9mm-Vial-Screw-HPLC-Gc-Vial-V935-V937-Economy-.avif',
   },
  
-  {
-    icon: Wrench,
-    title: 'Laboratory Fitout & Turnkey projects',
-    description: 'SS furniture, chemical storage, fume hoods, anti-vibration tables, safety cabinets for lab compliance.',
-    items: ['Lab Benches', 'Fume Hoods', 'Chemical Cabinets', 'Safety Equipment'],
-    gradient: 'from-[#2E7D32] to-[#00838F]',
-    href: '/products?category=Turn key projects',
-    image: null,
-  },
-  {
-    icon: Package,
-    title: 'Lab Supplies & Plasticware',
-    description: 'General laboratory supplies, glassware, plasticware, and consumables from Witeg Germany and other brands.',
-    items: ['Glassware', 'Plasticware', 'Lab Consumables', 'Safety Equipment'],
-    gradient: 'from-[#E65100] to-[#AD1457]',
-    href: '/products?category=Core Laboratory Equipment (Thermolab Scientific)',
-    image: null,
-  },
+
 ]
 
 export default function WhatWeProvide() {
