@@ -17,16 +17,13 @@ export default function ProductsContent() {
   const [category, setCategory] = useState(searchParams.get('category') ?? 'All')
   const [subcategory, setSubcategory] = useState(searchParams.get('subcategory') ?? '')
 
-  // Fetch once on mount (store caches for 5 min)
   useEffect(() => { fetchProducts() }, [fetchProducts])
 
-  // Current category config — used to render subcategory pills
   const activeCategoryConfig = useMemo(
     () => PRODUCT_CATEGORIES.find(c => c.name === category) ?? null,
     [category]
   )
 
-  // Instant client-side filter + search — no network requests
   const filtered = useMemo(() => {
     let result = products
     if (category && category !== 'All') {
@@ -50,8 +47,6 @@ export default function ProductsContent() {
     return result
   }, [products, category, subcategory, search])
 
-  // ── URL sync helpers ──────────────────────────────────────────────────────
-
   const buildParams = (cat: string, sub: string, q: string) => {
     const params = new URLSearchParams()
     if (cat !== 'All') params.set('category', cat)
@@ -67,7 +62,7 @@ export default function ProductsContent() {
 
   const handleCategory = (cat: string) => {
     setCategory(cat)
-    setSubcategory('') // reset subcategory whenever top-level changes
+    setSubcategory('')
     push(cat, '', search)
   }
 
@@ -97,84 +92,94 @@ export default function ProductsContent() {
         title="Products & Consumables"
         subtitle="Genuine chromatography consumables, vials, septa and lab supplies from certified sources."
       />
-      <div className="max-w-7xl mx-auto  py-12">
 
-        {/* Search bar */}
-        {/* <div className="relative mb-6 max-w-md">
-          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
-          <input
-            type="text"
-            value={search}
-            onChange={e => handleSearch(e.target.value)}
-            placeholder="Search products..."
-            className="w-full pl-10 pr-9 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:border-[#1565C0] focus:ring-2 focus:ring-blue-50 transition-all"
-          />
-          {search && (
-            <button
-              onClick={() => handleSearch('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-            >
-              <X size={14} />
-            </button>
-          )}
-        </div> */}
+      <div className="max-w-7xl mx-auto px-4 py-10">
 
-        {/* ── Top-level category filters ───────────────────────────────────── */}
-        <div className="flex flex-wrap gap-2 mb-3">
-          <button
-            onClick={() => handleCategory('All')}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-              category === 'All'
-                ? 'bg-gradient-to-r from-[#1565C0] to-[#00838F] text-white shadow-md'
-                : 'bg-white border border-gray-200 text-gray-600 hover:border-blue-300 hover:text-[#1565C0]'
-            }`}
-          >
-            All
-          </button>
+        {/* ── Filter bar ─────────────────────────────────────────────────── */}
+        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm px-5 py-4 mb-2">
 
-          {PRODUCT_CATEGORIES.map((cat) => (
-            <button
-              key={cat.name}
-              onClick={() => handleCategory(cat.name)}
-              className={`px-4 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-1.5 ${
-                category === cat.name
-                  ? 'bg-gradient-to-r from-[#1565C0] to-[#00838F] text-white shadow-md'
-                  : ' border border-gray-200  bg-blue-200 text-[#1565C0]'
-              }`}
-            >
-              {cat.name}
-              {cat.subcategories.length > 0 && (
-                <ChevronRight
-                  size={16}
-                  className={`transition-transform  ${category === cat.name ? 'rotate-90 opacity-80' : 'opacity-40'}`}
-                />
+          {/* Row 1:  category pills */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            {/* Divider */}
+            <div className="hidden sm:block w-px h-7 bg-gray-200 flex-shrink-0" />
+
+            {/* Category pills */}
+            <div className="flex items-center gap-2 flex-wrap">
+
+              {/* All */}
+              <button
+                onClick={() => handleCategory('All')}
+                className={`relative px-4 py-1.5 rounded-xl text-sm font-semibold transition-all duration-200
+                  ${category === 'All'
+                    ? 'bg-gradient-to-r from-[#1565C0] to-[#00838F] text-white shadow-md shadow-blue-200'
+                    : 'bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-800'}`}
+              >
+                All
+              </button>
+
+              {PRODUCT_CATEGORIES.map((cat) => {
+                const isActive = category === cat.name
+                return (
+                  <button
+                    key={cat.name}
+                    onClick={() => handleCategory(cat.name)}
+                    className={`relative flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-sm font-semibold transition-all duration-200
+                      ${isActive
+                        ? 'bg-gradient-to-r from-[#1565C0] to-[#00838F] text-white shadow-md shadow-blue-200'
+                        : 'bg-blue-200 text-[#1565C0]  hover:text-white hover:bg-sci-blue'}`}
+                  >
+                    {cat.name}
+                    {cat.subcategories.length > 0 && (
+                      <ChevronRight
+                        size={13}
+                        className={`flex-shrink-0 transition-transform duration-200
+                          ${isActive ? 'rotate-90 opacity-80' : 'opacity-40'}`}
+                      />
+                    )}
+                    {/* Active underline dot */}
+                    {isActive && (
+                      <motion.span
+                        layoutId="cat-indicator"
+                        className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white/60"
+                      />
+                    )}
+                  </button>
+                )
+              })}
+
+              {/* Clear */}
+              {hasActiveFilters && (
+                <button
+                  onClick={clearAll}
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-red-50 text-red-500 border border-red-100 hover:bg-red-100 transition-all"
+                >
+                  <X size={11} /> Clear
+                </button>
               )}
-            </button>
-          ))}
+            </div>
+          </div>
 
-          {hasActiveFilters && (
-            <button
-              onClick={clearAll}
-              className="px-4 py-2 rounded-full text-sm font-medium bg-red-50 text-red-500 border border-red-100 hover:bg-red-100 flex items-center gap-1.5"
-            >
-              <X size={12} /> Clear filters
-            </button>
-          )}
-        </div>
+          {/* Row 2: subcategory pills — animated */}
+          <AnimatePresence>
+            {activeCategoryConfig && activeCategoryConfig.subcategories.length > 0 && (
+              <motion.div
+                key={activeCategoryConfig.name}
+                initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                animate={{ opacity: 1, height: 'auto', marginTop: 12 }}
+                exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                transition={{ duration: 0.22 }}
+                className="overflow-hidden"
+              >
+                {/* Thin separator */}
+                <div className="border-t border-gray-100 mb-3" />
 
-        {/* ── Subcategory filters (only when the active category has them) ── */}
-        <AnimatePresence>
-          {activeCategoryConfig && activeCategoryConfig.subcategories.length > 0 && (
-            <motion.div
-              key={activeCategoryConfig.name}
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.2 }}
-              className="overflow-hidden mb-6"
-            >
-              <div className="flex flex-wrap gap-2 pt-2 pl-2 border-l-2 border-blue-100 ml-1">
-                {/* "All [category]" pill to clear subcategory */}
+                <div className="flex items-center gap-2 flex-wrap">
+                  {/* Label */}
+                  <span className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mr-1 flex-shrink-0">
+                    {activeCategoryConfig.name}:
+                  </span>
+
+                  {/* All sub */}
                 <button
                   onClick={() => handleSubcategory('')}
                   className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
@@ -198,28 +203,53 @@ export default function ProductsContent() {
                   >
                     {sub}
                   </button>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
-        {/* If no subcategory row, add spacing */}
-        {(!activeCategoryConfig || activeCategoryConfig.subcategories.length < 1) && (
-          <div className="mb-6" />
-        )}
-
-        {/* Results count */}
+        {/* Results count + breadcrumb */}
         {!loading && (
-          <p className="text-sm text-gray-400 mb-4">
-            {filtered.length} product{filtered.length !== 1 ? 's' : ''} found
-            {search ? ` for "${search}"` : ''}
-            {category !== 'All' ? ` in ${category}` : ''}
-            {subcategory ? ` › ${subcategory}` : ''}
-          </p>
+          <div className="flex items-center gap-1.5 text-sm text-gray-400 mb-5 px-1">
+            {hasActiveFilters ? (
+              <>
+                <span
+                  className="text-gray-400 hover:text-[#1565C0] cursor-pointer transition-colors text-xs"
+                  onClick={clearAll}
+                >
+                  All
+                </span>
+                {category !== 'All' && (
+                  <>
+                    <ChevronRight size={11} className="text-gray-300" />
+                    <span
+                      className={`text-xs cursor-pointer transition-colors ${!subcategory ? 'text-[#1565C0] font-semibold' : 'text-gray-400 hover:text-[#1565C0]'}`}
+                      onClick={() => handleCategory(category)}
+                    >
+                      {category}
+                    </span>
+                  </>
+                )}
+                {subcategory && (
+                  <>
+                    <ChevronRight size={11} className="text-gray-300" />
+                    <span className="text-xs font-semibold text-[#1565C0]">{subcategory}</span>
+                  </>
+                )}
+                <span className="mx-1 text-gray-200">·</span>
+              </>
+            ) : null}
+            <span className="text-xs">
+              <span className="font-semibold text-gray-600">{filtered.length}</span>{' '}
+              product{filtered.length !== 1 ? 's' : ''}
+              {search ? <> for <span className="font-medium text-gray-700">"{search}"</span></> : ''}
+            </span>
+          </div>
         )}
 
-        {/* Grid */}
+        {/* ── Grid ─────────────────────────────────────────────────────────── */}
         {loading ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
             {Array.from({ length: 8 }).map((_, i) => (
