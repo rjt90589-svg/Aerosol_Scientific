@@ -97,7 +97,7 @@ export default function ProductsContent() {
         title="Products & Consumables"
         subtitle="Genuine chromatography consumables, vials, septa and lab supplies from certified sources."
       />
-      <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="max-w-7xl mx-auto  py-12">
 
         {/* Search bar */}
         {/* <div className="relative mb-6 max-w-md">
@@ -136,17 +136,17 @@ export default function ProductsContent() {
             <button
               key={cat.name}
               onClick={() => handleCategory(cat.name)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${
+              className={`px-4 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-1.5 ${
                 category === cat.name
                   ? 'bg-gradient-to-r from-[#1565C0] to-[#00838F] text-white shadow-md'
-                  : 'bg-white border border-gray-200 text-gray-600 hover:border-blue-300 hover:text-[#1565C0]'
+                  : ' border border-gray-200  bg-blue-200 text-[#1565C0]'
               }`}
             >
               {cat.name}
               {cat.subcategories.length > 0 && (
                 <ChevronRight
-                  size={12}
-                  className={`transition-transform ${category === cat.name ? 'rotate-90 opacity-80' : 'opacity-40'}`}
+                  size={16}
+                  className={`transition-transform  ${category === cat.name ? 'rotate-90 opacity-80' : 'opacity-40'}`}
                 />
               )}
             </button>

@@ -164,7 +164,7 @@ export default function ProductCard({ product, index = 0 }: Props) {
           {/* Zoom hint badge — fades in on card hover, hides during zoom */}
           {product.image_url && (
             <div
-              className="absolute bottom-2 right-2 bg-black/25 text-white rounded-full p-1.5 transition-opacity duration-300 pointer-events-none"
+              className="absolute bottom-2 right-2 bg-transparent text-white rounded-full p-1.5 transition-opacity duration-300 pointer-events-none"
               style={{ opacity: zoom.visible ? 0 : undefined }}
             >
               <svg
