@@ -345,32 +345,10 @@ export default function AboutPage() {
             ))}
           </div>
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> e38f64ab4ee987ccecb7d0696c2099e00a6ea574
           <div className="mt-10 p-6 rounded-2xl bg-white border border-gray-100 shadow-sm text-sm text-gray-600 leading-relaxed max-w-3xl mx-auto text-center">
             <strong className="text-gray-900">Services:</strong> We provide service, support, and maintenance contracts for all lab instruments.
             Associating with us for service and support ensures we give our best to leverage your business to the next level.
           </div>
-<<<<<<< HEAD
-=======
-          <ul className="text-teal-100 space-y-2 text-sm leading-relaxed">
-            <li>• A leading provider of innovative and reliable laboratory solutions</li>
-            <li>• Empower scientific discovery with cutting-edge technology</li>
-            <li>• Contribute to global research and development advancements</li>
-            <li>• Ensure precision, quality, and sustainability in every solution</li>
-            <li>• Build long-term partnerships through exceptional value and service</li>
-          </ul>
-
- <p className="mt-5 font-semibold text-white">
-                   Precision in Every Solution. Progress in Every Lab.
-   </p>
-  
-
->>>>>>> fix_content
-=======
->>>>>>> e38f64ab4ee987ccecb7d0696c2099e00a6ea574
         </div>
       </section>
 

@@ -134,13 +134,9 @@ export const PRODUCT_CATEGORIES = [
   { name: "Turn key projects",
      subcategories: [
         "Laboratory civil work",
-<<<<<<< HEAD
-        "Furnitures"
-=======
      "Furnitures",
      "Safety equipment",
      "Fume hood"
->>>>>>> fix_content
      ] },
 ] as const;
 
