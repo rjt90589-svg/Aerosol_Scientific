@@ -346,10 +346,14 @@ export default function AboutPage() {
           </div>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> e38f64ab4ee987ccecb7d0696c2099e00a6ea574
           <div className="mt-10 p-6 rounded-2xl bg-white border border-gray-100 shadow-sm text-sm text-gray-600 leading-relaxed max-w-3xl mx-auto text-center">
             <strong className="text-gray-900">Services:</strong> We provide service, support, and maintenance contracts for all lab instruments.
             Associating with us for service and support ensures we give our best to leverage your business to the next level.
           </div>
+<<<<<<< HEAD
 =======
           <ul className="text-teal-100 space-y-2 text-sm leading-relaxed">
             <li>• A leading provider of innovative and reliable laboratory solutions</li>
@@ -365,6 +369,8 @@ export default function AboutPage() {
   
 
 >>>>>>> fix_content
+=======
+>>>>>>> e38f64ab4ee987ccecb7d0696c2099e00a6ea574
         </div>
       </section>
 
@@ -394,39 +400,11 @@ export default function AboutPage() {
             </div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="space-y-4"
-          >
-            <div className="rounded-2xl bg-gradient-to-br from-[#1565C0] to-[#00838F] p-6 text-white">
-              <h3 className="font-bold text-lg mb-2">Torontech Collaboration</h3>
-              <p className="text-blue-100 text-sm leading-relaxed mb-4">
-                Our collaboration with Torontech is committed to innovation and cost-effective solutions,
-                continuously enhancing technology and service offerings. Dedicated divisions cater to diverse sectors:
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                {torontechSectors.map((s) => (
-                  <div key={s.label} className="flex items-center gap-1.5 text-xs text-blue-100">
-                    <div className="w-1.5 h-1.5 rounded-full bg-teal-300 shrink-0" />
-                    {s.label}
-                  </div>
-                ))}
-              </div>
-            </div>
+ <p className="mt-5 font-semibold text-white">
+                   Precision in Every Solution. Progress in Every Lab.
+   </p>
+  
 
-            <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="rounded-xl bg-gray-50 border border-gray-100 p-4">
-                <div className="font-bold text-gray-800 text-sm mb-1">Spectrophotometer / Spectrometer</div>
-                <div className="text-gray-500">Used to analyze the concentration of elements in the sample being tested.</div>
-              </div>
-              <div className="rounded-xl bg-gray-50 border border-gray-100 p-4">
-                <div className="font-bold text-gray-800 text-sm mb-1">Universal Testing Machines</div>
-                <div className="text-gray-500">Tensile Tester (UTM) used to test both tensile and compressive strength of materials.</div>
-              </div>
-            </div>
-          </motion.div>
         </div>
       </section>
 

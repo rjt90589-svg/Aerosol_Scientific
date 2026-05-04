@@ -4,12 +4,17 @@ import AnimatedCounter from '@/components/ui/AnimatedCounter'
 
 const stats = [
 <<<<<<< HEAD
+<<<<<<< HEAD
   { value: 5-10, suffix: '', label: 'Projects Completed', description: 'Successful lab setups delivered' },
   { value: 200, suffix: '+', label: 'Happy Clients',       description: 'Across UAE and India' },
 =======
   { value: 10, suffix: '+', label: 'Projects Completed', description: 'Successful Lab setup and Instrument Delivery' },
   { value: 200, suffix: '+', label: 'Happy Clients',       description: 'Globally' },
 >>>>>>> fix_content
+=======
+  { value: 10, suffix: '+', label: 'Projects Completed', description: 'Successful Lab setup and Instrument Delivery' },
+  { value: 200, suffix: '+', label: 'Happy Clients',       description: 'Globally' },
+>>>>>>> e38f64ab4ee987ccecb7d0696c2099e00a6ea574
   { value: 20,  suffix: '+', label: 'Years Experience',    description: 'In scientific instruments' },
   { value: 15,  suffix: '+', label: 'Global Partners',     description: 'World-class OEM brands' },
 ]
