@@ -3,8 +3,13 @@ import { motion } from 'framer-motion'
 import AnimatedCounter from '@/components/ui/AnimatedCounter'
 
 const stats = [
+<<<<<<< HEAD
   { value: 5-10, suffix: '', label: 'Projects Completed', description: 'Successful lab setups delivered' },
   { value: 200, suffix: '+', label: 'Happy Clients',       description: 'Across UAE and India' },
+=======
+  { value: 10, suffix: '+', label: 'Projects Completed', description: 'Successful Lab setup and Instrument Delivery' },
+  { value: 200, suffix: '+', label: 'Happy Clients',       description: 'Globally' },
+>>>>>>> fix_content
   { value: 20,  suffix: '+', label: 'Years Experience',    description: 'In scientific instruments' },
   { value: 15,  suffix: '+', label: 'Global Partners',     description: 'World-class OEM brands' },
 ]
@@ -33,8 +38,8 @@ export default function StatsSection() {
             By the numbers
           </p>
           <h2 className="font-display text-2xl md:text-3xl font-bold text-white text-glow">
-            Trusted by labs across{' '}
-            <span className="gradient-text-spectrum">two continents</span>
+            Trusted by {' '}
+            <span className="gradient-text-spectrum">Labs, Customers and Partners</span>
           </h2>
         </div>
 

@@ -50,7 +50,7 @@ export default function WhyUs() {
           <SectionHeading
             eyebrow="Why Choose Us"
             title="Why |Aerosol Scientific?"
-            subtitle="Our experienced team understands the industry and its challenges. We ensure quick, reliable, and cost-effective solutions and services to your lab."
+            subtitle="Our experienced team understands the industry and works hard to meet your requirements. We ensure quick, reliable, and cost-effective solutions and services to your lab."
             centered
           />
         </div>
