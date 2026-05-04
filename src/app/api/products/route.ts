@@ -20,6 +20,7 @@ export async function GET() {
     const { data: products, error: productsError } = await supabaseAdmin
       .from('products')
       .select('*')
+      .order('featured_order', { ascending: true, nullsFirst: false })
       .order('created_at', { ascending: false })
 
     if (productsError) {

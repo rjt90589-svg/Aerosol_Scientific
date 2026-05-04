@@ -171,7 +171,6 @@ function SliderSkeleton() {
 export default function AnalabHeroSlider() {
   const { getFeatured, fetchProducts, loading } = useProductStore()
 
-
   const [current, setCurrent] = useState(0)
   const [paused, setPaused]   = useState(false)
   const [epoch, setEpoch]     = useState(0)

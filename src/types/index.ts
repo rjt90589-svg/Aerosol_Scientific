@@ -16,6 +16,7 @@ export interface Product {
   featured: boolean
   created_at: string
   updated_at: string
+  featured_order :number | null
   // Joined from reviews table (approved only)
   reviews: Review[]
   // Computed from reviews

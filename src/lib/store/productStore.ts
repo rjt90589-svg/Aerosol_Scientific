@@ -59,7 +59,15 @@ export const useProductStore = create<ProductState>((set, get) => ({
     return results
   },
 
-  getFeatured: () => get().products.filter(p => p.featured),
+ getFeatured: () =>
+  get()
+    .products
+    .filter(p => p.featured)
+    .sort((a, b) => {
+      const aO = a.featured_order ?? 999
+      const bO = b.featured_order ?? 999
+      return aO - bO
+    }),
 
   search: (query) => {
     if (!query.trim()) return get().products
