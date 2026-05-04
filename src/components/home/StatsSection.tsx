@@ -33,8 +33,8 @@ export default function StatsSection() {
             By the numbers
           </p>
           <h2 className="font-display text-2xl md:text-3xl font-bold text-white text-glow">
-            Trusted by labs across{' '}
-            <span className="gradient-text-spectrum">two continents</span>
+            Trusted by {' '}
+            <span className="gradient-text-spectrum">Labs, Customers and Partners</span>
           </h2>
         </div>
 
