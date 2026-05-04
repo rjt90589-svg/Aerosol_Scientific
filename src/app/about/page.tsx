@@ -378,39 +378,11 @@ export default function AboutPage() {
             </div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="space-y-4"
-          >
-            <div className="rounded-2xl bg-gradient-to-br from-[#1565C0] to-[#00838F] p-6 text-white">
-              <h3 className="font-bold text-lg mb-2">Torontech Collaboration</h3>
-              <p className="text-blue-100 text-sm leading-relaxed mb-4">
-                Our collaboration with Torontech is committed to innovation and cost-effective solutions,
-                continuously enhancing technology and service offerings. Dedicated divisions cater to diverse sectors:
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                {torontechSectors.map((s) => (
-                  <div key={s.label} className="flex items-center gap-1.5 text-xs text-blue-100">
-                    <div className="w-1.5 h-1.5 rounded-full bg-teal-300 shrink-0" />
-                    {s.label}
-                  </div>
-                ))}
-              </div>
-            </div>
+ <p className="mt-5 font-semibold text-white">
+                   Precision in Every Solution. Progress in Every Lab.
+   </p>
+  
 
-            <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="rounded-xl bg-gray-50 border border-gray-100 p-4">
-                <div className="font-bold text-gray-800 text-sm mb-1">Spectrophotometer / Spectrometer</div>
-                <div className="text-gray-500">Used to analyze the concentration of elements in the sample being tested.</div>
-              </div>
-              <div className="rounded-xl bg-gray-50 border border-gray-100 p-4">
-                <div className="font-bold text-gray-800 text-sm mb-1">Universal Testing Machines</div>
-                <div className="text-gray-500">Tensile Tester (UTM) used to test both tensile and compressive strength of materials.</div>
-              </div>
-            </div>
-          </motion.div>
         </div>
       </section>
 
@@ -446,7 +418,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── Core Values ───────────────────────────── */}
-      <section className="py-20 bg-white">
+      <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col items-center mb-12">
             <SectionHeading eyebrow="Our DNA" title="Core Values" centered />
@@ -474,6 +446,74 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      {/* ── Company Introduction Download ───────────── */}
+<section className="py-8 bg-gradient-to-br from-gray-50 to-blue-50/40">
+  <div className="max-w-4xl mx-auto px-4">
+    <div className="flex flex-col lg:flex-row items-center gap-10 bg-white rounded-3xl p-10 shadow-sm border border-blue-100">
+
+      {/* Left: Text */}
+      <motion.div
+        initial={{ opacity: 0, x: -30 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        className="flex-1"
+      >
+        <span className="text-xs font-semibold uppercase tracking-widest text-[#1565C0] mb-2 block">
+          Resources
+        </span>
+        <h2 className="text-2xl font-bold text-gray-900 mb-3">
+          Company Introduction
+        </h2>
+        <p className="text-gray-500 text-sm leading-relaxed mb-6 max-w-lg">
+          Download our company brochure to get a complete overview of Aerosol Scientific —
+          our product range, key partners, services, mission, and vision all in one document.
+        </p>
+
+        <a
+          href="/brochure/Aerosol_Brief_introduction.pdf"
+          download="Aerosol_Scientific_Introduction.pdf"
+          className="inline-flex items-center gap-2 bg-[#1565C0] text-white font-semibold px-6 py-3 rounded-xl hover:bg-[#0D47A1] hover:shadow-lg transition-all hover:-translate-y-0.5 text-sm"
+        >
+          {/* Download icon */}
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download Brochure (PDF)
+        </a>
+      </motion.div>
+
+      {/* Right: PDF Preview Card */}
+      <motion.div
+        initial={{ opacity: 0, x: 30 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        className="flex-shrink-0"
+      >
+        <div className="w-52 bg-gradient-to-br from-blue-50 to-teal-50 rounded-2xl border border-blue-100 p-5 flex flex-col items-center gap-3 shadow-sm">
+          {/* PDF Icon */}
+          <div className="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center border border-red-100">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E53E3E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+          </div>
+          <div className="text-center">
+            <p className="text-xs font-semibold text-gray-800">Aerosol Scientific</p>
+            <p className="text-xs text-gray-400 mt-0.5">Company Introduction</p>
+            <span className="mt-2 inline-block text-[10px] font-bold uppercase tracking-wider bg-red-100 text-red-600 px-2 py-0.5 rounded-md">PDF</span>
+          </div>
+        </div>
+      </motion.div>
+
+    </div>
+  </div>
+</section>
 
       {/* ── CTA ───────────────────────────────────── */}
       <section className="py-16 bg-[#0586D3] text-white text-center">

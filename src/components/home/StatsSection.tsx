@@ -3,8 +3,8 @@ import { motion } from 'framer-motion'
 import AnimatedCounter from '@/components/ui/AnimatedCounter'
 
 const stats = [
-  { value: 5-10, suffix: '', label: 'Projects Completed', description: 'Successful lab setups delivered' },
-  { value: 200, suffix: '+', label: 'Happy Clients',       description: 'Across UAE and India' },
+  { value: 10, suffix: '+', label: 'Projects Completed', description: 'Successful Lab setup and Instrument Delivery' },
+  { value: 200, suffix: '+', label: 'Happy Clients',       description: 'Globally' },
   { value: 20,  suffix: '+', label: 'Years Experience',    description: 'In scientific instruments' },
   { value: 15,  suffix: '+', label: 'Global Partners',     description: 'World-class OEM brands' },
 ]

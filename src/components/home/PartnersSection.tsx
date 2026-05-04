@@ -120,7 +120,7 @@ export default function PartnersSection() {
           <SectionHeading
             eyebrow="Our Network"
             title="Trusted |Partners & Brands"
-            subtitle="We collaborate with world-class manufacturers to bring you the finest instruments and consumables."
+            subtitle="We collaborate with world wide manufacturers to bring the best product, solution and consumables to meet your requirements."
             centered
           />
         </div>
