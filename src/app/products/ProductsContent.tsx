@@ -123,10 +123,10 @@ export default function ProductsContent() {
                   <button
                     key={cat.name}
                     onClick={() => handleCategory(cat.name)}
-                    className={`relative flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-sm font-semibold transition-all duration-200
+                    className={`relative flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-sm font-normal transition-all duration-200
                       ${isActive
                         ? 'bg-gradient-to-r from-[#1565C0] to-[#00838F] text-white shadow-md shadow-blue-200'
-                        : 'bg-blue-200 text-[#1565C0]  hover:text-white hover:bg-sci-blue'}`}
+                        : 'bg-white border text-[#1565C0]  hover:text-white hover:bg-sci-blue'}`}
                   >
                     {cat.name}
                     {cat.subcategories.length > 0 && (

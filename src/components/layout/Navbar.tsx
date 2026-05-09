@@ -118,15 +118,15 @@ function ProductsMegaMenu({ products, onClose }: MegaMenuProps) {
                     setActiveSubcategory(null);
                   }}
                   className={cn(
-                    "w-full flex items-center gap-2.5 px-3.5 py-2 text-left text-[15px] font-medium transition-all duration-150",
+                    "w-full flex items-center gap-2.5 px-3.5 py-2 text-left text-[14px] font-medium transition-all duration-150",
                     isActive
                       ? "bg-[#1251A3] text-white"
                       : "text-[#3D5276] hover:bg-[rgba(18,81,163,0.06)] hover:text-[#1251A3]",
                   )}
                 >
-                  <span className="text-[13px] shrink-0">
+                  {/* <span className="text-[13px] shrink-0">
                     {CATEGORY_ICONS[cat] ?? "🔬"}
-                  </span>
+                  </span> */}
                   <span className="truncate flex-1 leading-tight">{cat}</span>
                   <ChevronRight
                     size={11}
