@@ -167,7 +167,7 @@ export default function ServicesPage() {
                 </Link>
               </div>
               <div className="rounded-2xl overflow-hidden shadow-xl">
-                <img src={services[0].image} alt="Multi-vendor support" className="w-full h-full object-cover" />
+                <img src={services[0].image} alt="Multi-vendor support" className="hidden lg:block w-full h-full object-cover" />
               </div>
             </div>
 
