@@ -14,11 +14,19 @@ import AnalabHeroSlider from '@/components/home/Analabheroslider'
 
 export default async function HomePage() {
   const supabase = await createClient()
-  const { data: products } = await supabase
-    .from('products')
-    .select('*')
-    .limit(8)
-    // .eq('featured', true) 
+const { count } = await supabase
+  .from('products')
+  .select('*', { count: 'exact', head: true })
+
+const limit = 8
+const maxOffset = Math.max(0, (count || 0) - limit)
+
+const randomOffset = Math.floor(Math.random() * maxOffset)
+
+const { data: products } = await supabase
+  .from('products')
+  .select('*')
+  .range(randomOffset, randomOffset + limit - 1)
   return (
     <>
       {/* <HeroSlider /> */}
