@@ -17,7 +17,7 @@ export default async function HomePage() {
   const { data: products } = await supabase
     .from('products')
     .select('*')
-    .eq('featured', true)
+    // .eq('featured', true)
     .limit(8)
 
   return (
