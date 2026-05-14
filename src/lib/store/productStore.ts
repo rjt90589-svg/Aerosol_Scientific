@@ -67,7 +67,7 @@ export const useProductStore = create<ProductState>((set, get) => ({
       const aO = a.featured_order ?? 999
       const bO = b.featured_order ?? 999
       return aO - bO
-    }).slice(0, 8),
+    }).slice(0, 30),
 
   search: (query) => {
     if (!query.trim()) return get().products
