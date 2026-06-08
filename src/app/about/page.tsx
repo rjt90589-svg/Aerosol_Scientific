@@ -262,6 +262,11 @@ export default function AboutPage() {
         viewport={{ once: true }}
         className="flex-shrink-0"
       >
+         <a
+          href="/brochure/Aerosol_Brief_introduction.pdf"
+          download="Aerosol_Scientific_Introduction.pdf"
+          // className="inline-flex items-center gap-2 bg-[#1565C0] text-white font-semibold px-6 py-3 rounded-xl hover:bg-[#0D47A1] hover:shadow-lg transition-all hover:-translate-y-0.5 text-sm"
+        >
         <div className="w-52 bg-gradient-to-br from-blue-50 to-teal-50 rounded-2xl border border-blue-100 p-5 flex flex-col items-center gap-3 shadow-sm">
           {/* PDF Icon */}
           <div className="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center border border-red-100">
@@ -279,6 +284,7 @@ export default function AboutPage() {
             <span className="mt-2 inline-block text-[10px] font-bold uppercase tracking-wider bg-red-100 text-red-600 px-2 py-0.5 rounded-md">PDF</span>
           </div>
         </div>
+        </a>
       </motion.div>
 
     </div>

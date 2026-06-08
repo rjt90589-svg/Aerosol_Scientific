@@ -36,7 +36,7 @@ const OFFICES = [
     phone: '+971-547598109',
     email1: 'support@aerosolscientific.com', 
     email2: 'sales@aerosolscientific.com',
-    hours: 'Sun–Thu, 9AM–6PM GST',
+    hours: 'Mon-Fri, 9AM–6PM GST',
     gradient: 'from-[#1251A3] to-[#0891B2]',
   },
   {
